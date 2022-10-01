@@ -935,9 +935,11 @@ local function IsWhitelistedWeaponStress(weapon)
     return false
 end
 
+local shootingSleep = 500
 CreateThread(function() -- Shooting
     while true do
-        if LocalPlayer.state.isLoggedIn then
+        local isArmed = IsPedArmed(PlayerPedId(), 7)
+        if LocalPlayer.state.isLoggedIn and isAmred then
             local ped = PlayerPedId()
             local weapon = GetSelectedPedWeapon(ped)
             if weapon ~= `WEAPON_UNARMED` then
@@ -946,11 +948,12 @@ CreateThread(function() -- Shooting
                         TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
                     end
                 end
+                shootingSleep = 8
             else
-                Wait(1000)
+                shootingSleep = 1000
             end
         end
-        Wait(8)
+        Wait(shootingSleep)
     end
 end)
 
