@@ -36,7 +36,17 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_gain"), 'error', 1500)
+    TriggerClientEvent('ox_lib:notify', src, {
+        id = 'stress_gain',
+        title = Lang:t("notify.stress_gain"),
+        duration = 2500,
+        style = {
+            backgroundColor = '#141517',
+            color = '#ffffff'
+        },
+        icon = 'brain',
+        iconColor = '#C53030'
+    })
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
@@ -58,7 +68,17 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_removed"))
+    TriggerClientEvent('ox_lib:notify', src, {
+        id = 'stress_gain',
+        title = Lang:t("notify.stress_removed"),
+        duration = 2500,
+        style = {
+            backgroundColor = '#141517',
+            color = '#ffffff'
+        },
+        icon = 'brain',
+        iconColor = '#0F52BA'
+    })
 end)
 
 QBCore.Functions.CreateCallback('hud:server:getMenu', function(_, cb)
