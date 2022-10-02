@@ -1028,7 +1028,7 @@ local shootingSleep = 500
 CreateThread(function() -- Shooting
     while true do
         local isArmed = IsPedArmed(PlayerPedId(), 7)
-        if LocalPlayer.state.isLoggedIn and isAmred then
+        if LocalPlayer.state.isLoggedIn and isArmed then
             local ped = PlayerPedId()
             local weapon = GetSelectedPedWeapon(ped)
             if weapon ~= `WEAPON_UNARMED` then
