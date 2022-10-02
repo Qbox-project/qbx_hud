@@ -30,9 +30,9 @@ local w = 0
 DisplayRadar(false)
 
 local function CinematicShow(bool)
-    SetRadarBigmapEnabled(true, false)
+    SetBigmapActive(true, false)
     Wait(0)
-    SetRadarBigmapEnabled(false, false)
+    SetBigmapActive(false, false)
     if bool then
         for i = CinematicHeight, 0, -1.0 do
             Wait(10)
@@ -64,7 +64,16 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v})
         end
     end
-    QBCore.Functions.Notify(Lang:t("notify.hud_settings_loaded"), "success")
+    lib.notify({
+        id = 'hud_settings_loaded',
+        title = Lang:t("notify.hud_settings_loaded"),
+        style = {
+            backgroundColor = '#141517',
+            color = '#ffffff'
+        },
+        icon = 'circle-check',
+        iconColor = '#27ae60'
+    })
     Wait(1000)
     TriggerEvent("hud:client:LoadMap")
 end
@@ -119,7 +128,7 @@ RegisterCommand('menu', function()
     SetNuiFocus(true, true)
     SendNUIMessage({ action = "open"})
     showMenu = true
-end)
+end, false)
 
 RegisterNUICallback('closeMenu', function(_, cb)
     Wait(50)
@@ -134,7 +143,16 @@ RegisterKeyMapping('menu', 'Open Menu', 'keyboard', Config.OpenMenu)
 -- Reset hud
 local function restartHud()
     TriggerEvent("hud:client:playResetHudSounds")
-    QBCore.Functions.Notify(Lang:t("notify.hud_restart"), "error")
+    lib.notify({
+        id = 'hud_restart',
+        title = Lang:t("notify.hud_restart"),
+        style = {
+            backgroundColor = '#141517',
+            color = '#ffffff'
+        },
+        icon = 'circle-xmark',
+        iconColor = '#C53030'
+    })
     if IsPedInAnyVehicle(PlayerPedId()) then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -144,7 +162,16 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    QBCore.Functions.Notify(Lang:t("notify.hud_start"), "success")
+    lib.notify({
+        id = 'hud_start',
+        title = Lang:t("notify.hud_start"),
+        style = {
+            backgroundColor = '#141517',
+            color = '#ffffff'
+        },
+        icon = 'circle-check',
+        iconColor = '#27ae60'
+    })
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
@@ -363,7 +390,16 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.load_square_map"))
+            lib.notify({
+                id = 'load_square_map',
+                titlen = Lang:t("notify.load_square_map"),
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'circle-exclamation',
+                iconColor = '#0F52BA'
+            })
         end
         SetMinimapClipType(0)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "squaremap", "radarmasksm")
@@ -382,17 +418,26 @@ RegisterNetEvent("hud:client:LoadMap", function()
         -- 0.315 = map shorten
         SetMinimapComponentPosition('minimap_blur', 'L', 'B', -0.01 + minimapOffset, 0.025, 0.262, 0.300)
         SetBlipAlpha(GetNorthRadarBlip(), 0)
-        SetRadarBigmapEnabled(true, false)
+        SetBigmapActive(true, false)
         SetMinimapClipType(0)
         Wait(50)
-        SetRadarBigmapEnabled(false, false)
+        SetBigmapActive(false, false)
         if Menu.isToggleMapBordersChecked then
             showCircleB = false
             showSquareB = true
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.loaded_square_map"))
+            lib.notify({
+                id = 'load_square_map',
+                title = Lang:t("notify.load_square_map"),
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'circle-exclamation',
+                iconColor = '#0F52BA'
+            })
         end
     elseif Menu.isToggleMapShapeChecked == "circle" then
         RequestStreamedTextureDict("circlemap", false)
@@ -400,7 +445,16 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.load_circle_map"))
+            lib.notify({
+                id = 'load_circle_map',
+                title = Lang:t("notify.load_circle_map"),
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'circle-exclamation',
+                iconColor = '#0F52BA'
+            })
         end
         SetMinimapClipType(1)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap", "radarmasksm")
@@ -420,16 +474,25 @@ RegisterNetEvent("hud:client:LoadMap", function()
         SetMinimapComponentPosition('minimap_blur', 'L', 'B', -0.00 + minimapOffset, 0.015, 0.252, 0.338)
         SetBlipAlpha(GetNorthRadarBlip(), 0)
         SetMinimapClipType(1)
-        SetRadarBigmapEnabled(true, false)
+        SetBigmapActive(true, false)
         Wait(50)
-        SetRadarBigmapEnabled(false, false)
+        SetBigmapActive(false, false)
         if Menu.isToggleMapBordersChecked then
             showSquareB = false
             showCircleB = true
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.loaded_circle_map"))
+            lib.notify({
+                id = 'load_circle_map',
+                title = Lang:t("notify.load_circle_map"),
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'circle-exclamation',
+                iconColor = '#0F52BA'
+            })
         end
     end
 end)
@@ -527,14 +590,31 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCineamticModeChecked = false
         if Menu.isCinematicNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.cinematic_off"), 'error')
+            lib.notify({
+                id = 'cinematic_off',
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'circle-xmark',
+                iconColor = '#C53030'
+            })
         end
         DisplayRadar(1)
     else
         CinematicShow(true)
         Menu.isCineamticModeChecked = true
         if Menu.isCinematicNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.cinematic_on"))
+            lib.notify({
+                id = 'cinematic_on',
+                title = Lang:t("notify.cinematic_on"),
+                style = {
+                    backgroundColor = '#141517',
+                    color = '#ffffff'
+                },
+                icon = 'circle-exclamation',
+                iconColor = '#0F52BA'
+            })
         end
     end
     TriggerEvent("hud:client:playHudChecklistSound")
@@ -842,7 +922,16 @@ CreateThread(function()
                 if exports['LegacyFuel']:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
-                        QBCore.Functions.Notify(Lang:t("notify.low_fuel"), "error")
+                        lib.notify({
+                            id = 'low_fuel',
+                            title = Lang:t("notify.low_fuel"),
+                            style = {
+                                backgroundColor = '#141517',
+                                color = '#ffffff'
+                            },
+                            icon = 'circle-xmark',
+                            iconColor = '#C53030'
+                        })
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end
@@ -1016,7 +1105,7 @@ end)
 -- Minimap update
 CreateThread(function()
     while true do
-        SetRadarBigmapEnabled(false, false)
+        SetBigmapActive(false, false)
         SetRadarZoom(1000)
         Wait(500)
     end

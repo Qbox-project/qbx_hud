@@ -1,14 +1,15 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'qb-hud'
-version '2.1.0'
+description 'https://github.com/QBCore-Remastered'
+version '2.1.1'
 
 shared_scripts {
     '@qb-core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    'config.lua'
+    'config.lua',
+    '@ox_lib/init.lua'
 }
 
 client_script 'client.lua'
