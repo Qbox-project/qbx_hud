@@ -948,7 +948,7 @@ CreateThread(function() -- Shooting
                         TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
                     end
                 end
-                shootingSleep = 8
+                shootingSleep = 0
             else
                 shootingSleep = 1000
             end
