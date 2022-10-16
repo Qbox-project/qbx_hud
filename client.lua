@@ -64,16 +64,7 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v})
         end
     end
-    lib.notify({
-        id = 'hud_settings_loaded',
-        title = Lang:t("notify.hud_settings_loaded"),
-        style = {
-            backgroundColor = '#141517',
-            color = '#ffffff'
-        },
-        icon = 'circle-check',
-        iconColor = '#27ae60'
-    })
+    lib.notify({ description = Lang:t("notify.hud_settings_loaded"), type = 'success' })
     Wait(1000)
     TriggerEvent("hud:client:LoadMap")
 end
@@ -143,16 +134,7 @@ RegisterKeyMapping('menu', 'Open Menu', 'keyboard', Config.OpenMenu)
 -- Reset hud
 local function restartHud()
     TriggerEvent("hud:client:playResetHudSounds")
-    lib.notify({
-        id = 'hud_restart',
-        title = Lang:t("notify.hud_restart"),
-        style = {
-            backgroundColor = '#141517',
-            color = '#ffffff'
-        },
-        icon = 'circle-xmark',
-        iconColor = '#C53030'
-    })
+    lib.notify({ description = Lang:t("notify.hud_restart"), type = 'error' })
     if IsPedInAnyVehicle(PlayerPedId()) then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -162,16 +144,7 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    lib.notify({
-        id = 'hud_start',
-        title = Lang:t("notify.hud_start"),
-        style = {
-            backgroundColor = '#141517',
-            color = '#ffffff'
-        },
-        icon = 'circle-check',
-        iconColor = '#27ae60'
-    })
+    lib.notify({ description = Lang:t("notify.hud_start"), type = 'success' })
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
@@ -390,16 +363,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            lib.notify({
-                id = 'load_square_map',
-                titlen = Lang:t("notify.load_square_map"),
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'circle-exclamation',
-                iconColor = '#0F52BA'
-            })
+            lib.notify({ description = Lang:t("notify.load_square_map"), type = 'inform' })
         end
         SetMinimapClipType(0)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "squaremap", "radarmasksm")
@@ -428,16 +392,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            lib.notify({
-                id = 'load_square_map',
-                title = Lang:t("notify.load_square_map"),
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'circle-exclamation',
-                iconColor = '#0F52BA'
-            })
+            lib.notify({ description = Lang:t("notify.loaded_square_map"), type = 'success' })
         end
     elseif Menu.isToggleMapShapeChecked == "circle" then
         RequestStreamedTextureDict("circlemap", false)
@@ -445,16 +400,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            lib.notify({
-                id = 'load_circle_map',
-                title = Lang:t("notify.load_circle_map"),
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'circle-exclamation',
-                iconColor = '#0F52BA'
-            })
+            lib.notify({ description = Lang:t("notify.load_circle_map"), type = 'inform' })
         end
         SetMinimapClipType(1)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap", "radarmasksm")
@@ -483,16 +429,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            lib.notify({
-                id = 'load_circle_map',
-                title = Lang:t("notify.load_circle_map"),
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'circle-exclamation',
-                iconColor = '#0F52BA'
-            })
+            lib.notify({ description = Lang:t("notify.loaded_circle_map"), type = 'success' })
         end
     end
 end)
@@ -590,31 +527,14 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCineamticModeChecked = false
         if Menu.isCinematicNotifChecked then
-            lib.notify({
-                id = 'cinematic_off',
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'circle-xmark',
-                iconColor = '#C53030'
-            })
+            lib.notify({ description = Lang:t("notify.cinematic_off"), type = 'error' })
         end
         DisplayRadar(1)
     else
         CinematicShow(true)
         Menu.isCineamticModeChecked = true
         if Menu.isCinematicNotifChecked then
-            lib.notify({
-                id = 'cinematic_on',
-                title = Lang:t("notify.cinematic_on"),
-                style = {
-                    backgroundColor = '#141517',
-                    color = '#ffffff'
-                },
-                icon = 'circle-exclamation',
-                iconColor = '#0F52BA'
-            })
+            lib.notify({ description = Lang:t("notify.cinematic_on"), type = 'success' })
         end
     end
     TriggerEvent("hud:client:playHudChecklistSound")
@@ -922,16 +842,7 @@ CreateThread(function()
                 if exports['LegacyFuel']:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
-                        lib.notify({
-                            id = 'low_fuel',
-                            title = Lang:t("notify.low_fuel"),
-                            style = {
-                                backgroundColor = '#141517',
-                                color = '#ffffff'
-                            },
-                            icon = 'circle-xmark',
-                            iconColor = '#C53030'
-                        })
+                        lib.notify({ description = Lang:t("notify.low_fuel"), type = 'error' })
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end
