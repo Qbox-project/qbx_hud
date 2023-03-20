@@ -511,96 +511,96 @@ document.onkeyup = function (data) {
 
 function closeMenu() {
   $("#openmenu").fadeOut(550);
-  $.post('https://qb-hud/closeMenu');
+  $.post(`https://${GetParentResourceName()}/closeMenu`);
 }
 function restartHud() {
   closeMenu()
-  $.post('https://qb-hud/restartHud');
+  $.post(`https://${GetParentResourceName()}/restartHud`);
 }
 function resetStorage() {
   closeMenu()
-  $.post('https://qb-hud/resetStorage');
+  $.post(`https://${GetParentResourceName()}/resetStorage`);
 }
 function showOutMap() {
-  $.post('https://qb-hud/showOutMap');
+  $.post(`https://${GetParentResourceName()}/showOutMap`);
 }
 function showOutCompass() {
-  $.post('https://qb-hud/showOutCompass');
+  $.post(`https://${GetParentResourceName()}/showOutCompass`);
 }
 function showFollowCompass() {
-  $.post('https://qb-hud/showFollowCompass');
+  $.post(`https://${GetParentResourceName()}/showFollowCompass`);
 }
 function openMenuSounds() {
-  $.post('https://qb-hud/openMenuSounds');
+  $.post(`https://${GetParentResourceName()}/openMenuSounds`);
 }
 function resetHudSounds() {
-  $.post('https://qb-hud/resetHudSounds');
+  $.post(`https://${GetParentResourceName()}/resetHudSounds`);
 }
 function checklistSounds() {
-  $.post('https://qb-hud/checklistSounds');
+  $.post(`https://${GetParentResourceName()}/checklistSounds`);
 }
 function showMapNotif() {
-  $.post('https://qb-hud/showMapNotif');
+  $.post(`https://${GetParentResourceName()}/showMapNotif`);
 }
 function showFuelAlert() {
-  $.post('https://qb-hud/showFuelAlert');
+  $.post(`https://${GetParentResourceName()}/showFuelAlert`);
 }
 function showCinematicNotif() {
-  $.post('https://qb-hud/showCinematicNotif');
+  $.post(`https://${GetParentResourceName()}/showCinematicNotif`);
 }
 function dynamicHealth() {
-  $.post('https://qb-hud/dynamicHealth');
+  $.post(`https://${GetParentResourceName()}/dynamicHealth`);
 }
 function dynamicArmor() {
-  $.post('https://qb-hud/dynamicArmor');
+  $.post(`https://${GetParentResourceName()}/dynamicArmor`);
 }
 function dynamicHunger() {
-  $.post('https://qb-hud/dynamicHunger');
+  $.post(`https://${GetParentResourceName()}/dynamicHunger`);
 }
 function dynamicThirst() {
-  $.post('https://qb-hud/dynamicThirst');
+  $.post(`https://${GetParentResourceName()}/dynamicThirst`);
 }
 function dynamicStress() {
-  $.post('https://qb-hud/dynamicStress');
+  $.post(`https://${GetParentResourceName()}/dynamicStress`);
 }
 function dynamicOxygen() {
-  $.post('https://qb-hud/dynamicOxygen');
+  $.post(`https://${GetParentResourceName()}/dynamicOxygen`);
 }
 function dynamicEngine() {
-  $.post('https://qb-hud/dynamicEngine');
+  $.post(`https://${GetParentResourceName()}/dynamicEngine`);
 }
 function dynamicNitro() {
-  $.post('https://qb-hud/dynamicNitro');
+  $.post(`https://${GetParentResourceName()}/dynamicNitro`);
 }
 function ToggleMapShape() {
-  $.post('https://qb-hud/ToggleMapShape');
+  $.post(`https://${GetParentResourceName()}/ToggleMapShape`);
 }
 function changeFPS() {
-  $.post('https://qb-hud/changeFPS');
+  $.post(`https://${GetParentResourceName()}/changeFPS`);
 }
 function ToggleMapBorders() {
-  $.post('https://qb-hud/ToggleMapBorders');
+  $.post(`https://${GetParentResourceName()}/ToggleMapBorders`);
 }
 function HideMap() {
-  $.post('https://qb-hud/HideMap');
+  $.post(`https://${GetParentResourceName()}/HideMap`);
 }
 function changeCompassFPS() {
-  $.post('https://qb-hud/changeCompassFPS');
+  $.post(`https://${GetParentResourceName()}/changeCompassFPS`);
 }
 function showCompassBase() {
-  $.post('https://qb-hud/showCompassBase');
+  $.post(`https://${GetParentResourceName()}/showCompassBase`);
 }
 function showStreetsNames() {
-  $.post('https://qb-hud/showStreetsNames');
+  $.post(`https://${GetParentResourceName()}/showStreetsNames`);
 }
 function showPointerIndex() {
-  $.post('https://qb-hud/showPointerIndex');
+  $.post(`https://${GetParentResourceName()}/showPointerIndex`);
 }
 function showDegreesNum() {
-  $.post('https://qb-hud/showDegreesNum');
+  $.post(`https://${GetParentResourceName()}/showDegreesNum`);
 }
 function cinematicMode() {
-  $.post('https://qb-hud/cinematicMode');
+  $.post(`https://${GetParentResourceName()}/cinematicMode`);
 }
 
 $(document).ready(function () {
