@@ -935,27 +935,34 @@ local function IsWhitelistedWeaponStress(weapon)
     return false
 end
 
-local shootingSleep = 500
-CreateThread(function() -- Shooting
-    while true do
-        local isArmed = IsPedArmed(PlayerPedId(), 7)
-        if LocalPlayer.state.isLoggedIn and isArmed then
-            local ped = PlayerPedId()
-            local weapon = GetSelectedPedWeapon(ped)
-            if weapon ~= `WEAPON_UNARMED` then
+local hasWeapon = false
+
+AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
+    if not currentWeapon then hasWeapon = false return end
+
+    local curGun = currentWeapon.name
+    
+    if curGun ~= "WEAPON_UNARMED" and not IsWhitelistedWeaponArmed(curGun) then
+        hasWeapon = true
+        CheckStressThread(curGun)
+    end
+end)
+
+CheckStressThread = function (weapon)
+    if hasWeapon then
+        CreateThread(function ()
+            while hasWeapon do
+                local ped = PlayerPedId()
                 if IsPedShooting(ped) and not IsWhitelistedWeaponStress(weapon) then
                     if math.random() < config.StressChance then
                         TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
                     end
                 end
-                shootingSleep = 0
-            else
-                shootingSleep = 1000
+                Wait(0)
             end
-        end
-        Wait(shootingSleep)
+        end)
     end
-end)
+end
 
 -- Stress Screen Effects
 
