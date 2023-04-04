@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbx-core']:GetCoreObject()
 local ResetStress = false
 
 QBCore.Commands.Add('cash', 'Check Cash Balance', {}, false, function(source, _)

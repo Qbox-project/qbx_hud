@@ -1,4 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qbx-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData()
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
