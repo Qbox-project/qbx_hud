@@ -89,11 +89,61 @@ local function hasHarness(items)
     harness = _harness
 end
 
+-- Weapon Stress [Haroki]
+
+local function IsWhitelistedWeaponStress(weapon)
+    if weapon then
+        for _, v in pairs(config.WhitelistedWeaponStress) do
+            if weapon == v then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local hasWeapon = false
+
+local function startWeaponStressThread()
+    CreateThread(function()
+        while hasWeapon do
+            local ped = cache.ped
+            if IsPedShooting(ped) then
+                if math.random() < config.StressChance then
+                    TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
+                end
+            end
+
+            if not IsPedArmed(ped, 4) then
+                hasWeapon = false
+            end
+            Wait(0)
+        end
+    end)
+end
+
+AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
+    if not currentWeapon then
+        hasWeapon = false
+        return
+    end
+
+    local curGun = currentWeapon.name
+
+    if not IsWhitelistedWeaponStress(curGun) then
+        hasWeapon = true
+        startWeaponStressThread(curGun)
+    end
+end)
+
+-- Weapon Stress end
+
 RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
     PlayerData = QBCore.Functions.GetPlayerData()
+    if IsPedArmed(PlayerPedId(), 4) then hasWeapon = true startWeaponStressThread() end
 end)
 
 RegisterNetEvent("QBCore:Client:OnPlayerUnload", function()
@@ -157,7 +207,7 @@ RegisterCommand('resethud', function(_, cb)
     Wait(50)
     restartHud()
     cb("ok")
-end)
+end, false)
 
 RegisterNUICallback('resetStorage', function(_, cb)
     Wait(50)
@@ -170,11 +220,7 @@ RegisterNetEvent("hud:client:resetStorage", function()
     if Menu.isResetSoundsChecked then
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "airwrench", 0.1)
     end
-    QBCore.Functions.TriggerCallback('hud:server:getMenu',
-    function(menu)
-        loadSettings(menu);
-        SetResourceKvp('hudSettings', json.encode(menu))
-    end)
+    QBCore.Functions.TriggerCallback('hud:server:getMenu',function(menu) loadSettings(menu); SetResourceKvp('hudSettings', json.encode(menu)) end)
 end)
 
 -- Notifications
@@ -930,47 +976,6 @@ CreateThread(function() -- Speeding
             end
         end
         Wait(10000)
-    end
-end)
-
-local function IsWhitelistedWeaponStress(weapon)
-    if weapon then
-        for _, v in pairs(config.WhitelistedWeaponStress) do
-            if weapon == v then
-                return true
-            end
-        end
-    end
-    return false
-end
-
-local hasWeapon = false
-
-local startWeaponStressThread = function(weapon)
-    CreateThread(function()
-        while hasWeapon do
-            local ped = cache.ped
-            if IsPedShooting(ped) and not IsWhitelistedWeaponStress(weapon) then
-                if math.random() < config.StressChance then
-                    TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
-                end
-            end
-            Wait(0)
-        end
-    end)
-end
-
-AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
-    if not currentWeapon then
-        hasWeapon = false
-        return
-    end
-
-    local curGun = currentWeapon.name
-
-    if not IsWhitelistedWeaponArmed(curGun) then
-        hasWeapon = true
-        startWeaponStressThread(curGun)
     end
 end)
 -- Stress Screen Effects
