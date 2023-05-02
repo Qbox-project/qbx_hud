@@ -145,8 +145,10 @@ end)
 RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
+    local Weapon = OxInventory:getCurrentWeapon()
     if hudSettings then loadSettings(json.decode(hudSettings)) end
     PlayerData = QBCore.Functions.GetPlayerData()
+    if Weapon then startWeaponStressThread(Weapon.name) end
 end)
 
 RegisterNetEvent("QBCore:Client:OnPlayerUnload", function()
