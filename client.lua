@@ -1,5 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+local OxInventory = exports.ox_inventory
 local PlayerData = QBCore.Functions.GetPlayerData()
+local PlayerLoaded = false
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -90,7 +92,6 @@ local function hasHarness(items)
 end
 
 -- Weapon Stress [Haroki]
-
 local function IsWhitelistedWeaponStress(weapon)
     if weapon then
         for _, v in pairs(config.WhitelistedWeaponStress) do
@@ -104,7 +105,9 @@ end
 
 local hasWeapon = false
 
-local function startWeaponStressThread()
+local function startWeaponStressThread(weapon)
+    if IsWhitelistedWeaponStress(weapon) then hasWeapon = false; return end
+
     CreateThread(function()
         while hasWeapon do
             local ped = cache.ped
@@ -112,10 +115,6 @@ local function startWeaponStressThread()
                 if math.random() < config.StressChance then
                     TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
                 end
-            end
-
-            if not IsPedArmed(ped, 4) then
-                hasWeapon = false
             end
             Wait(0)
         end
@@ -129,21 +128,25 @@ AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
     end
 
     local curGun = currentWeapon.name
-
-    if not IsWhitelistedWeaponStress(curGun) then
-        hasWeapon = true
-        startWeaponStressThread(curGun)
-    end
+    hasWeapon = true
+    startWeaponStressThread(curGun)
 end)
 
 -- Weapon Stress end
+AddEventHandler('onResourceStart', function (resource)
+    if not resource == GetCurrentResourceName() or not LocalPlayer.state.isLoggedIn then return end
+    local Weapon = OxInventory:getCurrentWeapon()
+    PlayerData = QBCore.Functions.GetPlayerData()
+    PlayerLoaded = true
+    if Weapon then startWeaponStressThread(Weapon.name) end
+end)
+
 
 RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
     PlayerData = QBCore.Functions.GetPlayerData()
-    if IsPedArmed(PlayerPedId(), 4) then hasWeapon = true startWeaponStressThread() end
 end)
 
 RegisterNetEvent("QBCore:Client:OnPlayerUnload", function()
