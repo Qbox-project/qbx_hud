@@ -1,7 +1,6 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 local OxInventory = exports.ox_inventory
 local PlayerData = QBCore.Functions.GetPlayerData()
-local PlayerLoaded = false
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -137,7 +136,6 @@ AddEventHandler('onResourceStart', function (resource)
     if not resource == GetCurrentResourceName() or not LocalPlayer.state.isLoggedIn then return end
     local Weapon = OxInventory:getCurrentWeapon()
     PlayerData = QBCore.Functions.GetPlayerData()
-    PlayerLoaded = true
     if Weapon then startWeaponStressThread(Weapon.name) end
 end)
 
