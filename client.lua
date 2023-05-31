@@ -170,7 +170,9 @@ RegisterNetEvent("hud:client:resetStorage", function()
     if Menu.isResetSoundsChecked then
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "airwrench", 0.1)
     end
-    QBCore.Functions.TriggerCallback('hud:server:getMenu', function(menu) loadSettings(menu); SetResourceKvp('hudSettings', json.encode(menu)) end)
+    local menu = lib.callback.await('hud:server:getMenu')
+    loadSettings(menu)
+    SetResourceKvp('hudSettings', json.encode(menu))
 end)
 
 -- Notifications
