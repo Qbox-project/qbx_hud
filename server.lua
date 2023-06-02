@@ -81,6 +81,6 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     })
 end)
 
-QBCore.Functions.CreateCallback('hud:server:getMenu', function(_, cb)
-    cb(Config.Menu)
+lib.callback.register('hud:server:getMenu', function()
+    return Config.Menu
 end)
