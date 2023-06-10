@@ -13,9 +13,9 @@ local thirst = 100
 local cashAmount = 0
 local bankAmount = 0
 local nitroActive = 0
-local harness = 0
+local harness = false
 local hp = 100
-local armed = 0
+local armed = false
 local parachute = -1
 local oxygen = 100
 local dev = false
@@ -135,7 +135,7 @@ RegisterKeyMapping('menu', 'Open Menu', 'keyboard', Config.OpenMenu)
 local function restartHud()
     TriggerEvent("hud:client:playResetHudSounds")
     lib.notify({ description = Lang:t("notify.hud_restart"), type = 'error' })
-    if IsPedInAnyVehicle(PlayerPedId()) then
+    if IsPedInAnyVehicle(PlayerPedId(), false) then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
         SendNUIMessage({ action = 'car', show = true })
@@ -170,7 +170,7 @@ RegisterNetEvent("hud:client:resetStorage", function()
     if Menu.isResetSoundsChecked then
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "airwrench", 0.1)
     end
-    local menu = lib.callback.await('hud:server:getMenu')
+    local menu = lib.callback.await('hud:server:getMenu', false)
     loadSettings(menu)
     SetResourceKvp('hudSettings', json.encode(menu))
 end)
@@ -531,7 +531,7 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         if Menu.isCinematicNotifChecked then
             lib.notify({ description = Lang:t("notify.cinematic_off"), type = 'error' })
         end
-        DisplayRadar(1)
+        DisplayRadar(true)
     else
         CinematicShow(true)
         Menu.isCineamticModeChecked = true
@@ -667,13 +667,13 @@ local function updateVehicleHud(data)
 end
 
 local lastFuelUpdate = 0
-local lastFuelCheck = {}
+local lastFuelCheck = 0
 
 local function getFuelLevel(vehicle)
     local updateTick = GetGameTimer()
     if (updateTick - lastFuelUpdate) > 2000 then
         lastFuelUpdate = updateTick
-        lastFuelCheck = math.floor(exports['LegacyFuel']:GetFuel(vehicle))
+        lastFuelCheck = math.floor(GetVehicleFuelLevel(vehicle))
     end
     return lastFuelCheck
 end
@@ -720,8 +720,8 @@ CreateThread(function()
             if IsPauseMenuActive() then
                 show = false
             end
-            local vehicle = GetVehiclePedIsIn(player)
-            if not (IsPedInAnyVehicle(player) and not IsThisModelABicycle(vehicle)) then
+            local vehicle = GetVehiclePedIsIn(player, false)
+            if not (IsPedInAnyVehicle(player, false) and not IsThisModelABicycle(vehicle)) then
             updatePlayerHud({
                 show,
                 Menu.isDynamicHealthChecked,
@@ -760,7 +760,7 @@ CreateThread(function()
                 showAltitude = true
                 showSeatbelt = false
             end
-            if IsPedInAnyVehicle(player) and not IsThisModelABicycle(vehicle) then
+            if IsPedInAnyVehicle(player, false) and not IsThisModelABicycle(vehicle) then
                 if not wasInVehicle then
                     DisplayRadar(true)
                 end
@@ -840,8 +840,9 @@ CreateThread(function()
     while true do
         if LocalPlayer.state.isLoggedIn then
             local ped = PlayerPedId()
-            if IsPedInAnyVehicle(ped, false) and not IsThisModelABicycle(GetEntityModel(GetVehiclePedIsIn(ped, false))) then
-                if exports['LegacyFuel']:GetFuel(GetVehiclePedIsIn(ped, false)) <= 20 then -- At 20% Fuel Left
+            local vehicle = GetVehiclePedIsIn(ped, false)
+            if vehicle ~= 0 and not IsThisModelABicycle(GetEntityModel(vehicle)) then
+                if getFuelLevel(vehicle) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
                         lib.notify({ description = Lang:t("notify.low_fuel"), type = 'error' })
@@ -992,7 +993,8 @@ CreateThread(function()
             TriggerScreenblurFadeOut(1000.0)
 
             if not IsPedRagdoll(ped) and IsPedOnFoot(ped) and not IsPedSwimming(ped) then
-                SetPedToRagdollWithFall(ped, RagdollTimeout, RagdollTimeout, 1, GetEntityForwardVector(ped), 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+                local forwardVector = GetEntityForwardVector(ped)
+                SetPedToRagdollWithFall(ped, RagdollTimeout, RagdollTimeout, 1, forwardVector.x, forwardVector.y, forwardVector.z, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
             end
 
             Wait(1000)
@@ -1032,15 +1034,15 @@ end
 CreateThread(function()
     local minimap = RequestScaleformMovie("minimap")
     if not HasScaleformMovieLoaded(minimap) then
-        RequestScaleformMovie(minimap)
+        minimap = RequestScaleformMovie("minimap")
         while not HasScaleformMovieLoaded(minimap) do
-            Wait(1)
+            Wait(10)
         end
     end
     while true do
         if w > 0 then
             BlackBars()
-            DisplayRadar(0)
+            DisplayRadar(false)
             SendNUIMessage({
                 action = 'hudtick',
                 show = false,
@@ -1111,46 +1113,46 @@ CreateThread(function()
         local player = PlayerPedId()
         local camRot = GetGameplayCamRot(0)
         if Menu.isCompassFollowChecked then
-            heading = tostring(round(360.0 - ((camRot.z + 360.0) % 360.0)))
+            heading = round(360.0 - ((camRot.z + 360.0) % 360.0))
         else
-            heading = tostring(round(360.0 - GetEntityHeading(player)))
+            heading = round(360.0 - GetEntityHeading(player))
         end
-		if heading == '360' then heading = '0' end
-            if heading ~= lastHeading then
-			    if IsPedInAnyVehicle(player) then
-                    local crossroads = getCrossroads(player)
+		if heading == 360 then heading = 0 end
+        if heading ~= lastHeading then
+            if IsPedInAnyVehicle(player, false) then
+                local crossroads = getCrossroads(player)
+                SendNUIMessage ({
+                    action = 'update',
+                    value = heading
+                })
+                updateBaseplateHud({
+                    show,
+                    crossroads[1],
+                    crossroads[2],
+                    Menu.isCompassShowChecked,
+                    Menu.isShowStreetsChecked,
+                    Menu.isPointerShowChecked,
+                    Menu.isDegreesShowChecked,
+                })
+            else
+                if Menu.isOutCompassChecked then
                     SendNUIMessage ({
                         action = 'update',
                         value = heading
                     })
-                    updateBaseplateHud({
-                        show,
-                        crossroads[1],
-                        crossroads[2],
-                        Menu.isCompassShowChecked,
-                        Menu.isShowStreetsChecked,
-                        Menu.isPointerShowChecked,
-                        Menu.isDegreesShowChecked,
+                    SendNUIMessage ({
+                        action = 'baseplate',
+                        show = true,
+                        showCompass = true,
                     })
-			    else
-                    if Menu.isOutCompassChecked then
-                        SendNUIMessage ({
-                            action = 'update',
-                            value = heading
-                        })
-                        SendNUIMessage ({
-                            action = 'baseplate',
-                            show = true,
-                            showCompass = true,
-                        })
-                    else
-                        SendNUIMessage ({
-                            action = 'baseplate',
-                            show = false,
-                        })
-                    end
-			    end
-	        end
-		    lastHeading = heading
-	    end
+                else
+                    SendNUIMessage ({
+                        action = 'baseplate',
+                        show = false,
+                    })
+                end
+            end
+        end
+        lastHeading = heading
+    end
 end)
