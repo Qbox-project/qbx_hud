@@ -5,7 +5,7 @@ description 'https://github.com/QBCore-Remastered'
 version '2.1.1'
 
 shared_scripts {
-    '@qb-core/shared/locale.lua',
+    '@qbx-core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
