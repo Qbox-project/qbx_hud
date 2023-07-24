@@ -1,7 +1,7 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'https://github.com/QBCore-Remastered'
+description 'https://github.com/Qbox-project'
 version '2.1.1'
 
 shared_scripts {
