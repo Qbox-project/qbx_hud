@@ -54,25 +54,25 @@ end)
 
 -- Commands
 
-lib.addCommand('cash', {
-    help = 'Check Cash Balance',
+lib.addCommand(Lang:t('commands.cash'), {
+    help = Lang:t('commands.help.cash'),
     restricted = 'group.admin'
 }, function(source)
-    local Player = QBCore.Functions.GetPlayer(source)
-    local cashamount = Player.PlayerData.money.cash
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashamount)
+    local player = QBCore.Functions.GetPlayer(source)
+    local cashAmount = player.PlayerData.money.cash
+    TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashAmount)
 end)
 
-lib.addCommand('bank', {
-    help = 'Check Bank Balance',
+lib.addCommand(Lang:t('commands.bank'), {
+    help = Lang:t('commands.help.bank'),
 }, function(source)
-    local Player = QBCore.Functions.GetPlayer(source)
-    local bankamount = Player.PlayerData.money.bank
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankamount)
+    local player = QBCore.Functions.GetPlayer(source)
+    local bankAmount = player.PlayerData.money.bank
+    TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankAmount)
 end)
 
 lib.addCommand('dev', {
-    help = 'Enable/Disable developer Mode',
+    help = Lang:t('commands.help.dev'),
     restricted = 'group.admin'
 }, function(source)
     TriggerClientEvent("qb-admin:client:ToggleDevmode", source)

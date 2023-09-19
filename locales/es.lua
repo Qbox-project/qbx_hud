@@ -19,7 +19,17 @@ local Translations = {
     },
     info = {
         open_menu = 'Abrir Menú',
-    }
+    },
+    commands = {
+        cash = 'efectivo',
+        bank = 'banco',
+        dev = 'dev',
+        help = {
+            cash = 'Revisar balance en efectivo',
+            bank = 'Revisar balance en banco',
+            dev = 'Habilitar/deshabilitar modo desarrollador'
+        }
+    },
 }
 
 if GetConvar('qb_locale', 'en') == 'es' then

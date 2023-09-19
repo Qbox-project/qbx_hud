@@ -19,6 +19,16 @@ local Translations = {
     },
     info = {
         open_menu = 'Open Menu',
+    },
+    commands = {
+        cash = 'cash',
+        bank = 'bank',
+        dev = 'dev',
+        help = {
+            cash = 'Check Cash Balance',
+            bank = 'Check Bank Balance',
+            dev = 'Enable/Disable developer Mode'
+        }
     }
 }
 
