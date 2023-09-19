@@ -1,4 +1,4 @@
-local OxInventory = exports.ox_inventory
+local oxInventory = exports.ox_inventory
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -942,7 +942,7 @@ end
 
 local function getCurrentWeapon()
     if LocalPlayer.state.isLoggedIn then
-        local weapon = OxInventory:getCurrentWeapon()
+        local weapon = oxInventory:getCurrentWeapon()
         if weapon then startWeaponStressThread(weapon.name) end
     end
 end
