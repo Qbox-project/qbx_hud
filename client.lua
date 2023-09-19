@@ -1,3 +1,4 @@
+local OxInventory = exports.ox_inventory
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -24,6 +25,7 @@ local showSquareB = false
 local Menu = config.Menu
 local CinematicHeight = 0.2
 local w = 0
+local hasWeapon = false
 
 DisplayRadar(false)
 
@@ -922,26 +924,38 @@ local function IsWhitelistedWeaponStress(weapon)
     return false
 end
 
-local shootingSleep = 500
-CreateThread(function() -- Shooting
-    while true do
-        local isArmed = IsPedArmed(cache.ped, 7)
-        if LocalPlayer.state.isLoggedIn and isArmed then
-            local ped = cache.ped
-            local weapon = GetSelectedPedWeapon(ped)
-            if weapon ~= `WEAPON_UNARMED` then
-                if IsPedShooting(ped) and not IsWhitelistedWeaponStress(weapon) then
-                    if math.random() < config.StressChance then
-                        TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
-                    end
+local function startWeaponStressThread(weapon)
+    if IsWhitelistedWeaponStress(weapon) then return end
+    hasWeapon = true
+
+    CreateThread(function()
+        while hasWeapon do
+            if IsPedShooting(cache.ped) then
+                if math.random() <= config.StressChance then
+                    TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
                 end
-                shootingSleep = 0
-            else
-                shootingSleep = 1000
             end
+            Wait(0)
         end
-        Wait(shootingSleep)
+    end)
+end
+
+local function getCurrentWeapon()
+    if LocalPlayer.state.isLoggedIn then
+        local weapon = OxInventory:getCurrentWeapon()
+        if weapon then startWeaponStressThread(weapon.name) end
     end
+end
+
+getCurrentWeapon()
+
+AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
+    hasWeapon = false
+    Wait(0)
+
+    if not currentWeapon then return end
+
+    startWeaponStressThread(currentWeapon.name)
 end)
 
 -- Stress Screen Effects
