@@ -691,7 +691,7 @@ CreateThread(function()
                     armed = false
                 end
             end
-            playerDead = IsEntityDead(player) or PlayerData.metadata.inlaststand or PlayerData.metadata.isdead or false
+            playerDead = IsEntityDead(player) or PlayerData.metadata.inlaststand or PlayerData.metadata.isdead
             parachute = GetPedParachuteState(player)
             -- Stamina
             if not IsEntityInWater(player) then
