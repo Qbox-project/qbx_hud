@@ -828,7 +828,7 @@ CreateThread(function()
     while true do
         if LocalPlayer.state.isLoggedIn then
             local vehicle = cache.vehicle
-            if vehicle ~= 0 and not IsThisModelABicycle(GetEntityModel(vehicle)) then
+            if vehicle and not IsThisModelABicycle(GetEntityModel(vehicle)) then
                 if getFuelLevel(vehicle) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
