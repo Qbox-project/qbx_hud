@@ -1,4 +1,3 @@
-local oxInventory = exports.ox_inventory
 local config = Config
 local speedMultiplier = config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
@@ -932,22 +931,13 @@ local function startWeaponStressThread(weapon)
         while hasWeapon do
             if IsPedShooting(cache.ped) then
                 if math.random() <= config.StressChance then
-                    TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
+                    TriggerServerEvent('hud:server:GainStress', math.random(1, 5))
                 end
             end
             Wait(0)
         end
     end)
 end
-
-local function getCurrentWeapon()
-    if LocalPlayer.state.isLoggedIn then
-        local weapon = oxInventory:getCurrentWeapon()
-        if weapon then startWeaponStressThread(weapon.name) end
-    end
-end
-
-getCurrentWeapon()
 
 AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
     hasWeapon = false
@@ -1151,5 +1141,25 @@ CreateThread(function()
             end
         end
         lastHeading = heading
+    end
+end)
+
+RegisterNetEvent('qbx-hud:client:showHud', function()
+    if cache.vehicle then
+        DisplayRadar(true)
+        SendNUIMessage({
+            action = 'car',
+            show = true,
+        })
+    end
+end)
+
+RegisterNetEvent('qbx-hud:client:hideHud', function()
+    if cache.vehicle then
+        DisplayRadar(false)
+        SendNUIMessage({
+            action = 'car',
+            show = false,
+        })
     end
 end)
