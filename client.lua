@@ -634,7 +634,7 @@ local prevVehicleStats = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
 
 local function updateVehicleHud(data)
     local shouldUpdate = false
-    local invOpen = lib.callback.await('qbx-hud:server:invState')
+    local invOpen = LocalPlayer.state.invOpen
     for k, v in pairs(data) do
         if prevVehicleStats[k] ~= v then shouldUpdate = true break end
     end
