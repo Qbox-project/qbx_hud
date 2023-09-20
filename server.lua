@@ -1,16 +1,23 @@
 local resetStress = false
+local invOpen = false
 
 -- Handlers
 
 AddEventHandler('ox_inventory:openedInventory', function(source)
     TriggerClientEvent('qbx-hud:client:hideHud', source)
+    invOpen = true
 end)
 
 AddEventHandler('ox_inventory:closedInventory', function(source)
     TriggerClientEvent('qbx-hud:client:showHud', source)
+    invOpen = false
 end)
 
 -- Callbacks
+
+lib.callback.register('qbx-hud:server:invState', function()
+    return invOpen
+end)
 
 lib.callback.register('hud:server:getMenu', function()
     return Config.Menu

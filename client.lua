@@ -634,11 +634,12 @@ local prevVehicleStats = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
 
 local function updateVehicleHud(data)
     local shouldUpdate = false
+    local invOpen = lib.callback.await('qbx-hud:server:invState')
     for k, v in pairs(data) do
         if prevVehicleStats[k] ~= v then shouldUpdate = true break end
     end
     prevVehicleStats = data
-    if shouldUpdate then
+    if shouldUpdate and not invOpen then
         SendNUIMessage({
             action = 'car',
             show = data[1],
@@ -1147,9 +1148,49 @@ end)
 RegisterNetEvent('qbx-hud:client:showHud', function()
     if cache.vehicle then
         DisplayRadar(true)
-        SendNUIMessage({
-            action = 'car',
-            show = true,
+        updatePlayerHud({
+            show,
+            Menu.isDynamicHealthChecked,
+            Menu.isDynamicArmorChecked,
+            Menu.isDynamicHungerChecked,
+            Menu.isDynamicThirstChecked,
+            Menu.isDynamicStressChecked,
+            Menu.isDynamicOxygenChecked,
+            Menu.isDynamicEngineChecked,
+            Menu.isDynamicNitroChecked,
+            GetEntityHealth(player) - 100,
+            playerDead,
+            GetPedArmour(player),
+            thirst,
+            hunger,
+            stress,
+            voice,
+            LocalPlayer.state.radioChannel,
+            talking,
+            armed,
+            oxygen,
+            GetPedParachuteState(player),
+            nos,
+            cruiseOn,
+            nitroActive,
+            harness,
+            hp,
+            math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
+            (GetVehicleEngineHealth(vehicle) / 10),
+            Menu.isCineamticModeChecked,
+            dev,
+        })
+        updateVehicleHud({
+            show,
+            IsPauseMenuActive(),
+            seatbeltOn,
+            math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
+            getFuelLevel(vehicle),
+            math.ceil(GetEntityCoords(player).z * 0.5),
+            showAltitude,
+            showSeatbelt,
+            showSquareB,
+            showCircleB,
         })
     end
 end)
