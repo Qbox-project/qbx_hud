@@ -1148,38 +1148,6 @@ end)
 RegisterNetEvent('qbx-hud:client:showHud', function()
     if cache.vehicle then
         DisplayRadar(true)
-        updatePlayerHud({
-            show,
-            Menu.isDynamicHealthChecked,
-            Menu.isDynamicArmorChecked,
-            Menu.isDynamicHungerChecked,
-            Menu.isDynamicThirstChecked,
-            Menu.isDynamicStressChecked,
-            Menu.isDynamicOxygenChecked,
-            Menu.isDynamicEngineChecked,
-            Menu.isDynamicNitroChecked,
-            GetEntityHealth(player) - 100,
-            playerDead,
-            GetPedArmour(player),
-            thirst,
-            hunger,
-            stress,
-            voice,
-            LocalPlayer.state.radioChannel,
-            talking,
-            armed,
-            oxygen,
-            GetPedParachuteState(player),
-            nos,
-            cruiseOn,
-            nitroActive,
-            harness,
-            hp,
-            math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-            (GetVehicleEngineHealth(vehicle) / 10),
-            Menu.isCineamticModeChecked,
-            dev,
-        })
         updateVehicleHud({
             show,
             IsPauseMenuActive(),
