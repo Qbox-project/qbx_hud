@@ -91,6 +91,10 @@ RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
+    stress = PlayerData.metadata.stress
+    hunger = PlayerData.metadata.hunger
+    thirst = PlayerData.metadata.thirst
+    hp = PlayerData.metadata.health
 end)
 
 AddEventHandler('onResourceStart', function(resourceName)
