@@ -9,17 +9,17 @@ repository 'https://github.com/Qbox-project/qbx-hud'
 description 'HUD for Qbox'
 
 shared_scripts {
-    '@qbx-core/shared/locale.lua',
+    '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
     '@ox_lib/init.lua',
-    '@qbx-core/import.lua',
+    '@qbx_core/import.lua',
 }
 
 modules {
-    'qbx-core:core',
-    'qbx-core:playerdata',
+    'qbx_core:core',
+    'qbx_core:playerdata',
 }
 
 server_script 'server.lua'

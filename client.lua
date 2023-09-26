@@ -63,7 +63,7 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v })
         end
     end
-    QBCore.Functions.Notify(Lang:t("notify.hud_settings_loaded"), 'success')
+    QBX.Functions.Notify(Lang:t("notify.hud_settings_loaded"), 'success')
     Wait(1000)
     TriggerEvent("hud:client:LoadMap")
 end
@@ -91,10 +91,10 @@ RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
-    stress = PlayerData.metadata.stress
-    hunger = PlayerData.metadata.hunger
-    thirst = PlayerData.metadata.thirst
-    hp = PlayerData.metadata.health
+    stress = QBX.PlayerData.metadata.stress
+    hunger = QBX.PlayerData.metadata.hunger
+    thirst = QBX.PlayerData.metadata.thirst
+    hp = QBX.PlayerData.metadata.health
 end)
 
 AddEventHandler('onResourceStart', function(resourceName)
@@ -127,7 +127,7 @@ RegisterKeyMapping('menu', Lang:t('info.open_menu'), 'keyboard', Config.OpenMenu
 -- Reset hud
 local function restartHud()
     TriggerEvent("hud:client:playResetHudSounds")
-    QBCore.Functions.Notify(Lang:t("notify.hud_restart"), 'error')
+    QBX.Functions.Notify(Lang:t("notify.hud_restart"), 'error')
     if cache.vehicle then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -137,7 +137,7 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    QBCore.Functions.Notify(Lang:t("notify.hud_start"), 'success')
+    QBX.Functions.Notify(Lang:t("notify.hud_start"), 'success')
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
@@ -358,7 +358,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.load_square_map"), 'inform')
+            QBX.Functions.Notify(Lang:t("notify.load_square_map"), 'inform')
         end
         SetMinimapClipType(0)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "squaremap", "radarmasksm")
@@ -387,7 +387,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.loaded_square_map"), 'success')
+            QBX.Functions.Notify(Lang:t("notify.loaded_square_map"), 'success')
         end
     elseif Menu.isToggleMapShapeChecked == "circle" then
         RequestStreamedTextureDict("circlemap", false)
@@ -395,7 +395,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.load_circle_map"), 'inform')
+            QBX.Functions.Notify(Lang:t("notify.load_circle_map"), 'inform')
         end
         SetMinimapClipType(1)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap", "radarmasksm")
@@ -424,7 +424,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.loaded_circle_map"), 'success')
+            QBX.Functions.Notify(Lang:t("notify.loaded_circle_map"), 'success')
         end
     end
 end)
@@ -522,14 +522,14 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCineamticModeChecked = false
         if Menu.isCinematicNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.cinematic_off"), 'error')
+            QBX.Functions.Notify(Lang:t("notify.cinematic_off"), 'error')
         end
         DisplayRadar(true)
     else
         CinematicShow(true)
         Menu.isCineamticModeChecked = true
         if Menu.isCinematicNotifChecked then
-            QBCore.Functions.Notify(Lang:t("notify.cinematic_on"), 'success')
+            QBX.Functions.Notify(Lang:t("notify.cinematic_on"), 'success')
         end
     end
     TriggerEvent("hud:client:playHudChecklistSound")
@@ -695,7 +695,7 @@ CreateThread(function()
                     armed = false
                 end
             end
-            playerDead = IsEntityDead(player) or PlayerData.metadata.inlaststand or PlayerData.metadata.isdead
+            playerDead = IsEntityDead(player) or QBX.PlayerData.metadata.inlaststand or QBX.PlayerData.metadata.isdead
             parachute = GetPedParachuteState(player)
             -- Stamina
             if not IsEntityInWater(player) then
@@ -838,7 +838,7 @@ CreateThread(function()
                 if getFuelLevel(vehicle) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
-                        QBCore.Functions.Notify(Lang:t("notify.low_fuel"), 'error')
+                        QBX.Functions.Notify(Lang:t("notify.low_fuel"), 'error')
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end
@@ -867,8 +867,8 @@ RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
 end)
 
 RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
-    cashAmount = PlayerData.money.cash
-    bankAmount = PlayerData.money.bank
+    cashAmount = QBX.PlayerData.money.cash
+    bankAmount = QBX.PlayerData.money.bank
     SendNUIMessage({
         action = 'updatemoney',
         cash = cashAmount,
@@ -885,7 +885,7 @@ CreateThread(function()
     while true do
         Wait(1000)
         if cache.vehicle then
-            hasHarness(PlayerData.items)
+            hasHarness(QBX.PlayerData.items)
         end
     end
 end)

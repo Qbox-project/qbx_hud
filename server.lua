@@ -20,7 +20,7 @@ end)
 
 RegisterNetEvent('hud:server:GainStress', function(amount)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = QBX.Functions.GetPlayer(src)
     local newStress
     if not Player or (Config.DisablePoliceStress and Player.PlayerData.job.type == 'leo') then return end
     if not resetStress then
@@ -42,7 +42,7 @@ end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = QBX.Functions.GetPlayer(src)
     local newStress
     if not Player then return end
     if not resetStress then
@@ -68,7 +68,7 @@ lib.addCommand(Lang:t('commands.cash'), {
     help = Lang:t('commands.help.cash'),
     restricted = 'group.admin'
 }, function(source)
-    local player = QBCore.Functions.GetPlayer(source)
+    local player = QBX.Functions.GetPlayer(source)
     local cashAmount = player.PlayerData.money.cash
     TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashAmount)
 end)
@@ -76,7 +76,7 @@ end)
 lib.addCommand(Lang:t('commands.bank'), {
     help = Lang:t('commands.help.bank'),
 }, function(source)
-    local player = QBCore.Functions.GetPlayer(source)
+    local player = QBX.Functions.GetPlayer(source)
     local bankAmount = player.PlayerData.money.bank
     TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankAmount)
 end)
