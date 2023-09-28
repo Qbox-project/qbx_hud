@@ -37,7 +37,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_gain"), 'inform', 2500, _, _, {'#141517', '#ffffff'}, 'brain', '#C53030')
+    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_gain"), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#C53030')
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
@@ -59,7 +59,7 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_removed"), 'inform', 2500, _, _, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
+    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_removed"), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
 end)
 
 -- Commands

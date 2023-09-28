@@ -1153,12 +1153,12 @@ RegisterNetEvent('qbx_hud:client:showHud', function()
     if cache.vehicle then
         DisplayRadar(true)
         updateVehicleHud({
-            show,
+            true,
             IsPauseMenuActive(),
             seatbeltOn,
-            math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-            getFuelLevel(vehicle),
-            math.ceil(GetEntityCoords(player).z * 0.5),
+            math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+            getFuelLevel(cache.vehicle),
+            math.ceil(GetEntityCoords(cache.ped).z * 0.5),
             showAltitude,
             showSeatbelt,
             showSquareB,
