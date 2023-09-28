@@ -2,10 +2,10 @@ fx_version 'cerulean'
 use_experimental_fxv2_oal 'yes'
 lua54 'yes'
 game 'gta5'
-name 'qbx-hud'
+name 'qbx_hud'
 author 'Qbus & Qbox Contributors'
 version '1.0.0'
-repository 'https://github.com/Qbox-project/qbx-hud'
+repository 'https://github.com/Qbox-project/qbx_hud'
 description 'HUD for Qbox'
 
 shared_scripts {
@@ -18,7 +18,6 @@ shared_scripts {
 }
 
 modules {
-    'qbx_core:core',
     'qbx_core:playerdata',
 }
 

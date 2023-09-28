@@ -63,7 +63,7 @@ local function loadSettings(settings)
             SendNUIMessage({ test = true, event = k, toggle = v })
         end
     end
-    QBX.Functions.Notify(Lang:t("notify.hud_settings_loaded"), 'success')
+    exports.qbx_core:Notify(Lang:t("notify.hud_settings_loaded"), 'success')
     Wait(1000)
     TriggerEvent("hud:client:LoadMap")
 end
@@ -127,7 +127,7 @@ RegisterKeyMapping('menu', Lang:t('info.open_menu'), 'keyboard', Config.OpenMenu
 -- Reset hud
 local function restartHud()
     TriggerEvent("hud:client:playResetHudSounds")
-    QBX.Functions.Notify(Lang:t("notify.hud_restart"), 'error')
+    exports.qbx_core:Notify(Lang:t("notify.hud_restart"), 'error')
     if cache.vehicle then
         Wait(2600)
         SendNUIMessage({ action = 'car', show = false })
@@ -137,7 +137,7 @@ local function restartHud()
     SendNUIMessage({ action = 'hudtick', show = false })
     SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
-    QBX.Functions.Notify(Lang:t("notify.hud_start"), 'success')
+    exports.qbx_core:Notify(Lang:t("notify.hud_start"), 'success')
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
@@ -358,7 +358,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBX.Functions.Notify(Lang:t("notify.load_square_map"), 'inform')
+            exports.qbx_core:Notify(Lang:t("notify.load_square_map"), 'inform')
         end
         SetMinimapClipType(0)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "squaremap", "radarmasksm")
@@ -387,7 +387,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBX.Functions.Notify(Lang:t("notify.loaded_square_map"), 'success')
+            exports.qbx_core:Notify(Lang:t("notify.loaded_square_map"), 'success')
         end
     elseif Menu.isToggleMapShapeChecked == "circle" then
         RequestStreamedTextureDict("circlemap", false)
@@ -395,7 +395,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
             Wait(150)
         end
         if Menu.isMapNotifChecked then
-            QBX.Functions.Notify(Lang:t("notify.load_circle_map"), 'inform')
+            exports.qbx_core:Notify(Lang:t("notify.load_circle_map"), 'inform')
         end
         SetMinimapClipType(1)
         AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap", "radarmasksm")
@@ -424,7 +424,7 @@ RegisterNetEvent("hud:client:LoadMap", function()
         end
         Wait(1200)
         if Menu.isMapNotifChecked then
-            QBX.Functions.Notify(Lang:t("notify.loaded_circle_map"), 'success')
+            exports.qbx_core:Notify(Lang:t("notify.loaded_circle_map"), 'success')
         end
     end
 end)
@@ -522,14 +522,14 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         CinematicShow(false)
         Menu.isCineamticModeChecked = false
         if Menu.isCinematicNotifChecked then
-            QBX.Functions.Notify(Lang:t("notify.cinematic_off"), 'error')
+            exports.qbx_core:Notify(Lang:t("notify.cinematic_off"), 'error')
         end
         DisplayRadar(true)
     else
         CinematicShow(true)
         Menu.isCineamticModeChecked = true
         if Menu.isCinematicNotifChecked then
-            QBX.Functions.Notify(Lang:t("notify.cinematic_on"), 'success')
+            exports.qbx_core:Notify(Lang:t("notify.cinematic_on"), 'success')
         end
     end
     TriggerEvent("hud:client:playHudChecklistSound")
@@ -838,7 +838,7 @@ CreateThread(function()
                 if getFuelLevel(vehicle) <= 20 then -- At 20% Fuel Left
                     if Menu.isLowFuelChecked then
                         TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
-                        QBX.Functions.Notify(Lang:t("notify.low_fuel"), 'error')
+                        exports.qbx_core:Notify(Lang:t("notify.low_fuel"), 'error')
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end
@@ -1149,16 +1149,16 @@ CreateThread(function()
     end
 end)
 
-RegisterNetEvent('qbx-hud:client:showHud', function()
+RegisterNetEvent('qbx_hud:client:showHud', function()
     if cache.vehicle then
         DisplayRadar(true)
         updateVehicleHud({
-            show,
+            true,
             IsPauseMenuActive(),
             seatbeltOn,
-            math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-            getFuelLevel(vehicle),
-            math.ceil(GetEntityCoords(player).z * 0.5),
+            math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+            getFuelLevel(cache.vehicle),
+            math.ceil(GetEntityCoords(cache.ped).z * 0.5),
             showAltitude,
             showSeatbelt,
             showSquareB,
@@ -1167,7 +1167,7 @@ RegisterNetEvent('qbx-hud:client:showHud', function()
     end
 end)
 
-RegisterNetEvent('qbx-hud:client:hideHud', function()
+RegisterNetEvent('qbx_hud:client:hideHud', function()
     if cache.vehicle then
         DisplayRadar(false)
         SendNUIMessage({

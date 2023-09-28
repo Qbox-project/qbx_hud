@@ -3,11 +3,11 @@ local resetStress = false
 -- Handlers
 
 AddEventHandler('ox_inventory:openedInventory', function(source)
-    TriggerClientEvent('qbx-hud:client:hideHud', source)
+    TriggerClientEvent('qbx_hud:client:hideHud', source)
 end)
 
 AddEventHandler('ox_inventory:closedInventory', function(source)
-    TriggerClientEvent('qbx-hud:client:showHud', source)
+    TriggerClientEvent('qbx_hud:client:showHud', source)
 end)
 
 -- Callbacks
@@ -20,7 +20,7 @@ end)
 
 RegisterNetEvent('hud:server:GainStress', function(amount)
     local src = source
-    local Player = QBX.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local newStress
     if not Player or (Config.DisablePoliceStress and Player.PlayerData.job.type == 'leo') then return end
     if not resetStress then
@@ -37,12 +37,12 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_gain"), 'inform', 2500, _, _, {'#141517', '#ffffff'}, 'brain', '#C53030')
+    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_gain"), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#C53030')
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
     local src = source
-    local Player = QBX.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local newStress
     if not Player then return end
     if not resetStress then
@@ -59,7 +59,7 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     Player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_removed"), 'inform', 2500, _, _, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
+    TriggerClientEvent('QBCore:Notify', src, Lang:t("notify.stress_removed"), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
 end)
 
 -- Commands
@@ -68,7 +68,7 @@ lib.addCommand(Lang:t('commands.cash'), {
     help = Lang:t('commands.help.cash'),
     restricted = 'group.admin'
 }, function(source)
-    local player = QBX.Functions.GetPlayer(source)
+    local player = exports.qbx_core:GetPlayer(source)
     local cashAmount = player.PlayerData.money.cash
     TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashAmount)
 end)
@@ -76,7 +76,7 @@ end)
 lib.addCommand(Lang:t('commands.bank'), {
     help = Lang:t('commands.help.bank'),
 }, function(source)
-    local player = QBX.Functions.GetPlayer(source)
+    local player = exports.qbx_core:GetPlayer(source)
     local bankAmount = player.PlayerData.money.bank
     TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankAmount)
 end)
