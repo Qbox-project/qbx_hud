@@ -567,7 +567,7 @@ RegisterNetEvent('qb-admin:client:ToggleDevmode', function()
     dev = not dev
 end)
 
-local function IsWhitelistedWeaponArmed(weapon)
+local function isWhitelistedWeaponArmed(weapon)
     if weapon then
         for _, v in pairs(Config.WhitelistedWeaponArmed) do
             if weapon == v then
@@ -678,7 +678,7 @@ CreateThread(function()
             local show = true
             local weapon = GetSelectedPedWeapon(cache.ped)
             -- Player hud
-            if not IsWhitelistedWeaponArmed(weapon) then
+            if not isWhitelistedWeaponArmed(weapon) then
                 if weapon ~= `WEAPON_UNARMED` then
                     armed = true
                 else
@@ -904,7 +904,7 @@ CreateThread(function() -- Speeding
     end
 end)
 
-local function IsWhitelistedWeaponStress(weapon)
+local function isWhitelistedWeaponStress(weapon)
     if weapon then
         for _, v in pairs(Config.WhitelistedWeaponStress) do
             if weapon == v then
@@ -916,7 +916,7 @@ local function IsWhitelistedWeaponStress(weapon)
 end
 
 local function startWeaponStressThread(weapon)
-    if IsWhitelistedWeaponStress(weapon) then return end
+    if isWhitelistedWeaponStress(weapon) then return end
     hasWeapon = true
 
     CreateThread(function()
@@ -942,7 +942,7 @@ end)
 
 -- Stress Screen Effects
 
-local function GetBlurIntensity(stresslevel)
+local function getBlurIntensity(stresslevel)
     for _, v in pairs(Config.Intensity.blur) do
         if stresslevel >= v.min and stresslevel <= v.max then
             return v.intensity
@@ -951,7 +951,7 @@ local function GetBlurIntensity(stresslevel)
     return 1500
 end
 
-local function GetEffectInterval(stresslevel)
+local function getEffectInterval(stresslevel)
     for _, v in pairs(Config.EffectInterval) do
         if stresslevel >= v.min and stresslevel <= v.max then
             return v.timeout
@@ -962,9 +962,9 @@ end
 
 CreateThread(function()
     while true do
-        local effectInterval = GetEffectInterval(stress)
+        local effectInterval = getEffectInterval(stress)
         if stress >= 100 then
-            local blurIntensity = GetBlurIntensity(stress)
+            local blurIntensity = getBlurIntensity(stress)
             local fallRepeat = math.random(2, 4)
             local ragdollTimeout = fallRepeat * 1750
             TriggerScreenblurFadeIn(1000.0)
@@ -987,7 +987,7 @@ CreateThread(function()
                 TriggerScreenblurFadeOut(1000.0)
             end
         elseif stress >= Config.MinimumStress then
-            local blurIntensity = GetBlurIntensity(stress)
+            local blurIntensity = getBlurIntensity(stress)
             TriggerScreenblurFadeIn(1000.0)
             Wait(blurIntensity)
             TriggerScreenblurFadeOut(1000.0)
@@ -1004,7 +1004,7 @@ CreateThread(function()
     end
 end)
 
-local function BlackBars()
+local function blackBars()
     DrawRect(0.0, 0.0, 2.0, w, 0, 0, 0, 255)
     DrawRect(0.0, 1.0, 2.0, w, 0, 0, 0, 255)
 end
@@ -1012,7 +1012,7 @@ end
 CreateThread(function()
     while true do
         if w > 0 then
-            BlackBars()
+            blackBars()
             DisplayRadar(false)
             SendNUIMessage({
                 action = 'hudtick',
