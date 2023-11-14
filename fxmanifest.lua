@@ -1,12 +1,9 @@
 fx_version 'cerulean'
-use_experimental_fxv2_oal 'yes'
-lua54 'yes'
 game 'gta5'
-name 'qbx_hud'
-author 'Qbus & Qbox Contributors'
-version '1.0.0'
+
+description 'QBX_Hud'
 repository 'https://github.com/Qbox-project/qbx_hud'
-description 'HUD for Qbox'
+version '1.0.0'
 
 shared_scripts {
     '@qbx_core/shared/locale.lua',
@@ -33,3 +30,6 @@ files {
     'html/responsive.css',
     'html/app.js',
 }
+
+lua54 'yes'
+use_experimental_fxv2_oal 'yes'

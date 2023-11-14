@@ -1,5 +1,4 @@
-local config = Config
-local speedMultiplier = config.UseMPH and 2.23694 or 3.6
+local speedMultiplier = Config.UseMPH and 2.23694 or 3.6
 local seatbeltOn = false
 local cruiseOn = false
 local showAltitude = false
@@ -21,14 +20,13 @@ local playerDead = false
 local showMenu = false
 local showCircleB = false
 local showSquareB = false
-local Menu = config.Menu
 local CinematicHeight = 0.2
 local w = 0
 local hasWeapon = false
 
 DisplayRadar(false)
 
-local function CinematicShow(bool)
+local function cinematicShow(bool)
     SetBigmapActive(true, false)
     Wait(0)
     SetBigmapActive(false, false)
@@ -48,28 +46,28 @@ end
 local function loadSettings(settings)
     for k, v in pairs(settings) do
         if k == 'isToggleMapShapeChecked' then
-            Menu.isToggleMapShapeChecked = v
-            SendNUIMessage({ test = true, event = k, toggle = v })
+            Config.Menu.isToggleMapShapeChecked = v
+            SendNUIMessage({test = true, event = k, toggle = v})
         elseif k == 'isCineamticModeChecked' then
-            Menu.isCineamticModeChecked = v
-            CinematicShow(v)
-            SendNUIMessage({ test = true, event = k, toggle = v })
+            Config.Menu.isCineamticModeChecked = v
+            cinematicShow(v)
+            SendNUIMessage({test = true, event = k, toggle = v})
         elseif k == 'isChangeFPSChecked' then
-            Menu[k] = v
+            Config.Menu[k] = v
             local val = v and 'Optimized' or 'Synced'
-            SendNUIMessage({ test = true, event = k, toggle = val })
+            SendNUIMessage({test = true, event = k, toggle = val})
         else
-            Menu[k] = v
-            SendNUIMessage({ test = true, event = k, toggle = v })
+            Config.Menu[k] = v
+            SendNUIMessage({test = true, event = k, toggle = v})
         end
     end
-    exports.qbx_core:Notify(Lang:t("notify.hud_settings_loaded"), 'success')
+    exports.qbx_core:Notify(Lang:t('notify.hud_settings_loaded'), 'success')
     Wait(1000)
-    TriggerEvent("hud:client:LoadMap")
+    TriggerEvent('hud:client:LoadMap')
 end
 
 local function saveSettings()
-    SetResourceKvp('hudSettings', json.encode(Menu))
+    SetResourceKvp('hudSettings', json.encode(Config.Menu))
 end
 
 local function hasHarness(items)
@@ -87,7 +85,7 @@ local function hasHarness(items)
     harness = _harness
 end
 
-RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
@@ -108,60 +106,60 @@ end)
 RegisterCommand('menu', function()
     Wait(50)
     if showMenu then return end
-    TriggerEvent("hud:client:playOpenMenuSounds")
+    TriggerEvent('hud:client:playOpenMenuSounds')
     SetNuiFocus(true, true)
-    SendNUIMessage({ action = "open" })
+    SendNUIMessage({action = 'open'})
     showMenu = true
 end, false)
 
 RegisterNUICallback('closeMenu', function(_, cb)
     Wait(50)
-    TriggerEvent("hud:client:playCloseMenuSounds")
+    TriggerEvent('hud:client:playCloseMenuSounds')
     showMenu = false
     SetNuiFocus(false, false)
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterKeyMapping('menu', Lang:t('info.open_menu'), 'keyboard', Config.OpenMenu)
 
 -- Reset hud
 local function restartHud()
-    TriggerEvent("hud:client:playResetHudSounds")
-    exports.qbx_core:Notify(Lang:t("notify.hud_restart"), 'error')
+    TriggerEvent('hud:client:playResetHudSounds')
+    exports.qbx_core:Notify(Lang:t('notify.hud_restart'), 'error')
     if cache.vehicle then
         Wait(2600)
-        SendNUIMessage({ action = 'car', show = false })
-        SendNUIMessage({ action = 'car', show = true })
+        SendNUIMessage({action = 'car', show = false})
+        SendNUIMessage({action = 'car', show = true})
     end
     Wait(2600)
-    SendNUIMessage({ action = 'hudtick', show = false })
-    SendNUIMessage({ action = 'hudtick', show = true })
+    SendNUIMessage({action = 'hudtick', show = false})
+    SendNUIMessage({action = 'hudtick', show = true})
     Wait(2600)
-    exports.qbx_core:Notify(Lang:t("notify.hud_start"), 'success')
+    exports.qbx_core:Notify(Lang:t('notify.hud_start'), 'success')
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
     Wait(50)
     restartHud()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterCommand('resethud', function(_, cb)
     Wait(50)
     restartHud()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('resetStorage', function(_, cb)
     Wait(50)
-    TriggerEvent("hud:client:resetStorage")
-    cb("ok")
+    TriggerEvent('hud:client:resetStorage')
+    cb('ok')
 end)
 
-RegisterNetEvent("hud:client:resetStorage", function()
+RegisterNetEvent('hud:client:resetStorage', function()
     Wait(50)
-    if Menu.isResetSoundsChecked then
-        TriggerServerEvent("InteractSound_SV:PlayOnSource", "airwrench", 0.1)
+    if Config.Menu.isResetSoundsChecked then
+        TriggerServerEvent('InteractSound_SV:PlayOnSource', 'airwrench', 0.1)
     end
     local menu = lib.callback.await('hud:server:getMenu', false)
     loadSettings(menu)
@@ -171,205 +169,202 @@ end)
 -- Notifications
 RegisterNUICallback('openMenuSounds', function(_, cb)
     Wait(50)
-    Menu.isOpenMenuSoundsChecked = not Menu.isOpenMenuSoundsChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isOpenMenuSoundsChecked = not Config.Menu.isOpenMenuSoundsChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
-RegisterNetEvent("hud:client:playOpenMenuSounds", function()
+RegisterNetEvent('hud:client:playOpenMenuSounds', function()
     Wait(50)
-    if not Menu.isOpenMenuSoundsChecked then return end
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "monkeyopening", 0.5)
+    if not Config.Menu.isOpenMenuSoundsChecked then return end
+    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'monkeyopening', 0.5)
 end)
 
-RegisterNetEvent("hud:client:playCloseMenuSounds", function()
+RegisterNetEvent('hud:client:playCloseMenuSounds', function()
     Wait(50)
-    if not Menu.isOpenMenuSoundsChecked then return end
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "catclosing", 0.05)
+    if not Config.Menu.isOpenMenuSoundsChecked then return end
+    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'catclosing', 0.05)
 end)
 
 RegisterNUICallback('resetHudSounds', function(_, cb)
     Wait(50)
-    Menu.isResetSoundsChecked = not Menu.isResetSoundsChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isResetSoundsChecked = not Config.Menu.isResetSoundsChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
-RegisterNetEvent("hud:client:playResetHudSounds", function()
+RegisterNetEvent('hud:client:playResetHudSounds', function()
     Wait(50)
-    if not Menu.isResetSoundsChecked then return end
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "airwrench", 0.1)
+    if not Config.Menu.isResetSoundsChecked then return end
+    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'airwrench', 0.1)
 end)
 
 RegisterNUICallback('checklistSounds', function(_, cb)
     Wait(50)
-    TriggerEvent("hud:client:checklistSounds")
-    cb("ok")
+    TriggerEvent('hud:client:checklistSounds')
+    cb('ok')
 end)
 
-RegisterNetEvent("hud:client:checklistSounds", function()
+RegisterNetEvent('hud:client:checklistSounds', function()
     Wait(50)
-    Menu.isListSoundsChecked = not Menu.isListSoundsChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isListSoundsChecked = not Config.Menu.isListSoundsChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
 end)
 
-RegisterNetEvent("hud:client:playHudChecklistSound", function()
+RegisterNetEvent('hud:client:playHudChecklistSound', function()
     Wait(50)
-    if not Menu.isListSoundsChecked then return end
-    TriggerServerEvent("InteractSound_SV:PlayOnSource", "shiftyclick", 0.5)
+    if not Config.Menu.isListSoundsChecked then return end
+    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'shiftyclick', 0.5)
 end)
 
 RegisterNUICallback('showOutMap', function(_, cb)
     Wait(50)
-    Menu.isOutMapChecked = not Menu.isOutMapChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isOutMapChecked = not Config.Menu.isOutMapChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showOutCompass', function(_, cb)
     Wait(50)
-    Menu.isOutCompassChecked = not Menu.isOutCompassChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isOutCompassChecked = not Config.Menu.isOutCompassChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showFollowCompass', function(_, cb)
 	Wait(50)
-    Menu.isCompassFollowChecked = not Menu.isCompassFollowChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isCompassFollowChecked = not Config.Menu.isCompassFollowChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showMapNotif', function(_, cb)
     Wait(50)
-    Menu.isMapNotifChecked = not Menu.isMapNotifChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isMapNotifChecked = not Config.Menu.isMapNotifChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showFuelAlert', function(_, cb)
     Wait(50)
-    Menu.isLowFuelChecked = not Menu.isLowFuelChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isLowFuelChecked = not Config.Menu.isLowFuelChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showCinematicNotif', function(_, cb)
     Wait(50)
-    Menu.isCinematicNotifChecked = not Menu.isCinematicNotifChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isCinematicNotifChecked = not Config.Menu.isCinematicNotifChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 -- Status
 RegisterNUICallback('dynamicHealth', function(_, cb)
     Wait(50)
-    TriggerEvent("hud:client:ToggleHealth")
-    cb("ok")
+    TriggerEvent('hud:client:ToggleHealth')
+    cb('ok')
 end)
 
-RegisterNetEvent("hud:client:ToggleHealth", function()
+RegisterNetEvent('hud:client:ToggleHealth', function()
     Wait(50)
-    Menu.isDynamicHealthChecked = not Menu.isDynamicHealthChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicHealthChecked = not Config.Menu.isDynamicHealthChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
 end)
 
 RegisterNUICallback('dynamicArmor', function(_, cb)
     Wait(50)
-    Menu.isDynamicArmorChecked = not Menu.isDynamicArmorChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicArmorChecked = not Config.Menu.isDynamicArmorChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('dynamicHunger', function(_, cb)
     Wait(50)
-    Menu.isDynamicHungerChecked = not Menu.isDynamicHungerChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicHungerChecked = not Config.Menu.isDynamicHungerChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('dynamicThirst', function(_, cb)
     Wait(50)
-    Menu.isDynamicThirstChecked = not Menu.isDynamicThirstChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicThirstChecked = not Config.Menu.isDynamicThirstChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('dynamicStress', function(_, cb)
     Wait(50)
-    Menu.isDynamicStressChecked = not Menu.isDynamicStressChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicStressChecked = not Config.Menu.isDynamicStressChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('dynamicOxygen', function(_, cb)
     Wait(50)
-    Menu.isDynamicOxygenChecked = not Menu.isDynamicOxygenChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicOxygenChecked = not Config.Menu.isDynamicOxygenChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 -- Vehicle
 RegisterNUICallback('changeFPS', function(_, cb)
     Wait(50)
-    Menu.isChangeFPSChecked = not Menu.isChangeFPSChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isChangeFPSChecked = not Config.Menu.isChangeFPSChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('HideMap', function(_, cb)
     Wait(50)
-    Menu.isHideMapChecked = not Menu.isHideMapChecked
-    DisplayRadar(not Menu.isHideMapChecked)
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isHideMapChecked = not Config.Menu.isHideMapChecked
+    DisplayRadar(not Config.Menu.isHideMapChecked)
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
-RegisterNetEvent("hud:client:LoadMap", function()
+RegisterNetEvent('hud:client:LoadMap', function()
     Wait(50)
     -- Credit to Dalrae for the solve.
-    local defaultAspectRatio = 1920/1080 -- Don't change this.
+    local defaultAspectRatio = 1920 / 1080 -- Don't change this.
     local resolutionX, resolutionY = GetActiveScreenResolution()
-    local aspectRatio = resolutionX/resolutionY
+    local aspectRatio = resolutionX / resolutionY
     local minimapOffset = 0
     if aspectRatio > defaultAspectRatio then
-        minimapOffset = ((defaultAspectRatio-aspectRatio)/3.6)-0.008
+        minimapOffset = ((defaultAspectRatio-aspectRatio) / 3.6) - 0.008
     end
-    if Menu.isToggleMapShapeChecked == "square" then
-        RequestStreamedTextureDict("squaremap", false)
-        if not HasStreamedTextureDictLoaded("squaremap") then
-            Wait(150)
-        end
-        if Menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t("notify.load_square_map"), 'inform')
+    if Config.Menu.isToggleMapShapeChecked == 'square' then
+        lib.requestStreamedTextureDict('squaremap', false)
+        if Config.Menu.isMapNotifChecked then
+            exports.qbx_core:Notify(Lang:t('notify.load_square_map'), 'inform')
         end
         SetMinimapClipType(0)
-        AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "squaremap", "radarmasksm")
-        AddReplaceTexture("platform:/textures/graphics", "radarmask1g", "squaremap", "radarmasksm")
+        AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'squaremap', 'radarmasksm')
+        AddReplaceTexture('platform:/textures/graphics', 'radarmask1g', 'squaremap', 'radarmasksm')
         -- 0.0 = nav symbol and icons left
         -- 0.1638 = nav symbol and icons stretched
         -- 0.216 = nav symbol and icons raised up
-        SetMinimapComponentPosition("minimap", "L", "B", 0.0 + minimapOffset, -0.047, 0.1638, 0.183)
+        SetMinimapComponentPosition('minimap', 'L', 'B', 0.0 + minimapOffset, -0.047, 0.1638, 0.183)
 
         -- icons within map
-        SetMinimapComponentPosition("minimap_mask", "L", "B", 0.0 + minimapOffset, 0.0, 0.128, 0.20)
+        SetMinimapComponentPosition('minimap_mask', 'L', 'B', 0.0 + minimapOffset, 0.0, 0.128, 0.20)
 
         -- -0.01 = map pulled left
         -- 0.025 = map raised up
@@ -381,32 +376,29 @@ RegisterNetEvent("hud:client:LoadMap", function()
         SetMinimapClipType(0)
         Wait(50)
         SetBigmapActive(false, false)
-        if Menu.isToggleMapBordersChecked then
+        if Config.Menu.isToggleMapBordersChecked then
             showCircleB = false
             showSquareB = true
         end
         Wait(1200)
-        if Menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t("notify.loaded_square_map"), 'success')
+        if Config.Menu.isMapNotifChecked then
+            exports.qbx_core:Notify(Lang:t('notify.loaded_square_map'), 'success')
         end
-    elseif Menu.isToggleMapShapeChecked == "circle" then
-        RequestStreamedTextureDict("circlemap", false)
-        if not HasStreamedTextureDictLoaded("circlemap") then
-            Wait(150)
-        end
-        if Menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t("notify.load_circle_map"), 'inform')
+    elseif Config.Menu.isToggleMapShapeChecked == 'circle' then
+        lib.requestStreamedTextureDict('circlemap', false)
+        if Config.Menu.isMapNotifChecked then
+            exports.qbx_core:Notify(Lang:t('notify.load_circle_map'), 'inform')
         end
         SetMinimapClipType(1)
-        AddReplaceTexture("platform:/textures/graphics", "radarmasksm", "circlemap", "radarmasksm")
-        AddReplaceTexture("platform:/textures/graphics", "radarmask1g", "circlemap", "radarmasksm")
+        AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'circlemap', 'radarmasksm')
+        AddReplaceTexture('platform:/textures/graphics', 'radarmask1g', 'circlemap', 'radarmasksm')
         -- -0.0100 = nav symbol and icons left
         -- 0.180 = nav symbol and icons stretched
         -- 0.258 = nav symbol and icons raised up
-        SetMinimapComponentPosition("minimap", "L", "B", -0.0100 + minimapOffset, -0.030, 0.180, 0.258)
+        SetMinimapComponentPosition('minimap', 'L', 'B', -0.0100 + minimapOffset, -0.030, 0.180, 0.258)
 
         -- icons within map
-        SetMinimapComponentPosition("minimap_mask", "L", "B", 0.200 + minimapOffset, 0.0, 0.065, 0.20)
+        SetMinimapComponentPosition('minimap_mask', 'L', 'B', 0.200 + minimapOffset, 0.0, 0.065, 0.20)
 
         -- -0.00 = map pulled left
         -- 0.015 = map raised up
@@ -418,34 +410,34 @@ RegisterNetEvent("hud:client:LoadMap", function()
         SetBigmapActive(true, false)
         Wait(50)
         SetBigmapActive(false, false)
-        if Menu.isToggleMapBordersChecked then
+        if Config.Menu.isToggleMapBordersChecked then
             showSquareB = false
             showCircleB = true
         end
         Wait(1200)
-        if Menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t("notify.loaded_circle_map"), 'success')
+        if Config.Menu.isMapNotifChecked then
+            exports.qbx_core:Notify(Lang:t('notify.loaded_circle_map'), 'success')
         end
     end
 end)
 
 RegisterNUICallback('ToggleMapShape', function(_, cb)
     Wait(50)
-    if not Menu.isHideMapChecked then
-        Menu.isToggleMapShapeChecked = Menu.isToggleMapShapeChecked == "circle" and "square" or "circle"
+    if not Config.Menu.isHideMapChecked then
+        Config.Menu.isToggleMapShapeChecked = Config.Menu.isToggleMapShapeChecked == 'circle' and 'square' or 'circle'
         Wait(50)
-        TriggerEvent("hud:client:LoadMap")
+        TriggerEvent('hud:client:LoadMap')
     end
-    TriggerEvent("hud:client:playHudChecklistSound")
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('ToggleMapBorders', function(_, cb)
     Wait(50)
-    Menu.isToggleMapBordersChecked = not Menu.isToggleMapBordersChecked
-    if Menu.isToggleMapBordersChecked then
-        if Menu.isToggleMapShapeChecked == "square" then
+    Config.Menu.isToggleMapBordersChecked = not Config.Menu.isToggleMapBordersChecked
+    if Config.Menu.isToggleMapBordersChecked then
+        if Config.Menu.isToggleMapShapeChecked == 'square' then
             showSquareB = true
         else
             showCircleB = true
@@ -454,87 +446,87 @@ RegisterNUICallback('ToggleMapBorders', function(_, cb)
         showSquareB = false
         showCircleB = false
     end
-    TriggerEvent("hud:client:playHudChecklistSound")
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('dynamicEngine', function(_, cb)
     Wait(50)
-    Menu.isDynamicEngineChecked = not Menu.isDynamicEngineChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicEngineChecked = not Config.Menu.isDynamicEngineChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('dynamicNitro', function(_, cb)
     Wait(50)
-    Menu.isDynamicNitroChecked = not Menu.isDynamicNitroChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDynamicNitroChecked = not Config.Menu.isDynamicNitroChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 -- Compass
 RegisterNUICallback('showCompassBase', function(_, cb)
 	Wait(50)
-    Menu.isCompassShowChecked = not Menu.isCompassShowChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isCompassShowChecked = not Config.Menu.isCompassShowChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showStreetsNames', function(_, cb)
 	Wait(50)
-    Menu.isShowStreetsChecked = not Menu.isShowStreetsChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isShowStreetsChecked = not Config.Menu.isShowStreetsChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showPointerIndex', function(_, cb)
 	Wait(50)
-    Menu.isPointerShowChecked = not Menu.isPointerShowChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isPointerShowChecked = not Config.Menu.isPointerShowChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('showDegreesNum', function(_, cb)
 	Wait(50)
-    Menu.isDegreesShowChecked = not Menu.isDegreesShowChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isDegreesShowChecked = not Config.Menu.isDegreesShowChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('changeCompassFPS', function(_, cb)
 	Wait(50)
-    Menu.isChangeCompassFPSChecked = not Menu.isChangeCompassFPSChecked
-    TriggerEvent("hud:client:playHudChecklistSound")
+    Config.Menu.isChangeCompassFPSChecked = not Config.Menu.isChangeCompassFPSChecked
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNUICallback('cinematicMode', function(_, cb)
     Wait(50)
-    if Menu.isCineamticModeChecked then
-        CinematicShow(false)
-        Menu.isCineamticModeChecked = false
-        if Menu.isCinematicNotifChecked then
-            exports.qbx_core:Notify(Lang:t("notify.cinematic_off"), 'error')
+    if Config.Menu.isCineamticModeChecked then
+        cinematicShow(false)
+        Config.Menu.isCineamticModeChecked = false
+        if Config.Menu.isCinematicNotifChecked then
+            exports.qbx_core:Notify(Lang:t('notify.cinematic_off'), 'error')
         end
         DisplayRadar(true)
     else
-        CinematicShow(true)
-        Menu.isCineamticModeChecked = true
-        if Menu.isCinematicNotifChecked then
-            exports.qbx_core:Notify(Lang:t("notify.cinematic_on"), 'success')
+        cinematicShow(true)
+        Config.Menu.isCineamticModeChecked = true
+        if Config.Menu.isCinematicNotifChecked then
+            exports.qbx_core:Notify(Lang:t('notify.cinematic_on'), 'success')
         end
     end
-    TriggerEvent("hud:client:playHudChecklistSound")
+    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
-    cb("ok")
+    cb('ok')
 end)
 
 RegisterNetEvent('hud:client:ToggleAirHud', function()
@@ -571,13 +563,13 @@ RegisterNetEvent('hud:client:UpdateHarness', function(harnessHp)
     hp = harnessHp
 end)
 
-RegisterNetEvent("qb-admin:client:ToggleDevmode", function()
+RegisterNetEvent('qb-admin:client:ToggleDevmode', function()
     dev = not dev
 end)
 
 local function IsWhitelistedWeaponArmed(weapon)
     if weapon then
-        for _, v in pairs(config.WhitelistedWeaponArmed) do
+        for _, v in pairs(Config.WhitelistedWeaponArmed) do
             if weapon == v then
                 return true
             end
@@ -586,7 +578,7 @@ local function IsWhitelistedWeaponArmed(weapon)
     return false
 end
 
-local prevPlayerStats = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
+local prevPlayerStats = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
 
 local function updatePlayerHud(data)
     local shouldUpdate = false
@@ -634,7 +626,7 @@ local function updatePlayerHud(data)
     end
 end
 
-local prevVehicleStats = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
+local prevVehicleStats = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
 
 local function updateVehicleHud(data)
     local shouldUpdate = false
@@ -677,16 +669,14 @@ end
 CreateThread(function()
     local wasInVehicle = false
     while true do
-        if Menu.isChangeFPSChecked then
+        if Config.Menu.isChangeFPSChecked then
             Wait(500)
         else
             Wait(50)
         end
         if LocalPlayer.state.isLoggedIn then
             local show = true
-            local player = cache.ped
-            local playerId = cache.playerId
-            local weapon = GetSelectedPedWeapon(player)
+            local weapon = GetSelectedPedWeapon(cache.ped)
             -- Player hud
             if not IsWhitelistedWeaponArmed(weapon) then
                 if weapon ~= `WEAPON_UNARMED` then
@@ -695,18 +685,18 @@ CreateThread(function()
                     armed = false
                 end
             end
-            playerDead = IsEntityDead(player) or QBX.PlayerData.metadata.inlaststand or QBX.PlayerData.metadata.isdead
-            parachute = GetPedParachuteState(player)
+            playerDead = IsEntityDead(cache.ped) or QBX.PlayerData.metadata.inlaststand or QBX.PlayerData.metadata.isdead
+            parachute = GetPedParachuteState(cache.ped)
             -- Stamina
-            if not IsEntityInWater(player) then
-                oxygen = 100 - GetPlayerSprintStaminaRemaining(playerId)
+            if not IsEntityInWater(cache.ped) then
+                oxygen = 100 - GetPlayerSprintStaminaRemaining(cache.playerId)
             end
             -- Oxygen
-            if IsEntityInWater(player) then
-                oxygen = GetPlayerUnderwaterTimeRemaining(playerId) * 10
+            if IsEntityInWater(cache.ped) then
+                oxygen = GetPlayerUnderwaterTimeRemaining(cache.playerId) * 10
             end
             -- Player hud
-            local talking = NetworkIsPlayerTalking(playerId)
+            local talking = NetworkIsPlayerTalking(cache.playerId)
             local voice = 0
             if LocalPlayer.state.proximity then
                 voice = LocalPlayer.state.proximity.distance
@@ -714,21 +704,20 @@ CreateThread(function()
             if IsPauseMenuActive() then
                 show = false
             end
-            local vehicle = cache.vehicle
-            if not (cache.vehicle and not IsThisModelABicycle(vehicle)) then
+            if not (cache.vehicle and not IsThisModelABicycle(cache.vehicle)) then
             updatePlayerHud({
                 show,
-                Menu.isDynamicHealthChecked,
-                Menu.isDynamicArmorChecked,
-                Menu.isDynamicHungerChecked,
-                Menu.isDynamicThirstChecked,
-                Menu.isDynamicStressChecked,
-                Menu.isDynamicOxygenChecked,
-                Menu.isDynamicEngineChecked,
-                Menu.isDynamicNitroChecked,
-                GetEntityHealth(player) - 100,
+                Config.Menu.isDynamicHealthChecked,
+                Config.Menu.isDynamicArmorChecked,
+                Config.Menu.isDynamicHungerChecked,
+                Config.Menu.isDynamicThirstChecked,
+                Config.Menu.isDynamicStressChecked,
+                Config.Menu.isDynamicOxygenChecked,
+                Config.Menu.isDynamicEngineChecked,
+                Config.Menu.isDynamicNitroChecked,
+                GetEntityHealth(cache.ped) - 100,
                 playerDead,
-                GetPedArmour(player),
+                GetPedArmour(cache.ped),
                 thirst,
                 hunger,
                 stress,
@@ -743,35 +732,35 @@ CreateThread(function()
                 nitroActive,
                 harness,
                 hp,
-                math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
+                math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
                 -1,
-                Menu.isCineamticModeChecked,
+                Config.Menu.isCineamticModeChecked,
                 dev,
             })
             end
             -- Vehicle hud
-            if IsPedInAnyHeli(player) or IsPedInAnyPlane(player) then
+            if IsPedInAnyHeli(cache.ped) or IsPedInAnyPlane(cache.ped) then
                 showAltitude = true
                 showSeatbelt = false
             end
-            if cache.vehicle and not IsThisModelABicycle(vehicle) then
+            if cache.vehicle and not IsThisModelABicycle(cache.vehicle) then
                 if not wasInVehicle then
                     DisplayRadar(true)
                 end
                 wasInVehicle = true
                 updatePlayerHud({
                     show,
-                    Menu.isDynamicHealthChecked,
-                    Menu.isDynamicArmorChecked,
-                    Menu.isDynamicHungerChecked,
-                    Menu.isDynamicThirstChecked,
-                    Menu.isDynamicStressChecked,
-                    Menu.isDynamicOxygenChecked,
-                    Menu.isDynamicEngineChecked,
-                    Menu.isDynamicNitroChecked,
-                    GetEntityHealth(player) - 100,
+                    Config.Menu.isDynamicHealthChecked,
+                    Config.Menu.isDynamicArmorChecked,
+                    Config.Menu.isDynamicHungerChecked,
+                    Config.Menu.isDynamicThirstChecked,
+                    Config.Menu.isDynamicStressChecked,
+                    Config.Menu.isDynamicOxygenChecked,
+                    Config.Menu.isDynamicEngineChecked,
+                    Config.Menu.isDynamicNitroChecked,
+                    GetEntityHealth(cache.ped) - 100,
                     playerDead,
-                    GetPedArmour(player),
+                    GetPedArmour(cache.ped),
                     thirst,
                     hunger,
                     stress,
@@ -780,24 +769,24 @@ CreateThread(function()
                     talking,
                     armed,
                     oxygen,
-                    GetPedParachuteState(player),
+                    GetPedParachuteState(cache.ped),
                     nos,
                     cruiseOn,
                     nitroActive,
                     harness,
                     hp,
-                    math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-                    (GetVehicleEngineHealth(vehicle) / 10),
-                    Menu.isCineamticModeChecked,
+                    math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+                    (GetVehicleEngineHealth(cache.vehicle) / 10),
+                    Config.Menu.isCineamticModeChecked,
                     dev,
                 })
                 updateVehicleHud({
                     show,
                     IsPauseMenuActive(),
                     seatbeltOn,
-                    math.ceil(GetEntitySpeed(vehicle) * speedMultiplier),
-                    getFuelLevel(vehicle),
-                    math.ceil(GetEntityCoords(player).z * 0.5),
+                    math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+                    getFuelLevel(cache.vehicle),
+                    math.ceil(GetEntityCoords(cache.ped).z * 0.5),
                     showAltitude,
                     showSeatbelt,
                     showSquareB,
@@ -818,7 +807,7 @@ CreateThread(function()
                     cruiseOn = false
                     harness = false
                 end
-                DisplayRadar(Menu.isOutMapChecked)
+                DisplayRadar(Config.Menu.isOutMapChecked)
             end
         else
             SendNUIMessage({
@@ -833,12 +822,11 @@ end)
 CreateThread(function()
     while true do
         if LocalPlayer.state.isLoggedIn then
-            local vehicle = cache.vehicle
-            if vehicle and not IsThisModelABicycle(GetEntityModel(vehicle)) then
-                if getFuelLevel(vehicle) <= 20 then -- At 20% Fuel Left
-                    if Menu.isLowFuelChecked then
-                        TriggerServerEvent("InteractSound_SV:PlayOnSource", "pager", 0.10)
-                        exports.qbx_core:Notify(Lang:t("notify.low_fuel"), 'error')
+            if cache.vehicle and not IsThisModelABicycle(GetEntityModel(cache.vehicle)) then
+                if getFuelLevel(cache.vehicle) <= 20 then -- At 20% Fuel Left
+                    if Config.Menu.isLowFuelChecked then
+                        TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
+                        exports.qbx_core:Notify(Lang:t('notify.low_fuel'), 'error')
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end
@@ -896,16 +884,15 @@ CreateThread(function() -- Speeding
     while true do
         if LocalPlayer.state.isLoggedIn then
             if cache.vehicle then
-                local veh = cache.vehicle
-                local vehClass = GetVehicleClass(veh)
-                local speed = GetEntitySpeed(veh) * speedMultiplier
+                local vehClass = GetVehicleClass(cache.vehicle)
+                local speed = GetEntitySpeed(cache.vehicle) * speedMultiplier
 
                 if vehClass ~= 13 and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 21 then
                     local stressSpeed
                     if vehClass == 8 then
-                        stressSpeed = config.MinimumSpeed
+                        stressSpeed = Config.MinimumSpeed
                     else
-                        stressSpeed = seatbeltOn and config.MinimumSpeed or config.MinimumSpeedUnbuckled
+                        stressSpeed = seatbeltOn and Config.MinimumSpeed or Config.MinimumSpeedUnbuckled
                     end
                     if speed >= stressSpeed then
                         TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
@@ -919,7 +906,7 @@ end)
 
 local function IsWhitelistedWeaponStress(weapon)
     if weapon then
-        for _, v in pairs(config.WhitelistedWeaponStress) do
+        for _, v in pairs(Config.WhitelistedWeaponStress) do
             if weapon == v then
                 return true
             end
@@ -935,7 +922,7 @@ local function startWeaponStressThread(weapon)
     CreateThread(function()
         while hasWeapon do
             if IsPedShooting(cache.ped) then
-                if math.random() <= config.StressChance then
+                if math.random() <= Config.StressChance then
                     TriggerServerEvent('hud:server:GainStress', math.random(1, 5))
                 end
             end
@@ -956,7 +943,7 @@ end)
 -- Stress Screen Effects
 
 local function GetBlurIntensity(stresslevel)
-    for _, v in pairs(config.Intensity.blur) do
+    for _, v in pairs(Config.Intensity.blur) do
         if stresslevel >= v.min and stresslevel <= v.max then
             return v.intensity
         end
@@ -965,7 +952,7 @@ local function GetBlurIntensity(stresslevel)
 end
 
 local function GetEffectInterval(stresslevel)
-    for _, v in pairs(config.EffectInterval) do
+    for _, v in pairs(Config.EffectInterval) do
         if stresslevel >= v.min and stresslevel <= v.max then
             return v.timeout
         end
@@ -975,35 +962,34 @@ end
 
 CreateThread(function()
     while true do
-        local ped = cache.ped
         local effectInterval = GetEffectInterval(stress)
         if stress >= 100 then
-            local BlurIntensity = GetBlurIntensity(stress)
-            local FallRepeat = math.random(2, 4)
-            local RagdollTimeout = FallRepeat * 1750
+            local blurIntensity = GetBlurIntensity(stress)
+            local fallRepeat = math.random(2, 4)
+            local ragdollTimeout = fallRepeat * 1750
             TriggerScreenblurFadeIn(1000.0)
-            Wait(BlurIntensity)
+            Wait(blurIntensity)
             TriggerScreenblurFadeOut(1000.0)
 
-            if not IsPedRagdoll(ped) and IsPedOnFoot(ped) and not IsPedSwimming(ped) then
-                local forwardVector = GetEntityForwardVector(ped)
-                SetPedToRagdollWithFall(ped, RagdollTimeout, RagdollTimeout, 1, forwardVector.x, forwardVector.y, forwardVector.z, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            if not IsPedRagdoll(cache.ped) and IsPedOnFoot(cache.ped) and not IsPedSwimming(cache.ped) then
+                local forwardVector = GetEntityForwardVector(cache.ped)
+                SetPedToRagdollWithFall(cache.ped, ragdollTimeout, ragdollTimeout, 1, forwardVector.x, forwardVector.y, forwardVector.z, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
             end
 
             Wait(1000)
-            for _ = 1, FallRepeat, 1 do
+            for _ = 1, fallRepeat, 1 do
                 Wait(750)
                 DoScreenFadeOut(200)
                 Wait(1000)
                 DoScreenFadeIn(200)
                 TriggerScreenblurFadeIn(1000.0)
-                Wait(BlurIntensity)
+                Wait(blurIntensity)
                 TriggerScreenblurFadeOut(1000.0)
             end
-        elseif stress >= config.MinimumStress then
-            local BlurIntensity = GetBlurIntensity(stress)
+        elseif stress >= Config.MinimumStress then
+            local blurIntensity = GetBlurIntensity(stress)
             TriggerScreenblurFadeIn(1000.0)
-            Wait(BlurIntensity)
+            Wait(blurIntensity)
             TriggerScreenblurFadeOut(1000.0)
         end
         Wait(effectInterval)
@@ -1024,13 +1010,7 @@ local function BlackBars()
 end
 
 CreateThread(function()
-    local minimap = RequestScaleformMovie("minimap")
-    if not HasScaleformMovieLoaded(minimap) then
-        minimap = RequestScaleformMovie("minimap")
-        while not HasScaleformMovieLoaded(minimap) do
-            Wait(10)
-        end
-    end
+    local minimap = lib.requestScaleformMovie('minimap')
     while true do
         if w > 0 then
             BlackBars()
@@ -1049,12 +1029,7 @@ CreateThread(function()
 end)
 
 -- Compass
-function round(num, numDecimalPlaces)
-    local mult = 10^(numDecimalPlaces or 0)
-    return math.floor(num + 0.5 * mult)
-end
-
-local prevBaseplateStats = { nil, nil, nil, nil, nil, nil, nil}
+local prevBaseplateStats = {nil, nil, nil, nil, nil, nil, nil}
 
 local function updateBaseplateHud(data)
     local shouldUpdate = false
@@ -1085,7 +1060,7 @@ local function getCrossroads(player)
         local pos = GetEntityCoords(player)
         local street1, street2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
         lastCrossroadUpdate = updateTick
-        lastCrossroadCheck = { GetStreetNameFromHashKey(street1), GetStreetNameFromHashKey(street2) }
+        lastCrossroadCheck = {GetStreetNameFromHashKey(street1), GetStreetNameFromHashKey(street2)}
     end
     return lastCrossroadCheck
 end
@@ -1096,23 +1071,22 @@ CreateThread(function()
 	local lastHeading = 1
     local heading
 	while true do
-        if Menu.isChangeCompassFPSChecked then
+        if Config.Menu.isChangeCompassFPSChecked then
             Wait(50)
         else
             Wait(0)
         end
         local show = true
-        local player = cache.ped
         local camRot = GetGameplayCamRot(0)
-        if Menu.isCompassFollowChecked then
-            heading = round(360.0 - ((camRot.z + 360.0) % 360.0))
+        if Config.Menu.isCompassFollowChecked then
+            heading = math.round(360.0 - ((camRot.z + 360.0) % 360.0))
         else
-            heading = round(360.0 - GetEntityHeading(player))
+            heading = math.round(360.0 - GetEntityHeading(cache.ped))
         end
 		if heading == 360 then heading = 0 end
         if heading ~= lastHeading then
             if cache.vehicle then
-                local crossroads = getCrossroads(player)
+                local crossroads = getCrossroads(cache.ped)
                 SendNUIMessage ({
                     action = 'update',
                     value = heading
@@ -1121,13 +1095,13 @@ CreateThread(function()
                     show,
                     crossroads[1],
                     crossroads[2],
-                    Menu.isCompassShowChecked,
-                    Menu.isShowStreetsChecked,
-                    Menu.isPointerShowChecked,
-                    Menu.isDegreesShowChecked,
+                    Config.Menu.isCompassShowChecked,
+                    Config.Menu.isShowStreetsChecked,
+                    Config.Menu.isPointerShowChecked,
+                    Config.Menu.isDegreesShowChecked,
                 })
             else
-                if Menu.isOutCompassChecked then
+                if Config.Menu.isOutCompassChecked then
                     SendNUIMessage ({
                         action = 'update',
                         value = heading
