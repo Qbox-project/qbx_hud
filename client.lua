@@ -1010,7 +1010,6 @@ local function BlackBars()
 end
 
 CreateThread(function()
-    local minimap = lib.requestScaleformMovie('minimap')
     while true do
         if w > 0 then
             BlackBars()
