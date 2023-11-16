@@ -14,7 +14,7 @@ shared_scripts {
     '@ox_lib/init.lua',
 }
 
-client_script {
+client_scripts {
     '@qbx_core/modules/playerdata.lua',
     'client.lua',
 }
