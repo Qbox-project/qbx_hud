@@ -7,11 +7,12 @@ version '1.0.0'
 
 
 shared_scripts {
+    '@ox_lib/init.lua',
     '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
-    '@ox_lib/init.lua',
+    
 }
 
 client_scripts {
