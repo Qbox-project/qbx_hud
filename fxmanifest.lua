@@ -1,12 +1,10 @@
 fx_version 'cerulean'
-use_experimental_fxv2_oal 'yes'
-lua54 'yes'
 game 'gta5'
-name 'qbx_hud'
-author 'Qbus & Qbox Contributors'
-version '1.0.0'
-repository 'https://github.com/Qbox-project/qbx_hud'
+
 description 'HUD for Qbox'
+repository 'https://github.com/Qbox-project/qbx_hud'
+version '1.0.0'
+
 
 shared_scripts {
     '@qbx_core/shared/locale.lua',
@@ -14,15 +12,14 @@ shared_scripts {
     'locales/*.lua',
     'config.lua',
     '@ox_lib/init.lua',
-    '@qbx_core/import.lua',
 }
 
-modules {
-    'qbx_core:playerdata',
+client_script {
+    '@qbx_core/modules/playerdata.lua',
+    'client.lua',
 }
 
 server_script 'server.lua'
-client_script 'client.lua'
 
 ui_page 'html/index.html'
 
@@ -33,3 +30,6 @@ files {
     'html/responsive.css',
     'html/app.js',
 }
+
+lua54 'yes'
+use_experimental_fxv2_oal 'yes'
