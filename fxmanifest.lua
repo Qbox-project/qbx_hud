@@ -10,16 +10,14 @@ shared_scripts {
     '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
-    'config.lua',
-    
 }
 
 client_scripts {
     '@qbx_core/modules/playerdata.lua',
-    'client.lua',
+    'client/main.lua',
 }
 
-server_script 'server.lua'
+server_script 'server/main.lua'
 
 ui_page 'html/index.html'
 
@@ -29,6 +27,7 @@ files {
     'html/styles.css',
     'html/responsive.css',
     'html/app.js',
+    'config/*.lua',
 }
 
 lua54 'yes'

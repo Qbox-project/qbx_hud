@@ -1,3 +1,5 @@
+local config = require 'config.server'
+local sharedConfig = require 'config.shared'
 local resetStress = false
 
 -- Handlers
@@ -13,7 +15,7 @@ end)
 -- Callbacks
 
 lib.callback.register('hud:server:getMenu', function()
-    return Config.Menu
+    return sharedConfig.menu
 end)
 
 -- Network Events
@@ -22,7 +24,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
     local newStress
-    if not player or (Config.DisablePoliceStress and player.PlayerData.job.type == 'leo') then return end
+    if not player or (config.stress.disableForLEO and player.PlayerData.job.type == 'leo') then return end
     if not resetStress then
         if not player.PlayerData.metadata.stress then
             player.PlayerData.metadata.stress = 0
