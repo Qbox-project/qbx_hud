@@ -1,25 +1,25 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QBX_Hud'
+description 'HUD for Qbox'
 repository 'https://github.com/Qbox-project/qbx_hud'
 version '1.0.0'
 
 shared_scripts {
+    '@ox_lib/init.lua',
     '@qbx_core/shared/locale.lua',
     'locales/en.lua',
     'locales/*.lua',
     'config.lua',
-    '@ox_lib/init.lua',
-    '@qbx_core/import.lua',
+    
 }
 
-modules {
-    'qbx_core:playerdata',
+client_scripts {
+    '@qbx_core/modules/playerdata.lua',
+    'client.lua',
 }
 
 server_script 'server.lua'
-client_script 'client.lua'
 
 ui_page 'html/index.html'
 
