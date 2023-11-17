@@ -5,7 +5,6 @@ description 'HUD for Qbox'
 repository 'https://github.com/Qbox-project/qbx_hud'
 version '1.0.0'
 
-
 shared_scripts {
     '@ox_lib/init.lua',
     '@qbx_core/shared/locale.lua',
