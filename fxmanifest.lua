@@ -27,7 +27,9 @@ files {
     'html/styles.css',
     'html/responsive.css',
     'html/app.js',
-    'config/*.lua',
+    'config/client.lua',
+    'config/shared.lua',
+    'config/server.lua',
 }
 
 lua54 'yes'
