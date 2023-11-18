@@ -29,7 +29,6 @@ files {
     'html/app.js',
     'config/client.lua',
     'config/shared.lua',
-    'config/server.lua',
 }
 
 lua54 'yes'
