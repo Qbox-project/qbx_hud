@@ -1,0 +1,54 @@
+name: Create New Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+
+jobs:
+  create-release:
+    name: Create New Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+
+      - name: Bump manifest version
+        run: node .github/actions/bump-manifest-version.js
+        env:
+          TGT_RELEASE_VERSION: ${{ inputs.version }}
+
+      - name: Push manifest change
+        uses: EndBug/add-and-commit@latest
+        with:
+          add: fxmanifest.lua
+          push: true
+          author_name: Manifest Bumper
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+          message: 'chore: bump manifest version to ${{ inputs.version }}'
+  
+      - name: Install ZIP
+        run: sudo apt install zip
+
+      - name: Bundle files
+        run: |
+          rm -rf ./.github ./.vscode ./.git
+          zip -r ./${{ github.event.repository.name }}.zip ./
+
+      - name: Create Release
+        uses: 'marvinpinto/action-automatic-releases@latest'
+        with:
+          title: ${{ inputs.version }}
+          repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: ${{ inputs.version }}
+          prerelease: false
+          files: ${{ github.event.repository.name }}.zip
