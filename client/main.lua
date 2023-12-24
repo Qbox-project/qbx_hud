@@ -108,7 +108,6 @@ end)
 RegisterCommand('menu', function()
     Wait(50)
     if showMenu then return end
-    TriggerEvent('hud:client:playOpenMenuSounds')
     SetNuiFocus(true, true)
     SendNUIMessage({action = 'open'})
     showMenu = true
@@ -116,7 +115,6 @@ end, false)
 
 RegisterNUICallback('closeMenu', function(_, cb)
     Wait(50)
-    TriggerEvent('hud:client:playCloseMenuSounds')
     showMenu = false
     SetNuiFocus(false, false)
     cb('ok')
@@ -126,7 +124,6 @@ RegisterKeyMapping('menu', Lang:t('info.open_menu'), 'keyboard', config.menuKey)
 
 -- Reset hud
 local function restartHud()
-    TriggerEvent('hud:client:playResetHudSounds')
     exports.qbx_core:Notify(Lang:t('notify.hud_restart'), 'error')
     if cache.vehicle then
         Wait(2600)
@@ -160,72 +157,14 @@ end)
 
 RegisterNetEvent('hud:client:resetStorage', function()
     Wait(50)
-    if sharedConfig.menu.isResetSoundsChecked then
-        TriggerServerEvent('InteractSound_SV:PlayOnSource', 'airwrench', 0.1)
-    end
     local menu = lib.callback.await('hud:server:getMenu', false)
     loadSettings(menu)
     SetResourceKvp('hudSettings', json.encode(menu))
 end)
 
--- Notifications
-RegisterNUICallback('openMenuSounds', function(_, cb)
-    Wait(50)
-    sharedConfig.menu.isOpenMenuSoundsChecked = not sharedConfig.menu.isOpenMenuSoundsChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
-    saveSettings()
-    cb('ok')
-end)
-
-RegisterNetEvent('hud:client:playOpenMenuSounds', function()
-    Wait(50)
-    if not sharedConfig.menu.isOpenMenuSoundsChecked then return end
-    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'monkeyopening', 0.5)
-end)
-
-RegisterNetEvent('hud:client:playCloseMenuSounds', function()
-    Wait(50)
-    if not sharedConfig.menu.isOpenMenuSoundsChecked then return end
-    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'catclosing', 0.05)
-end)
-
-RegisterNUICallback('resetHudSounds', function(_, cb)
-    Wait(50)
-    sharedConfig.menu.isResetSoundsChecked = not sharedConfig.menu.isResetSoundsChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
-    saveSettings()
-    cb('ok')
-end)
-
-RegisterNetEvent('hud:client:playResetHudSounds', function()
-    Wait(50)
-    if not sharedConfig.menu.isResetSoundsChecked then return end
-    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'airwrench', 0.1)
-end)
-
-RegisterNUICallback('checklistSounds', function(_, cb)
-    Wait(50)
-    TriggerEvent('hud:client:checklistSounds')
-    cb('ok')
-end)
-
-RegisterNetEvent('hud:client:checklistSounds', function()
-    Wait(50)
-    sharedConfig.menu.isListSoundsChecked = not sharedConfig.menu.isListSoundsChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
-    saveSettings()
-end)
-
-RegisterNetEvent('hud:client:playHudChecklistSound', function()
-    Wait(50)
-    if not sharedConfig.menu.isListSoundsChecked then return end
-    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'shiftyclick', 0.5)
-end)
-
 RegisterNUICallback('showOutMap', function(_, cb)
     Wait(50)
     sharedConfig.menu.isOutMapChecked = not sharedConfig.menu.isOutMapChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -233,7 +172,6 @@ end)
 RegisterNUICallback('showOutCompass', function(_, cb)
     Wait(50)
     sharedConfig.menu.isOutCompassChecked = not sharedConfig.menu.isOutCompassChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -241,7 +179,6 @@ end)
 RegisterNUICallback('showFollowCompass', function(_, cb)
 	Wait(50)
     sharedConfig.menu.isCompassFollowChecked = not sharedConfig.menu.isCompassFollowChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -249,15 +186,14 @@ end)
 RegisterNUICallback('showMapNotif', function(_, cb)
     Wait(50)
     sharedConfig.menu.isMapNotifChecked = not sharedConfig.menu.isMapNotifChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
+
     saveSettings()
     cb('ok')
 end)
 
 RegisterNUICallback('showFuelAlert', function(_, cb)
     Wait(50)
-    sharedConfig.menu.isLowFuelChecked = not sharedConfig.menu.isLowFuelChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
+    sharedConfig.menu.isLowFuelChecked = not sharedConfig.menu.isLowFuelChecked 
     saveSettings()
     cb('ok')
 end)
@@ -265,7 +201,6 @@ end)
 RegisterNUICallback('showCinematicNotif', function(_, cb)
     Wait(50)
     sharedConfig.menu.isCinematicNotifChecked = not sharedConfig.menu.isCinematicNotifChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -280,14 +215,12 @@ end)
 RegisterNetEvent('hud:client:ToggleHealth', function()
     Wait(50)
     sharedConfig.menu.isDynamicHealthChecked = not sharedConfig.menu.isDynamicHealthChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
 end)
 
 RegisterNUICallback('dynamicArmor', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicArmorChecked = not sharedConfig.menu.isDynamicArmorChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -295,7 +228,6 @@ end)
 RegisterNUICallback('dynamicHunger', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicHungerChecked = not sharedConfig.menu.isDynamicHungerChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -303,7 +235,6 @@ end)
 RegisterNUICallback('dynamicThirst', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicThirstChecked = not sharedConfig.menu.isDynamicThirstChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -311,7 +242,6 @@ end)
 RegisterNUICallback('dynamicStress', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicStressChecked = not sharedConfig.menu.isDynamicStressChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -319,7 +249,6 @@ end)
 RegisterNUICallback('dynamicOxygen', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicOxygenChecked = not sharedConfig.menu.isDynamicOxygenChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -328,7 +257,6 @@ end)
 RegisterNUICallback('changeFPS', function(_, cb)
     Wait(50)
     sharedConfig.menu.isChangeFPSChecked = not sharedConfig.menu.isChangeFPSChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -337,7 +265,6 @@ RegisterNUICallback('HideMap', function(_, cb)
     Wait(50)
     sharedConfig.menu.isHideMapChecked = not sharedConfig.menu.isHideMapChecked
     DisplayRadar(not sharedConfig.menu.isHideMapChecked)
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -430,7 +357,6 @@ RegisterNUICallback('ToggleMapShape', function(_, cb)
         Wait(50)
         TriggerEvent('hud:client:LoadMap')
     end
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -448,7 +374,6 @@ RegisterNUICallback('ToggleMapBorders', function(_, cb)
         showSquareB = false
         showCircleB = false
     end
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -456,7 +381,6 @@ end)
 RegisterNUICallback('dynamicEngine', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicEngineChecked = not sharedConfig.menu.isDynamicEngineChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -464,7 +388,6 @@ end)
 RegisterNUICallback('dynamicNitro', function(_, cb)
     Wait(50)
     sharedConfig.menu.isDynamicNitroChecked = not sharedConfig.menu.isDynamicNitroChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -473,7 +396,6 @@ end)
 RegisterNUICallback('showCompassBase', function(_, cb)
 	Wait(50)
     sharedConfig.menu.isCompassShowChecked = not sharedConfig.menu.isCompassShowChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -481,7 +403,6 @@ end)
 RegisterNUICallback('showStreetsNames', function(_, cb)
 	Wait(50)
     sharedConfig.menu.isShowStreetsChecked = not sharedConfig.menu.isShowStreetsChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -489,7 +410,6 @@ end)
 RegisterNUICallback('showPointerIndex', function(_, cb)
 	Wait(50)
     sharedConfig.menu.isPointerShowChecked = not sharedConfig.menu.isPointerShowChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -497,7 +417,6 @@ end)
 RegisterNUICallback('showDegreesNum', function(_, cb)
 	Wait(50)
     sharedConfig.menu.isDegreesShowChecked = not sharedConfig.menu.isDegreesShowChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -505,7 +424,6 @@ end)
 RegisterNUICallback('changeCompassFPS', function(_, cb)
 	Wait(50)
     sharedConfig.menu.isChangeCompassFPSChecked = not sharedConfig.menu.isChangeCompassFPSChecked
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -526,7 +444,6 @@ RegisterNUICallback('cinematicMode', function(_, cb)
             exports.qbx_core:Notify(Lang:t('notify.cinematic_on'), 'success')
         end
     end
-    TriggerEvent('hud:client:playHudChecklistSound')
     saveSettings()
     cb('ok')
 end)
@@ -827,7 +744,7 @@ CreateThread(function()
             if cache.vehicle and not IsThisModelABicycle(GetEntityModel(cache.vehicle)) then
                 if getFuelLevel(cache.vehicle) <= 20 then -- At 20% Fuel Left
                     if sharedConfig.menu.isLowFuelChecked then
-                        TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
+                        -- Add pager sound for when fuel is low
                         exports.qbx_core:Notify(Lang:t('notify.low_fuel'), 'error')
                         Wait(60000) -- repeats every 1 min until empty
                     end
