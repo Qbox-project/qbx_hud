@@ -193,7 +193,7 @@ end)
 
 RegisterNUICallback('showFuelAlert', function(_, cb)
     Wait(50)
-    sharedConfig.menu.isLowFuelChecked = not sharedConfig.menu.isLowFuelChecked 
+    sharedConfig.menu.isLowFuelChecked = not sharedConfig.menu.isLowFuelChecked
     saveSettings()
     cb('ok')
 end)
