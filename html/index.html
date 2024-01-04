@@ -1,346 +1,208 @@
 <html>
-    <head>
-        <meta id="viewport" name="viewport" content ="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" type="text/css" href="styles.css"/>
-        <link rel="stylesheet" type="text/css" href="responsive.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.prod.css" rel="stylesheet" type="text/css"/>
-        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css"/>
-        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js" defer></script>
-        <script src="https://cdn.jsdelivr.net/npm/quasar@2.1.0/dist/quasar.umd.prod.js" defer></script>
-        <script src="app.js" defer></script>
-    </head>
-    <body>
-        <div id="baseplate-container" v-show="show">
-            <div v-if="showStreets" class="street-container">
-                <div class="street2">{{street2}}</div>
-                <div class="street1">{{street1}}</div>
-            </div>
-            <div class="baseplate" v-show="show">
-                <div v-if="showPointer" class="pointer">˅</div>
-                <div v-if="showDegrees" class="degrees"></div>
-                    <svg class="bezel">
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="-90"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="-45"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="0"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="45"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="90"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="135"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="180"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="225"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="270"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="315"/>
-                        <rect width="4.5" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="360"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="9" x="405"/>
-                        <rect width="3" stroke="black" fill="white" stroke-width="0.5" stroke-opacity="0.6" v-if="showCompass" height="20" x="450"/>
-                    </svg>
-            
-                    <svg class="bearing">
-                        <text v-if="showCompass" x="0" y="1.5" dominant-baseline="middle" text-anchor="middle" fill= "yellow">N</text>
-                        <text v-if="showCompass" x="360" y="1.5" dominant-baseline="middle" text-anchor="middle" fill= "yellow">N</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="315" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NW</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="-45" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NW</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="45" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NE</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="405" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">NE</text>
-                        <text v-if="showCompass" x="90" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">E</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="135" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">SE</text>
-                        <text v-if="showCompass" x="180" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">S</text>
-                        <text style="font-size: 1.4vh!important; font-weight: 800!important;" v-if="showCompass" x="225" y="-11" dominant-baseline="middle" text-anchor="middle" fill="white">SW</text>
-                        <text v-if="showCompass" x="270" y="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">W</text>
-                    </svg>
-                </div>
-            </div>
-        <div id="openmenu">
-            <div id="menu">
-                <q-splitter v-model="splitterModel" style="height: 50vh;">
-                    <template v-slot:before>
-                        <q-tabs v-model="tab" active-bg-color="active-tab" inline-label indicator-color="transparent" vertical class="text-tabcolor bg-panel">
-                            <q-tab name="hud" icon="view_list" label="HUD" style="height: 5.5vh; padding-left: 1vh; justify-content: end;"></q-tab>
-                        </q-tabs>
-                    </template>
-                    <template v-slot:after>
-                        <q-tab-panels v-model="tab" animated swipeable vertical transition-prev="jump-up" transition-next="jump-up" class="bg-active-tab">
-                            <q-tab-panel name="hud">
-                                <div class="q-mb-md">
-                                    <div class="text-h6 q-mb-md">Reset Hud <img class="brand-logo" align="right" src="./brand-logo.svg"></img></div>
-                                    <div class="q-pa-md q-gutter-sm">
-                                        <q-btn v-on:click="resetStorage($event)" :loading="progress[0].loading" :percentage="progress[0].percentage" text-color="textbutton" color="bgbutton" @click="startComputing(0)" style="width: 150px"> Reset Settings
-                                        <template v-slot:loading> <q-spinner-gears class="on-left"></q-spinner-gears> Resetting... </template></q-btn>
-                                        <div class="text-h7 q-mb-md">If you want to reset your settings back to default; click this shiny button! <br> (you will have to relog for your menu to reset changes successfully)</div>
-                                        <q-btn v-on:click="restartHud($event)" :loading="progress[1].loading" :percentage="progress[1].percentage" text-color="textbutton" color="bgbutton" @click="startComputing(1)" style="width: 150px"> Reset Hud
-                                        <template v-slot:loading> <q-spinner-gears class="on-left"></q-spinner-gears> Resetting... </template></q-btn>
-                                        <div class="text-h7 q-mb-md">If your hud is acting up, give it a good ol' reset! Or you can do /resethud</div>
-                                    </div>
-                                    <hr>
-                                    <div class="text-h6 q-mb-md">Options</div>
-                                    <div class="text-h7">
-                                        <q-item borderless tag="label" v-ripple>
-                                            <q-item-section avatar>
-                                                <q-checkbox v-model="isOutMapChecked" v-on:click="showOutMap($event)" color="checkbox" val="1"></q-checkbox>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Show Minimap Only in Vehicle</q-item-label>
-                                                <q-item-label class="text-h7" caption>Disabling this will always keep your minimap on your screen</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item borderless tag="label" v-ripple>
-                                            <q-item-section avatar>
-                                                <q-checkbox v-model="isOutCompassChecked" v-on:click="showOutCompass($event)" color="checkbox" val="2"></q-checkbox>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Show Compass Only in Vehicle</q-item-label>
-                                                <q-item-label class="text-h7" caption>Disabling this will always keep your compass on your screen</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item borderless tag="label" v-ripple>
-                                            <q-item-section avatar>
-                                                <q-checkbox v-model="isCompassFollowChecked" v-on:click="showFollowCompass($event)" color="checkbox" val="3"></q-checkbox>
-                                            </q-item-section>
-                                            <q-item-section>
-                                                <q-item-label>Show Compass Follow Cam</q-item-label>
-                                                <q-item-label class="text-h7" caption>Disabling this will make it so you can no longer use your mouse to rotate the compass around</q-item-label>
-                                            </q-item-section>
-                                        </q-item>
-                                    </div>
-                                    <hr>
-                                    <div class="text-h6 q-mb-md">Notifications</div>
-                                    <div class="text-h7">
-                                        <q-checkbox v-on:click="openMenuSounds($event)" label='Menu Sound Effects Enabled' v-model="isOpenMenuSoundsChecked" color="checkbox" val="4" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="resetHudSounds($event)" label='Reset Hud Sound Effects Enabled' v-model="isResetSoundsChecked" color="checkbox" val="5" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="checklistSounds($event)" label='GUI Sound Effects Enabled' v-model="isListSoundsChecked" color="checkbox" val="6" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="showMapNotif($event)" label='Map Notifications Enabled' v-model="isMapNotifChecked" color="checkbox" val="7" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="showFuelAlert($event)" label='Low Fuel Alert Enabled' v-model="isLowFuelChecked" color="checkbox" val="8" style="display: flex;"></q-checkbox>
-                                        <q-checkbox v-on:click="showCinematicNotif($event)" label='Cinematic Mode Notifications Enabled' v-model="isCinematicNotifChecked" color="checkbox" val="9" style="display: flex;"></q-checkbox>
-                                    </div>
-                                </div>                        
-                                <hr>
-                                <div class="text-h6 q-mb-md">Status</div>
-                                <div class="text-h7">
-                                    <q-checkbox v-on:click="dynamicHealth($event)" label='Show Health always' v-model="isDynamicHealthChecked" color="checkbox" val="10" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicArmor($event)" label='Show Armor always' v-model="isDynamicArmorChecked" color="checkbox" val="11" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicHunger($event)" label='Show Hunger always' v-model="isDynamicHungerChecked" color="checkbox" val="12" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicThirst($event)" label='Show Thirst always' v-model="isDynamicThirstChecked" color="checkbox" val="13" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicStress($event)" label='Show Stress always' v-model="isDynamicStressChecked" color="checkbox" val="14" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicOxygen($event)" label='Show Oxygen always' v-model="isDynamicOxygenChecked" color="checkbox" val="15" style="display: flex;"></q-checkbox>
-                                </div>
-                                <hr>
-                                <div class="text-h6 q-mb-md">Vehicle</div>
-                                <div class="text-h7">
-                                    <q-toggle v-on:click="changeFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Speedometer FPS ${isChangeFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeFPSChecked"></q-toggle>
-                                    <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your speedometer in real time, however, it will also be more demanding on your machine.</div>
-                                    <q-toggle v-on:click="ToggleMapShape($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Minimap ${isToggleMapShapeChecked}`" unchecked-icon="radio_button_unchecked" false-value="circle" true-value="square" checked-icon="check_box_outline_blank" v-model="isToggleMapShapeChecked"></q-toggle>
-                                    <div class="text-h7 q-mb-md-d">Whether it's square or circle you desire, you have the ability to choose!</div>
-                                    <q-checkbox v-on:click="HideMap($event)" label='Minimap Enabled' v-model="isHideMapChecked" color="checkbox" val="15" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="ToggleMapBorders($event)" label='Minimap Borders Enabled' v-model="isToggleMapBordersChecked" color="checkbox" val="16" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicEngine($event)" label='Show Engine always' v-model="isDynamicEngineChecked" color="checkbox" val="17" style="display: flex;"></q-checkbox>
-                                    <q-checkbox v-on:click="dynamicNitro($event)" label='Show Nitro always' v-model="isDynamicNitroChecked" color="checkbox" val="18" style="display: flex;"></q-checkbox>
-                                </div>
-                                <hr>
-                                <div class="text-h6 q-mb-md">Compass</div>
-                                <div class="text-h7">
-                                    <q-toggle v-on:click="changeCompassFPS($event)" size="lg" keep-color icon-color="toggleicons" color="checkbox" :label="`Compass FPS ${isChangeCompassFPSChecked}`" unchecked-icon="60fps" false-value="Synced" true-value="Optimized" checked-icon="30fps" v-model="isChangeCompassFPSChecked"></q-toggle>
-                                    <div class="text-h7 q-mb-md-d">Synced FPS option will result in less optimization, but keep your compass in real time, however, it will also be more demanding on your machine.</div>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showCompassBase($event)" v-model="isShowCompassChecked" color="checkbox" val="19"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section >
-                                            <q-item-label>Compass Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see the compass navigation</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showStreetsNames($event)" v-model="isShowStreetsChecked" color="checkbox" val="20"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>Show Street Names Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see street names / locations</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showPointerIndex($event)" v-model="isPointerShowChecked" color="checkbox" val="21"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>Show Compass Pointer Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see your pointer index to pinpoint your exact cardinal directions</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item borderless tag="label" v-ripple>
-                                        <q-item-section avatar>
-                                            <q-checkbox v-on:click="showDegreesNum($event)" v-model="isDegreesShowChecked" color="checkbox" val="22"></q-checkbox>
-                                        </q-item-section>
-                                        <q-item-section>
-                                            <q-item-label>Show Compass Degrees Enabled</q-item-label>
-                                            <q-item-label class="text-h7" caption>Disabling this will make it so you can't see your exact degrees</q-item-label>
-                                        </q-item-section>
-                                    </q-item>
-                                </div>
-                                <hr>
-                                <div class="text-h6 q-mb-md">Cinematic Mode</div>
-                                <div class="text-h7">
-                                    <q-checkbox v-on:click="cinematicMode($event)" label='Enabled' v-model="isCineamticModeChecked" color="checkbox" val="23" style="display: flex;"></q-checkbox>
-                                </div>
-                                <br>
-                            </q-tab-panel>
-                        </q-tab-panels>
-                    </template>
-                </q-splitter>
-            </div>
+
+<head>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.0/css/all.css" />
+    <script src="script.js" type="text/javascript"></script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body style="display: none;">
+    <div id="money-container">
+        <div id="bank">
+            <i class="fas fa-landmark"></i>
+            <text id="bank-balance">0</text>
+            <text id="bank-change"></text>
         </div>
-        <div id="main-container">
-            <div id="money-container">
-                <div id="money-cash">
-                    <transition name="slide-fade">
-                        <p v-if="showCash"><span id="sign">$&nbsp;</span><span id="money">{{(cash)}}</span></p>
-                    </transition>
+        <div id="cash">
+            <i class="fas fa-money-bill"></i>
+            <text id="cash-balance">0</text>
+            <text id="cash-change"></text>
+        </div>
+    </div>
+    <div class="compass-hud">
+        <i class="fas fa-map-marker-alt"></i>
+        <div id="azimuth">NW</div>
+        <div class="compass-location">
+            <div id="street">Richmond Street</div>
+            <span></span>
+            <div id="zone">Los Santos</div>
+        </div>
+    </div>
+    <div class="player-hud">
+        <div class="bars">
+            <div class="type">
+                <div class="icon">
+                    <i class="fad fa-hamburger"
+                        style="--fa-primary-color: rgb(111, 28, 0); --fa-secondary-color: #f79123;"></i>
                 </div>
-                <div id="money-bank">
-                    <transition name="slide-fade">
-                        <p v-if="showBank"><span id="sign">$&nbsp;</span><span id="bank">{{(bank)}}</span></p>
-                    </transition>
-                </div>
-                <div id="money-change" v-if="showUpdate">
-                    <p v-if="plus" id="money"><span id="plus">+&nbsp;</span><span id="money">{{(amount)}}</span></p>
-                    <p v-else-if="minus" id="minus"><span id="minus">-&nbsp;</span><span id="money">{{(amount)}}</span></p>
-                </div>
-            </div>
-            <div id="ui-container">
-                <div id="playerHud" v-show="show">
-                    <transition name="fade">
-                    <div v-if="showVoice">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: talkingColor}" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="voice" size="50px" :thickness="0.24" :style="{color: talkingColor}" :min="0" :max="5" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: 0px;" :name="voiceIcon" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showHealth">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: healthColor}" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="health" size="50px" :thickness="0.24" :style="{color: healthColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: -0.4px;" name="fas fa-heart" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showArmor">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: armorColor}" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="armor" size="50px" :thickness="0.24" :style="{color: armorColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-shield-alt" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showHunger">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: hungerColor}" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="hunger" size="50px" :thickness="0.24" :style="{color: hungerColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -1px; left: -0.5px;" name="fas fa-hamburger" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showThirst">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: thirstColor}" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="thirst" size="50px" :thickness="0.24" :style="{color: thirstColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: -0.5px;" name="fas fa-tint" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showStress">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="stress" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="stress" size="50px" :thickness="0.24" color="stress" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -0.5px; left: -0.5px;" name="fas fa-brain" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showOxygen">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="oxygen" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="oxygen" size="50px" :thickness="0.24" color="oxygen" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -2px; left: -0.1px;" name="fas fa-lungs" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showArmed">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="armed" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="static" size="50px" :thickness="0.24" color="armed" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-stream" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showParachute">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="parachute" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="parachute" size="50px" :thickness="0.24" color="parachute" :min="0" :max="2" center-color="grey-10">
-                        <q-icon name="fas fa-parachute-box" size="23px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showEngine">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" :style="{color: engineColor}" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="engine" size="50px" :thickness="0.24" :style="{color: engineColor}" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -1px;" name="fas fa-oil-can" size="19.5px":style="{color: engineColor}"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showHarness">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="harness" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="hp" size="50px" :thickness="0.24" color="harness" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-user-slash" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showCruise">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="cruise" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="speed" size="50px" :thickness="0.24" color="cruise" :min="0" :max="100" center-color="grey-10">
-                        <q-icon style="top: -1.5px;" name="fas fa-tachometer-alt-fast" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showNos">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="nos" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="nos" size="50px" :thickness="0.24" color="nos" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-meteor" size="19.5px" :style="{color: nosColor}"/>
-                    </div>
-                    </transition>
-                    <transition name="fade">
-                    <div v-if="showDev">
-                        <q-circular-progress class="q-ml-xl" style="opacity: 40%;" :value="static" size="50px" :thickness="0.24" color="dev" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="left: -50%;" show-value :value="static" size="50px" :thickness="0.24" color="dev" :min="0" :max="100" center-color="grey-10">
-                        <q-icon name="fas fa-terminal" size="19.5px" color="white"/>
-                    </div>
-                    </transition>
+                <div class="progress">
+                    <div id="progress-hunger"></div>
                 </div>
             </div>
-            <div id="veh-container">
-                <div v-show="show">
-                    <div class="responsive" id="speedometer">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-150deg); opacity: 60%;" :value="speedometer" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-150deg); left: -50%;" show-value :value="speed" size="70px" :thickness="0.21" color="gauge" :min="0" :max="600">
-                        <speed>{{(speed)}}</speed>
-                    </div>
-                    <div class="responsive" id="fuelgauge">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); opacity: 60%;" :value="fuelgauge" size="36px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); left: -50%;" show-value :value="fuel" size="36px" :thickness="0.21" :style="{color: fuelColor}">
-                        <q-icon name="fas fa-gas-pump" style="transform: rotate(125deg);" size="14px" color="white"/>
-                    </div>
-                    <div class="responsive" id="altitudegauge" v-if="showAltitude">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-135deg); opacity: 60%;" :value="altitudegauge" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-135deg); left: -50%;" show-value :value="altitude" size="70px" :thickness="0.21" color="gauge" :min="0" :max="750">
-                        <altitude>{{(altitude)}}</altitude>
-                    </div>
-                    <transition name="fade">
-                    <div class="responsive" id="seatbelt" v-if="showSeatbelt">
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); opacity: 60%;" size="70px" :thickness="0.21" color="gauge" :min="0" :max="100"></q-circular-progress>
-                        <q-circular-progress class="q-ml-xl" style="transform: rotate(-125deg); left: -40%;" show-value size="70px" :thickness="0.21" color="gauge" :min="0" :max="750">
-                        <q-icon name="fas fa-user-slash" style="transform: rotate(125deg);" :value="seatbelt" size="21px" :style="{color: seatbeltColor}"/>
-                    </div>
-                    </transition>
-                    <div class="border">
-                        <div class="square" v-if="showSquare"></div>
-                    </div>
-                    <div class="border">
-                        <div class="circle" v-if="showCircle"></div>
-                    </div>
+            <div class="type">
+                <div class="icon">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <div class="progress">
+                    <div id="progress-thirst"></div>
+                </div>
+            </div>
+            <div class="type">
+                <div class="icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="progress">
+                    <div id="progress-stress"></div>
+                </div>
+            </div>
+            <div class="type">
+                <div class="icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <div class="progress">
+                    <div id="progress-voice"></div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+    <div class="vehicle-hud">
+        <div id="indicatorL" class="indicator">
+            <svg width="22" height="20" viewBox="0 0 22 20" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0)">
+                    <path
+                        d="M20.6583 13.7215H12.5064V19.2405C12.5064 19.4937 12.2026 19.5949 12.0507 19.443L0.60762 9.8734C0.455722 9.77213 0.455722 9.51897 0.60762 9.4177L12.0507 0.556942C12.2532 0.405044 12.5064 0.556942 12.5064 0.810107V6.27846H20.6583C20.8102 6.27846 20.9621 6.43036 20.9621 6.58226V13.4683C20.9621 13.5696 20.8102 13.7215 20.6583 13.7215Z"
+                        stroke-opacity="1" stroke-width="1.5" stroke-miterlimit="10" />
+                </g>
+                <defs>
+                    <clipPath id="clip0">
+                        <rect width="21.4684" height="20" transform="matrix(-1 0 0 1 21.4684 0)" />
+                    </clipPath>
+                </defs>
+            </svg>
+        </div>
+        <div id="indicatorR" class="indicator">
+            <svg width="22" height="20" viewBox="0 0 22 20" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip1)">
+                    <path
+                        d="M0.81013 13.7215H8.96203V19.2405C8.96203 19.4937 9.26583 19.5949 9.41773 19.443L20.8608 9.8734C21.0127 9.77213 21.0127 9.51897 20.8608 9.4177L9.41773 0.556942C9.21519 0.405044 8.96203 0.556942 8.96203 0.810107V6.27846H0.81013C0.658231 6.27846 0.506332 6.43036 0.506332 6.58226V13.4683C0.506332 13.5696 0.658231 13.7215 0.81013 13.7215Z"
+                        stroke-opacity="1" stroke-width="1.5" stroke-miterlimit="10" />
+                </g>
+                <defs>
+                    <clipPath id="clip1">
+                        <rect width="21.4684" height="20" />
+                    </clipPath>
+                </defs>
+            </svg>
+        </div>
+        <i id="seatbelt" class="fas fa-user-slash"></i>
+        <div class="gauges">
+            <div id="nitro" class="hud">
+                <svg class="circle" width="40" height="40">
+                    <g opacity="1" clip-path="url(#clip0)" style="translate: 13px 13px;" fill="white">
+                        <path
+                            d="M9.2084 4.27568V1.82575V1.59168V0.920676C9.2084 0.795839 9.09531 0.686606 8.96607 0.686606C8.83683 0.686606 8.72375 0.795839 8.72375 0.920676V1.56047C8.65913 1.90377 8.43296 2.85566 8.01292 3.24577C7.96446 3.29259 7.9483 3.35501 7.9483 3.41743V3.90117C7.9483 4.02601 8.06139 4.13524 8.19063 4.13524H8.72375V4.44733V4.46294C8.72375 4.58778 8.83683 4.69701 8.96607 4.69701C9.27302 4.69701 9.51535 4.93108 9.51535 5.22757V9.58127C9.51535 9.87776 9.27302 10.1118 8.96607 10.1118C8.65913 10.1118 8.4168 9.87776 8.4168 9.58127V8.20806C8.4168 8.08322 8.30371 7.97399 8.17447 7.97399H7.67367V4.43173C7.67367 4.22887 7.57674 4.04161 7.4475 3.91677V0.905072C7.4475 0.405722 7.02746 0 6.5105 0H1.69628C1.17932 0 0.759289 0.405722 0.759289 0.905072V3.91677C0.613893 4.04161 0.533118 4.22887 0.533118 4.43173V11.5319H0.242326C0.113086 11.5319 0 11.6411 0 11.7659C0 11.8908 0.113086 12 0.242326 12H0.759289H7.1567H7.9483C8.07754 12 8.19063 11.8908 8.19063 11.7659C8.19063 11.6411 8.07754 11.5319 7.9483 11.5319H7.65751V8.45774H7.91599V9.59688C7.91599 10.143 8.38449 10.5956 8.94992 10.5956C9.51535 10.5956 9.98384 10.143 9.98384 9.59688V5.24317C10 4.77503 9.66074 4.36931 9.2084 4.27568ZM1.69628 0.780234H6.5105C6.57512 0.780234 6.63974 0.842653 6.63974 0.905072V3.72952H1.56704V0.905072C1.56704 0.842653 1.63166 0.780234 1.69628 0.780234Z" />
+                    </g>
+                    <circle class="gauge-background" cx="20" cy="20" r="18" stroke="#FFFFFF"
+                        stroke-dasharray="113.097 113.097" stroke-dashoffset="33.93" stroke-opacity=".2"
+                        stroke-width="3" fill="none" transform="rotate(51 20 20)" />
+                    <circle id="progress-nitro" cx="20" cy="20" r="18" stroke="#4488FF"
+                        stroke-opacity="1" stroke-width="3" fill="none" transform="rotate(51 20 20)" />
+                    <defs>
+                        <clipPath id="clip0">
+                            <rect width="12" height="13" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+            <div class="speedometer">
+                <svg width="75" height="75">
+                    <circle class="gauge-background" cx="37.5" cy="37.5" r="35" stroke="white" opacity="0.4"
+                        stroke-width="4" fill="none" stroke-dasharray="219.911486 219.911486" stroke-dashoffset="65.9"
+                        transform="rotate(145 37.5 37.5)" />
+                    <circle id="progress-speed" cx="37.5" cy="37.5" r="35" stroke="url('#speed-gradient')"
+                        stroke-width="3" fill="none" transform="rotate(145 37.5 37.5)" />
+                    <text id="speed">0</text>
+                    <text id="speed-unit">km/h</text>
+                    <defs>
+                        <linearGradient id="speed-gradient">
+                            <stop offset="30%" stop-color="#FF0245" />
+                            <stop offset="100%" stop-color="#BBFFFE" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="hud" id="fuel">
+                <svg class="circle" width="40" height="40">
+                    <g opacity="1" clip-path="url(#clip0)" style="translate: 16px 13px;" fill="white">
+                        <path
+                            d="M9.2084 4.27568V1.82575V1.59168V0.920676C9.2084 0.795839 9.09531 0.686606 8.96607 0.686606C8.83683 0.686606 8.72375 0.795839 8.72375 0.920676V1.56047C8.65913 1.90377 8.43296 2.85566 8.01292 3.24577C7.96446 3.29259 7.9483 3.35501 7.9483 3.41743V3.90117C7.9483 4.02601 8.06139 4.13524 8.19063 4.13524H8.72375V4.44733V4.46294C8.72375 4.58778 8.83683 4.69701 8.96607 4.69701C9.27302 4.69701 9.51535 4.93108 9.51535 5.22757V9.58127C9.51535 9.87776 9.27302 10.1118 8.96607 10.1118C8.65913 10.1118 8.4168 9.87776 8.4168 9.58127V8.20806C8.4168 8.08322 8.30371 7.97399 8.17447 7.97399H7.67367V4.43173C7.67367 4.22887 7.57674 4.04161 7.4475 3.91677V0.905072C7.4475 0.405722 7.02746 0 6.5105 0H1.69628C1.17932 0 0.759289 0.405722 0.759289 0.905072V3.91677C0.613893 4.04161 0.533118 4.22887 0.533118 4.43173V11.5319H0.242326C0.113086 11.5319 0 11.6411 0 11.7659C0 11.8908 0.113086 12 0.242326 12H0.759289H7.1567H7.9483C8.07754 12 8.19063 11.8908 8.19063 11.7659C8.19063 11.6411 8.07754 11.5319 7.9483 11.5319H7.65751V8.45774H7.91599V9.59688C7.91599 10.143 8.38449 10.5956 8.94992 10.5956C9.51535 10.5956 9.98384 10.143 9.98384 9.59688V5.24317C10 4.77503 9.66074 4.36931 9.2084 4.27568ZM1.69628 0.780234H6.5105C6.57512 0.780234 6.63974 0.842653 6.63974 0.905072V3.72952H1.56704V0.905072C1.56704 0.842653 1.63166 0.780234 1.69628 0.780234Z" />
+                    </g>
+                    <circle class="gauge-background" cx="20" cy="20" r="18" stroke="#FFFFFF"
+                        stroke-dasharray="113.097 113.097" stroke-dashoffset="33.93" stroke-opacity=".2"
+                        stroke-width="3" fill="none" transform="rotate(237 20 20)" />
+                    <circle id="progress-fuel" cx="20" cy="20" r="18" stroke="url('#fuel-gradient')" stroke-opacity="1"
+                        stroke-width="3" fill="none" transform="rotate(237 20 20)" />
+                    <defs>
+                        <clipPath id="clip0">
+                            <rect width="12" height="13" />
+                        </clipPath>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+        <div id="highbeam">
+            <svg width="25" height="20" viewBox="0 0 25 20" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip2)">
+                    <path
+                        d="M14.7312 0C11.8638 0 9.78494 4.19355 9.78494 10C9.78494 16.3441 11.5771 20 14.7312 20C20.2509 20 24.7312 15.5197 24.7312 10C24.767 4.48029 20.2509 0 14.7312 0ZM14.7312 18.2079C12.7957 18.2079 11.5771 15.0538 11.5771 10C11.6129 5.08961 13.2258 1.79211 14.7312 1.79211C19.2473 1.79211 22.9391 5.48387 22.9391 10C22.9391 14.5161 19.2832 18.2079 14.7312 18.2079Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M8.1362 1.14697H0.896057C0.394265 1.14697 0 1.57708 0 2.04303C0 2.50898 0.394265 2.93909 0.896057 2.93909H8.1362C8.63799 2.93909 9.03226 2.54482 9.03226 2.04303C9.03226 1.54124 8.60215 1.14697 8.1362 1.14697Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M8.1362 6.45166H0.896057C0.394265 6.45166 0 6.84593 0 7.34772C0 7.84951 0.394265 8.24378 0.896057 8.24378H8.1362C8.63799 8.24378 9.03226 7.84951 9.03226 7.34772C9.03226 6.84593 8.60215 6.45166 8.1362 6.45166Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M8.1362 11.7563H0.896057C0.394265 11.7563 0 12.1506 0 12.6524C0 13.1542 0.394265 13.5485 0.896057 13.5485H8.1362C8.63799 13.5485 9.03226 13.1542 9.03226 12.6524C9.03226 12.1506 8.60215 11.7563 8.1362 11.7563Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M8.1362 17.0608H0.896057C0.394265 17.0608 0 17.4551 0 17.9568C0 18.4586 0.394265 18.8529 0.896057 18.8529H8.1362C8.63799 18.8529 9.03226 18.4586 9.03226 17.9568C9.03226 17.4551 8.60215 17.0608 8.1362 17.0608Z"
+                        fill-opacity="1" />
+                </g>
+                <defs>
+                    <clipPath id="clip2">
+                        <rect width="24.767" height="20" />
+                    </clipPath>
+                </defs>
+            </svg>
+        </div>
+        <div id="lowbeam">
+            <svg width="25" height="20" viewBox="0 0 25 20" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip3)">
+                    <path
+                        d="M14.6479 0C11.831 0 9.78873 4.11972 9.78873 9.82394C9.78873 16.0563 11.5493 19.6479 14.6479 19.6479C20.0704 19.6479 24.4718 15.2465 24.4718 9.82394C24.4718 4.40141 20.0704 0 14.6479 0ZM22.7113 9.82394C22.7113 14.2606 19.0845 17.8873 14.6479 17.8873C12.7465 17.8873 11.5493 14.7887 11.5493 9.82394C11.5493 5 13.169 1.76056 14.6479 1.76056C19.0845 1.76056 22.7113 5.38732 22.7113 9.82394Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M0.880277 5.38729C0.950699 5.38729 1.02112 5.38729 1.09154 5.35208L8.20422 3.48588C8.41549 3.41546 8.62676 3.27461 8.73239 3.06335C8.83802 2.85208 8.87323 2.64081 8.83802 2.39433C8.7676 2.18306 8.62676 1.9718 8.41549 1.86616C8.20422 1.72532 7.99295 1.72532 7.74647 1.76053L0.669009 3.62673C0.211262 3.76757 -0.0704279 4.22532 0.035206 4.71828C0.14084 5.1056 0.492952 5.38729 0.880277 5.38729Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M8.41549 6.72528C8.20422 6.61965 7.99295 6.58444 7.74648 6.61965L0.66901 8.52106C0.457743 8.59148 0.246475 8.73233 0.140841 8.94359C0.0352074 9.15486 -3.86871e-06 9.36613 0.0352074 9.61261C0.140841 9.99993 0.492954 10.2816 0.880278 10.2816C0.9507 10.2816 1.02112 10.2816 1.09155 10.2464L8.20422 8.38021C8.41549 8.30979 8.62676 8.16895 8.73239 7.95768C8.83802 7.74641 8.87324 7.49993 8.83802 7.28866C8.7676 7.04219 8.62676 6.86613 8.41549 6.72528Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M7.74647 11.5141L0.669009 13.4155C0.211262 13.5564 -0.0704279 14.0141 0.035206 14.5071C0.14084 14.8592 0.492952 15.1409 0.880277 15.1409C0.950699 15.1409 1.02112 15.1409 1.09154 15.1057L8.20422 13.2395C8.41549 13.169 8.62676 13.0282 8.73239 12.8169C8.83802 12.6057 8.87323 12.3944 8.83802 12.1479C8.69718 11.6902 8.23943 11.4085 7.74647 11.5141Z"
+                        fill-opacity="1" />
+                    <path
+                        d="M8.41549 16.5141C8.20422 16.4085 7.95774 16.3733 7.74647 16.4085L0.669009 18.2747C0.211262 18.4155 -0.0704279 18.8733 0.035206 19.3662C0.14084 19.7535 0.492952 20.0352 0.880277 20.0352C0.950699 20.0352 1.02112 20.0352 1.09154 20L8.20422 18.1338C8.41549 18.0634 8.62676 17.9226 8.73239 17.7113C8.83802 17.5 8.87323 17.2888 8.83802 17.0423C8.80281 16.7958 8.62676 16.6197 8.41549 16.5141Z"
+                        fill-opacity="1" />
+                </g>
+                <defs>
+                    <clipPath id="clip3">
+                        <rect width="24.4718" height="20" />
+                    </clipPath>
+                </defs>
+            </svg>
+        </div>
+    </div>
+</body>
+
 </html>

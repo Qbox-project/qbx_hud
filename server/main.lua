@@ -1,8 +1,6 @@
 local config = require 'config.server'
-local sharedConfig = require 'config.shared'
-local resetStress = false
 
--- Handlers
+lib.versionCheck('Qbox-project/qbx_hud')
 
 AddEventHandler('ox_inventory:openedInventory', function(source)
     TriggerClientEvent('qbx_hud:client:hideHud', source)
@@ -12,80 +10,46 @@ AddEventHandler('ox_inventory:closedInventory', function(source)
     TriggerClientEvent('qbx_hud:client:showHud', source)
 end)
 
--- Callbacks
-
-lib.callback.register('hud:server:getMenu', function()
-    return sharedConfig.menu
-end)
-
--- Network Events
-
 RegisterNetEvent('hud:server:GainStress', function(amount)
-    local src = source
-    local player = exports.qbx_core:GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(source)
     local newStress
-    if not player or (config.stress.disableForLEO and player.PlayerData.job.type == 'leo') then return end
-    if not resetStress then
-        if not player.PlayerData.metadata.stress then
-            player.PlayerData.metadata.stress = 0
-        end
-        newStress = player.PlayerData.metadata.stress + amount
-        if newStress <= 0 then newStress = 0 end
-    else
-        newStress = 0
+    if not player or (config.disablePoliceStress and player.PlayerData.job.type == 'leo') then return end
+    if not player.PlayerData.metadata.stress then
+        player.PlayerData.metadata.stress = 0
     end
-    if newStress > 100 then
-        newStress = 100
-    end
+    newStress = player.PlayerData.metadata.stress + amount
+    newStress = newStress <= 0 and 0 or newStress > 100 and 100 or newStress
+
+    Player(source).state:set('stress', newStress, true)
     player.Functions.SetMetaData('stress', newStress)
-    TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    exports.qbx_core:Notify(src, Lang:t('notify.stress_gain'), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#C53030')
+    exports.qbx_core:Notify(source, Lang:t("notify.stress_gain"), 'error', 1500)
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
-    local src = source
-    local player = exports.qbx_core:GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(source)
     local newStress
     if not player then return end
-    if not resetStress then
-        if not player.PlayerData.metadata.stress then
-            player.PlayerData.metadata.stress = 0
-        end
-        newStress = player.PlayerData.metadata.stress - amount
-        if newStress <= 0 then newStress = 0 end
-    else
-        newStress = 0
+    if not player.PlayerData.metadata.stress then
+        player.PlayerData.metadata.stress = 0
     end
-    if newStress > 100 then
-        newStress = 100
-    end
+    newStress = player.PlayerData.metadata.stress - amount
+    newStress = newStress <= 0 and 0 or newStress > 100 and 100 or newStress
+
+    Player(source).state:set('stress', newStress, true)
     player.Functions.SetMetaData('stress', newStress)
-    TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    exports.qbx_core:Notify(src, Lang:t('notify.stress_removed'), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
+    exports.qbx_core:Notify(source, Lang:t("notify.stress_removed"))
 end)
 
--- Commands
-
-lib.addCommand(Lang:t('commands.cash'), {
-    help = Lang:t('commands.help.cash'),
-    restricted = 'group.admin'
-}, function(source)
-    local player = exports.qbx_core:GetPlayer(source)
-    local cashAmount = player.PlayerData.money.cash
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashAmount)
+lib.addCommand('bank', {
+    help = Lang:t('commands.bank.help'),
+    restricted = false,
+}, function (source)
+    TriggerClientEvent('qbx_hud:client:showMoney', source, false)
 end)
 
-lib.addCommand(Lang:t('commands.bank'), {
-    help = Lang:t('commands.help.bank'),
-}, function(source)
-    local player = exports.qbx_core:GetPlayer(source)
-    local bankAmount = player.PlayerData.money.bank
-    TriggerClientEvent('hud:client:ShowAccounts', source, 'bank', bankAmount)
-end)
-
-lib.addCommand('dev', {
-    help = Lang:t('commands.help.dev'),
-    restricted = 'group.admin'
-}, function(source)
-    TriggerClientEvent('qb-admin:client:ToggleDevmode', source)
+lib.addCommand('cash', {
+    help = Lang:t('commands.cash.help'),
+    restricted = false,
+}, function (source)
+    TriggerClientEvent('qbx_hud:client:showMoney', source, true)
 end)

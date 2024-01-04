@@ -1,0 +1,295 @@
+@keyframes fadeLoop {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+}
+
+.player-hud {
+    position: absolute;
+    left: 16.5vw;
+    bottom: 1.5vh;
+    min-width: 100px;
+    width: 12.5vw;
+    min-height: 100px;
+    height: 10.5vh;
+    padding: 5px 5px 5px 5px;
+    box-sizing: border-box;
+    background: rgba(24, 27, 32, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#money-container {
+    display: flex;
+    position: absolute;
+    top: 5vh;
+    right: 1.5vw;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    white-space: nowrap;
+    margin: 5px;
+}
+
+#cash, #bank {
+    display: none;
+    align-items: center;
+    height: 95%;
+    font-size: 1.5em;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.negative-money::before {
+    content: "- ";
+    color: #ff0000;
+}
+
+#cash-change::before, #bank-change::before {
+    content: "+ ";
+    color: #01a01c;
+}
+
+#cash > *, #bank > * {
+    margin-right: 15px;
+}
+
+.fa-landmark {
+    color: #bbc8de;
+}
+
+.fa-money-bill {
+    color: #01a01c;
+}
+
+.player-hud .bars {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 82.5%;
+    width: 100%;
+    height: 100%;
+    margin-left: 5px;
+}
+
+.player-hud .bars .type {
+    width: 97.5%;
+    height: min-content;
+    text-wrap: nowrap;
+    margin-block: 1px;
+}
+
+.player-hud .bars .type .icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: -4px;
+    text-align: center;
+    width: 20px;
+}
+
+.bars .type .progress {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: -4px;
+    margin-left: 8px;
+    width: calc(100% - 25px);
+    height: 0.75vh;
+    background-color: rgba(187, 200, 222, 0.3);
+    border-radius: 10px;
+}
+
+.bars .type .progress div {
+    display: block;
+    width: 10%;
+    height: 100%;
+    background-color: #bbc8de;
+    border-radius: 10px;
+}
+
+.fa-hamburger {
+    color: #dd6e14;
+}
+
+#progress-hunger {
+    background-color: #dd6e14;
+}
+
+.fa-tint {
+    color: #1a7cad;
+}
+
+#progress-thirst {
+    background-color: #1a7cad;
+}
+
+.fa-brain {
+    color: rgba(196, 0, 0);
+}
+
+#progress-stress {
+    background-color: rgba(196, 0, 0);
+}
+
+#progress-voice {
+    width: 0%;
+}
+
+i {
+    font-size: 1.25em;
+    color: #ffffff;
+}
+
+.fa-terminal {
+    color: #222222 !important;
+}
+
+.vehicle-hud {
+    position: absolute;
+    bottom: 0.5vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    width: fit-content;
+    height: 100px;
+    padding: 5px 5px 5px 5px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow: hidden;
+    align-items: center;
+}
+
+.vehicle-hud .gauges {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    font-family: Roboto, sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+#nitro {
+    margin-left: -15px;
+}
+
+#progress-speed {
+    stroke-dasharray: 219.911486 219.911486;
+    stroke-dashoffset: 219.911486;
+}
+
+#progress-fuel {
+    stroke-dasharray: 113.09733552923255 113.09733552923255 ;
+    stroke-dashoffset: 113.09733552923255 ;
+    stroke: white;
+    stroke-opacity: 0.8;
+}
+
+#progress-nitro {
+    stroke-dasharray: 113.09733552923255 113.09733552923255 ;
+    stroke-dashoffset: 113.09733552923255 ;
+    color: #1a7cad;
+}
+
+#speed {
+    fill: white;
+    font-size: 1.5em;
+    text-anchor: middle;
+    translate: 37.5px 37.5px;
+}
+
+#speed-unit {
+    font-size: 0.625em;
+    fill: rgba(255, 255, 255, 0.5);
+    text-anchor: middle;
+    translate: 37.5px 55px;
+}
+
+#fuel {
+    translate: -13px -15px;
+}
+
+#nitro {
+    translate: 12px -17px;
+}
+
+#seatbelt {
+    color: #aa5555ff;
+    margin-right: 5px;
+}
+
+.indicator {
+    fill: none;
+    stroke: white;
+    opacity: 0.2;
+    margin-inline: 5px;
+}
+
+.indicator-active {
+    stroke: #f39c12;
+    animation: fadeLoop 1s step-start infinite !important;
+}
+
+#highbeam {
+    fill: white;
+    opacity: 0.2;
+    margin-inline: 5px;
+}
+
+#lowbeam {
+    fill: white;
+    opacity: 0.2;
+    margin-inline: 5px;
+}
+
+.compass-hud {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    bottom: 21vh;
+    left: 1.5vw;
+}
+
+.compass-hud i {
+    font-size: 1.5em;
+    color: white;
+    margin-right: 5px;
+}
+
+#azimuth {
+    color: white;
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+.compass-hud .compass-location {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-size: 1.25em;
+}
+
+#street {
+    color: white;
+}
+
+.compass-hud .compass-location span {
+    height: 3px;
+    border-radius: 1px;
+    background-color: gray;
+}
+
+#zone {
+    color: rgb(150, 150, 150);
+}
