@@ -327,7 +327,7 @@ CreateThread(function()
     end
 end)
 
-AddStateBagChangeHandler('hunger', ('player:%s'):format(cache.serverId), function(bagname, key, value, reserved, replicated)
+AddStateBagChangeHandler('hunger', ('player:%s'):format(cache.serverId), function(_, _, value)
     SendNUIMessage({
         update = true,
         data = {
@@ -343,7 +343,7 @@ AddStateBagChangeHandler('hunger', ('player:%s'):format(cache.serverId), functio
     })
 end)
 
-AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), function(bagname, key, value, reserved, replicated)
+AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), function(_, _, value)
     SendNUIMessage({
         update = true,
         data = {
@@ -359,7 +359,7 @@ AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), functio
     })
 end)
 
-AddStateBagChangeHandler('stress', ('player:%s'):format(cache.serverId), function(bagname, key, value, reserved, replicated)
+AddStateBagChangeHandler('stress', ('player:%s'):format(cache.serverId), function(_, _, value)
     stress = value
     SendNUIMessage({
         update = true,
@@ -379,7 +379,7 @@ end)
 
 seatbeltOn = false
 harnessOn = false
-AddStateBagChangeHandler('seatbelt', ('player:%s'):format(cache.serverId), function(bagname, key, value, reserved, replicated)
+AddStateBagChangeHandler('seatbelt', ('player:%s'):format(cache.serverId), function(_, _, value)
     seatbeltOn = value
     if harnessOn then return end
     SendNUIMessage({
@@ -393,7 +393,7 @@ AddStateBagChangeHandler('seatbelt', ('player:%s'):format(cache.serverId), funct
     })
 end)
 
-AddStateBagChangeHandler('harness', ('player:%s'):format(cache.serverId), function(bagname, key, value, reserved, replicated)
+AddStateBagChangeHandler('harness', ('player:%s'):format(cache.serverId), function(_, _, value)
     harnessOn = value
 
     SendNUIMessage({
@@ -501,6 +501,7 @@ RegisterNetEvent('qbx_hud:client:hideHud', function ()
 end)
 
 RegisterNetEvent('qbx_hud:client:showHud', function ()
+    if not toggleCinematic and toggleHud then
         SendNUIMessage({
             update = true,
             data = {
@@ -510,6 +511,7 @@ RegisterNetEvent('qbx_hud:client:showHud', function ()
                 }
             }
         })
+    end
 end)
 
 RegisterNetEvent('qbx_hud:client:togglehud', function ()
