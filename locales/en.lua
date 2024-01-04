@@ -1,33 +1,19 @@
 local Translations = {
     notify = {
-        hud_settings_loaded = "HUD Settings Loaded!",
-        hud_restart = "HUD Is Restarting!",
-        hud_start = "HUD Is Now Started!",
-        hud_command_info = "This command resets your current HUD settings!",
-        load_square_map = "Square Map Loading...",
-        loaded_square_map = "Square Map Has Loaded!",
-        load_circle_map = "Circle Map Loading...",
-        loaded_circle_map = "Circle Map Has Loaded!",
-        cinematic_on = "Cinematic Mode On!",
-        cinematic_off = "Cinematic Mode Off!",
-        engine_on = "Engine Started!",
-        engine_off = "Engine Shut Down!",
-        low_fuel = "Fuel Level Low!",
-        access_denied = "You Are Not Authorized!",
-        stress_gain = "Feeling More Stressed!",
-        stress_removed = "Feeling More Relaxed!",
-    },
-    info = {
-        open_menu = 'Open Menu',
+        low_fuel = 'Fuel Level Low!',
+        stress_gain = 'Feeling More Stressed!',
+        stress_removed = 'Feeling More Relaxed!',
+        cinematic_on = 'Cinematic Mode Enabled!',
+        cinematic_off = 'Cinematic Mode Disabled!',
+        hud_on = 'HUD Enabled!',
+        hud_off = 'HUD Disabled!',
     },
     commands = {
-        cash = 'cash',
-        bank = 'bank',
-        dev = 'dev',
-        help = {
-            cash = 'Check Cash Balance',
-            bank = 'Check Bank Balance',
-            dev = 'Enable/Disable developer Mode'
+        bank = {
+            help = 'Show Bank Balance'
+        },
+        cash = {
+            help = 'Show Cash Balance'
         }
     }
 }
