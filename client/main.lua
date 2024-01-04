@@ -501,15 +501,15 @@ RegisterNetEvent('qbx_hud:client:hideHud', function ()
 end)
 
 RegisterNetEvent('qbx_hud:client:showHud', function ()
-    SendNUIMessage({
-        update = true,
-        data = {
-            {
-                type = 'showHud',
-                value = true,
+        SendNUIMessage({
+            update = true,
+            data = {
+                {
+                    type = 'showHud',
+                    value = true,
+                }
             }
-        }
-    })
+        })
 end)
 
 RegisterNetEvent('qbx_hud:client:togglehud', function ()
