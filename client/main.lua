@@ -135,7 +135,7 @@ local function vehiclehudloop()
     end)
 
     CreateThread(function()
-        local sleep, alert = 1000, 0
+        local alert, sleep = 0
         while isInVehicle do
             sleep = 1000
             if GetIsVehicleEngineRunning(cache.vehicle) and IsMinimapRendering() then
