@@ -175,7 +175,7 @@ local function vehiclehudloop()
                         alert = alert - 1
                     else
                         alert = 1500
-                        PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", 1)
+                        PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", true)
                         exports.qbx_core:Notify(Lang:t("notify.low_fuel"), "error")
                     end
                 end
@@ -433,6 +433,11 @@ AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(cache.serverId), fun
 end)
 
 CreateThread(function()
+    -- Disable the minimap on login
+    if not LocalPlayer.state.isLoggedIn then
+        DisplayRadar(false)
+    end
+
     while true do
         SetRadarBigmapEnabled(false, false)
         SetRadarZoom(200)
