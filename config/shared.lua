@@ -3,9 +3,6 @@ return {
         isOutMapChecked = false, -- isOutMapChecked
         isOutCompassChecked = false, -- isOutMapChecked
         isCompassFollowChecked = true, -- isCompassFollowChecked
-        isOpenMenuSoundsChecked = true, -- isOpenMenuSoundsChecked
-        isResetSoundsChecked = true, -- isResetSoundsChecked
-        isListSoundsChecked = true, -- isListSoundsChecked
         isMapNotifChecked = true, -- isMapNotifChecked
         isLowFuelChecked = true, -- isLowFuelChecked
         isCinematicNotifChecked = true, -- isCinematicNotifChecked

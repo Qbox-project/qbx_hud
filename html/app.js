@@ -6,9 +6,6 @@ const app = Vue.createApp({
 			isOutMapChecked: this.initIsOutMapChecked(),
       isOutCompassChecked: this.initIsOutCompassChecked(),
       isCompassFollowChecked: this.initIsCompassFollowChecked(),
-      isOpenMenuSoundsChecked: this.initIsOpenMenuSoundsChecked(),
-      isResetSoundsChecked: this.initIsResetSoundsChecked(),
-      isListSoundsChecked: this.initIsListSoundsChecked(),
       isMapNotifChecked: this.initIsMapNotifChecked(),
       isLowFuelChecked: this.initIsLowFuelChecked(),
       isCinematicNotifChecked: this.initIsCinematicNotifChecked(),
@@ -82,15 +79,6 @@ const app = Vue.createApp({
 		},
     isCompassFollowChecked: function() {
 			localStorage.setItem("isCompassFollowChecked", this.isCompassFollowChecked);
-		},
-    isOpenMenuSoundsChecked: function() {
-			localStorage.setItem("isOpenMenuSoundsChecked", this.isOpenMenuSoundsChecked);
-		},
-    isResetSoundsChecked: function() {
-			localStorage.setItem("isResetSoundsChecked", this.isResetSoundsChecked);
-		},
-    isListSoundsChecked: function() {
-			localStorage.setItem("isListSoundsChecked", this.isListSoundsChecked);
 		},
     isMapNotifChecked: function() {
 			localStorage.setItem("isMapNotifChecked", this.isMapNotifChecked);
@@ -175,30 +163,6 @@ const app = Vue.createApp({
 		},
     initIsCompassFollowChecked: function() {
 			const stored = localStorage.getItem("isCompassFollowChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsOpenMenuSoundsChecked: function() {
-			const stored = localStorage.getItem("isOpenMenuSoundsChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsResetSoundsChecked: function() {
-			const stored = localStorage.getItem("isResetSoundsChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsListSoundsChecked: function() {
-			const stored = localStorage.getItem("isListSoundsChecked");
 			if (stored === null) {
 				return true;
 			} else {
@@ -394,18 +358,6 @@ const app = Vue.createApp({
       targetId = event.currentTarget.id;
       showFollowCompass()
     },
-    openMenuSounds: function(event) {
-      targetId = event.currentTarget.id;
-      openMenuSounds()
-    },
-    resetHudSounds: function(event) {
-      targetId = event.currentTarget.id;
-      resetHudSounds()
-    },
-    checklistSounds: function(event) {
-      targetId = event.currentTarget.id;
-      checklistSounds()
-    },
     showMapNotif: function(event) {
       targetId = event.currentTarget.id;
       showMapNotif()
@@ -529,15 +481,6 @@ function showOutCompass() {
 }
 function showFollowCompass() {
   $.post(`https://${GetParentResourceName()}/showFollowCompass`);
-}
-function openMenuSounds() {
-  $.post(`https://${GetParentResourceName()}/openMenuSounds`);
-}
-function resetHudSounds() {
-  $.post(`https://${GetParentResourceName()}/resetHudSounds`);
-}
-function checklistSounds() {
-  $.post(`https://${GetParentResourceName()}/checklistSounds`);
 }
 function showMapNotif() {
   $.post(`https://${GetParentResourceName()}/showMapNotif`);
