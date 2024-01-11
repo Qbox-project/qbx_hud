@@ -67,6 +67,7 @@ CreateThread(function()
             end
             sleep, minimapShown = 500, true
         end
+        collectgarbage()
     end
 end)
 
