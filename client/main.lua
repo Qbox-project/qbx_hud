@@ -1,5 +1,6 @@
 local config = require 'config.client'
-stress = LocalPlayer.state.stress or 0
+local playerState = LocalPlayer.state
+stress = playerState.stress or 0
 local displayBars = false
 local toggleHud = true
 local toggleCinematic = false
@@ -140,7 +141,7 @@ local function vehiclehudloop()
             sleep = 1000
             if GetIsVehicleEngineRunning(cache.vehicle) and IsMinimapRendering() then
                 local _, highbeam, lowbeam = GetVehicleLightsState(cache.vehicle)
-                local nitroLevel = Entity(cache.vehicle).state?.nitro or 0
+                local nitroLevel = Entity(cache.vehicle).state.nitro or 0
                 SendNUIMessage({
                     update = true,
                     data = {
@@ -196,7 +197,7 @@ local function initVehicleHud()
     }
 
     if isInVehicle then
-        local nitroLevel = Entity(cache.vehicle).state?.nitro or 0
+        local nitroLevel = Entity(cache.vehicle).state.nitro or 0
         data = {
             {
                 type = 'gauge',
@@ -241,18 +242,18 @@ end)
 
 local function initHud()
     if config.minimapAlwaysOn then
-        DisplayRadar(LocalPlayer.state.isLoggedIn)
+        DisplayRadar(playerState.isLoggedIn)
     end
     SendNUIMessage({
         update = true,
         data = {
-            { type = 'showHud', value = LocalPlayer.state.isLoggedIn },
-            { type = 'progress', name = 'hunger', value = LocalPlayer.state.hunger or 0, option = { backgroundColor = LocalPlayer.state.hunger < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'thirst', value = LocalPlayer.state.thirst or 0, option = { backgroundColor = LocalPlayer.state.thirst < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'stress', value = LocalPlayer.state.stress or 0, option = { backgroundColor = LocalPlayer.state.stress > 75 and '#881111ff' or false } },
-            { type = 'progress', name = 'voice', value = LocalPlayer.state.proximity.distance * 10 },
-            { type = 'balance', set = true, isCash = true, value = QBX.PlayerData.money.cash},
-            { type = 'balance', set = true, isCash = false, value = QBX.PlayerData.money.bank },
+            { type = 'showHud', value = playerState.isLoggedIn },
+            { type = 'progress', name = 'hunger', value = playerState.hunger or 0, option = { backgroundColor = playerState.hunger < 30 and '#881111ff' or false } },
+            { type = 'progress', name = 'thirst', value = playerState.thirst or 0, option = { backgroundColor = playerState.thirst < 30 and '#881111ff' or false } },
+            { type = 'progress', name = 'stress', value = playerState.stress or 0, option = { backgroundColor = playerState.stress > 75 and '#881111ff' or false } },
+            { type = 'progress', name = 'voice', value = playerState.proximity.distance * 10 },
+            { type = 'balance', set = true, isCash = true, value = QBX.PlayerData?.money?.cash},
+            { type = 'balance', set = true, isCash = false, value = QBX.PlayerData?.money?.bank },
         }
     })
 end
@@ -434,7 +435,7 @@ end)
 
 CreateThread(function()
     -- Disable the minimap on login
-    if not LocalPlayer.state.isLoggedIn then
+    if not playerState.isLoggedIn then
         DisplayRadar(false)
     end
 
