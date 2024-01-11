@@ -28,6 +28,7 @@ files {
     "html/script.js",
     "config/client.lua",
     "config/server.lua",
+    "@pma-voice/shared.lua"
 }
 
 dependencies {

@@ -291,39 +291,52 @@ AddEventHandler('onResourceStart', function(resource)
     end
 end)
 
---- Set the voice level and/or talking status
----@param value number | nil
----@param talking boolean | nil
-local function setVoice(value, talking)
-    local data = {
-        {
-            type = 'progress',
-            name = 'voice',
-            value = value and value * 10 or nil,
-        }
-    }
-    data[1].option = type(talking) == "boolean" and {
-        backgroundColor = (LocalPlayer.state.talkingradio and '#5A93FF') or (talking and '#FF935A') or false
-    } or nil
-
+--- Set the talking status
+---@param talking boolean
+local function setTalking(talking)
     SendNUIMessage({
         update = true,
-        type = 'progress',
-        data = data
+        data = {
+            {
+                type = 'progress',
+                name = 'voice',
+                option = {
+                    backgroundColor = (playerState.talkingradio and '#5A93FF') or (talking and '#FF935A') or false
+                }
+            }
+        }
     })
 end
 
-local proximity, isTalking = 10, false
+require '@pma-voice.shared'
+local proximityLevels = Cfg.voiceModes
+local highestLevel
+for i = 1, #proximityLevels do
+    if not highestLevel or proximityLevels[i][1] > highestLevel then
+        highestLevel = proximityLevels[i][1]
+    end
+end
+
+AddStateBagChangeHandler('proximity', ('player:%s'):format(cache.serverId), function(_, _, value)
+    SendNUIMessage({
+        update = true,
+        data = {
+            {
+                type = 'progress',
+                name = 'voice',
+                value = value.distance / highestLevel * 100
+            }
+        }
+    })
+end)
+
+local isTalking = false
 CreateThread(function()
     while true do
         local talking = MumbleIsPlayerTalking(cache.playerId)
-        if proximity ~= LocalPlayer.state.proximity.distance then
-            proximity = LocalPlayer.state.proximity.distance
-            setVoice(LocalPlayer.state.proximity.distance, nil)
-        end
         if isTalking ~= talking then
             isTalking = talking
-            setVoice(nil, talking)
+            setTalking(talking)
         end
         Wait(125)
     end
