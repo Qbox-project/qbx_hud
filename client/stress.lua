@@ -18,37 +18,20 @@ CreateThread(function() -- Speeding
     end
 end)
 
-local function IsWhitelistedWeaponStress(weapon)
-    if weapon then
-        for _, v in pairs(config.whitelistedWeaponStress) do
-            if weapon == v then
-                return true
+local function armedLoop()
+    while cache.weapon do
+        if IsPedShooting(cache.ped) then
+            if math.random() < stressConfig.stressChance then
+                TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
             end
         end
+        Wait(0)
     end
-    return false
 end
 
-local shootingSleep = 500
-CreateThread(function() -- Shooting
-    while true do
-        local isArmed = IsPedArmed(cache.ped, 7)
-        if LocalPlayer.state.isLoggedIn and isArmed then
-            local weapon = GetSelectedPedWeapon(cache.ped)
-            if weapon ~= `WEAPON_UNARMED` then
-                if IsPedShooting(cache.ped) and not IsWhitelistedWeaponStress(weapon) then
-                    if math.random() < stressConfig.stressChance then
-                        TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
-                    end
-                end
-                shootingSleep = 0
-            else
-                shootingSleep = 1000
-            end
-        else
-            shootingSleep = 1000
-        end
-        Wait(shootingSleep)
+lib.onCache('weapon', function(weapon)
+    if weapon and not config.whitelistedWeaponStress[weapon] then
+        CreateThread(armedLoop)
     end
 end)
 
