@@ -1,9 +1,14 @@
 return {
     speedMultiplier = 3.6, -- 3.6 for km/h, 2.236936 for mph
     whitelistedWeaponStress = {
-        `weapon_petrolcan`,
-        `weapon_hazardcan`,
-        `weapon_fireextinguisher`
+        [`weapon_unarmed`] = true,
+        [`weapon_flashlight`] = true,
+        [`weapon_petrolcan`] = true,
+        [`weapon_hazardcan`] = true,
+        [`weapon_fireextinguisher`] = true,
+        [`weapon_stungun`] = true,
+        [`weapon_ball`] = true,
+        [`weapon_snowball`] = true,
     },
     cinematicHeight = 0.15,
     lowFuelAlert = 15,
