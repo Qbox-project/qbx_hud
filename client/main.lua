@@ -157,7 +157,7 @@ local function vehiclehudloop()
                         {
                             type = 'gauge',
                             name = 'fuel',
-                            value = Entity(cache.vehicle).state.fuel or 100
+                            value = GetVehicleFuelLevel(cache.vehicle) or 100
                         },
                         {
                             type = 'gauge',
@@ -172,7 +172,7 @@ local function vehiclehudloop()
                         }
                     }
                 })
-                if Entity(cache.vehicle)?.state?.fuel and config.lowFuelAlert and Entity(cache.vehicle)?.state?.fuel < config.lowFuelAlert then
+                if config.lowFuelAlert and GetVehicleFuelLevel(cache.vehicle) < config.lowFuelAlert then
                     if alert > 0 then
                         alert = alert - 1
                     else
@@ -224,8 +224,8 @@ lib.onCache('vehicle', function(value)
     isInVehicle = value
     initVehicleHud()
     if not value then
-        LocalPlayer.state:set('seatbelt', false, true)
-        LocalPlayer.state:set('harness', false, true)
+        playerState:set('seatbelt', false, true)
+        playerState:set('harness', false, true)
         SendNUIMessage({
             update = true,
             data = {
