@@ -58,9 +58,9 @@ CreateThread(function()
     while true do
         local effectInterval = 2500
         if playerState.isLoggedIn then
-            effectInterval = GetEffectInterval(stress)
-            if stress >= 100 then
-                local BlurIntensity = GetBlurIntensity(stress)
+            effectInterval = GetEffectInterval(Stress)
+            if Stress >= 100 then
+                local BlurIntensity = GetBlurIntensity(Stress)
                 local FallRepeat = math.random(2, 4)
                 local RagdollTimeout = FallRepeat * 1750
                 TriggerScreenblurFadeIn(1000.0)
@@ -86,8 +86,8 @@ CreateThread(function()
                     Wait(BlurIntensity)
                     TriggerScreenblurFadeOut(1000.0)
                 end
-            elseif stress >= stressConfig.stressBlurMini then
-                local BlurIntensity = GetBlurIntensity(stress)
+            elseif Stress >= stressConfig.stressBlurMini then
+                local BlurIntensity = GetBlurIntensity(Stress)
                 TriggerScreenblurFadeIn(1000.0)
                 Wait(BlurIntensity)
                 TriggerScreenblurFadeOut(1000.0)

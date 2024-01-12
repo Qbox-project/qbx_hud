@@ -1,6 +1,6 @@
 local config = require 'config.client'
 local playerState = LocalPlayer.state
-stress = playerState.stress or 0
+Stress = playerState.stress or 0
 local displayBars = false
 local toggleHud = true
 local toggleCinematic = false
@@ -137,7 +137,8 @@ local function vehiclehudloop()
     end)
 
     CreateThread(function()
-        local alert, sleep = 0
+        local alert = 0
+        local sleep
         while isInVehicle do
             sleep = 1000
             if GetIsVehicleEngineRunning(cache.vehicle) and IsMinimapRendering() then
@@ -375,7 +376,7 @@ AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), functio
 end)
 
 AddStateBagChangeHandler('stress', ('player:%s'):format(cache.serverId), function(_, _, value)
-    stress = value
+    Stress = value
     SendNUIMessage({
         update = true,
         data = {
