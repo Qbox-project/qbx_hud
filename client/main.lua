@@ -63,7 +63,7 @@ local function loadSettings(settings)
             SendNUIMessage({test = true, event = k, toggle = v})
         end
     end
-    exports.qbx_core:Notify(Lang:t('notify.hud_settings_loaded'), 'success')
+    exports.qbx_core:Notify(locale('notify.hud_settings_loaded'), 'success')
     Wait(1000)
     TriggerEvent('hud:client:LoadMap')
 end
@@ -120,11 +120,11 @@ RegisterNUICallback('closeMenu', function(_, cb)
     cb('ok')
 end)
 
-RegisterKeyMapping('menu', Lang:t('info.open_menu'), 'keyboard', config.menuKey)
+RegisterKeyMapping('menu', locale('info.open_menu'), 'keyboard', config.menuKey)
 
 -- Reset hud
 local function restartHud()
-    exports.qbx_core:Notify(Lang:t('notify.hud_restart'), 'error')
+    exports.qbx_core:Notify(locale('notify.hud_restart'), 'error')
     if cache.vehicle then
         Wait(2600)
         SendNUIMessage({action = 'car', show = false})
@@ -134,7 +134,7 @@ local function restartHud()
     SendNUIMessage({action = 'hudtick', show = false})
     SendNUIMessage({action = 'hudtick', show = true})
     Wait(2600)
-    exports.qbx_core:Notify(Lang:t('notify.hud_start'), 'success')
+    exports.qbx_core:Notify(locale('notify.hud_start'), 'success')
 end
 
 RegisterNUICallback('restartHud', function(_, cb)
@@ -280,9 +280,9 @@ RegisterNetEvent('hud:client:LoadMap', function()
         minimapOffset = ((defaultAspectRatio-aspectRatio) / 3.6) - 0.008
     end
     if sharedConfig.menu.isToggleMapShapeChecked == 'square' then
-        lib.requestStreamedTextureDict('squaremap', false)
+        lib.requestStreamedTextureDict('squaremap')
         if sharedConfig.menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t('notify.load_square_map'), 'inform')
+            exports.qbx_core:Notify(locale('notify.load_square_map'), 'inform')
         end
         SetMinimapClipType(0)
         AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'squaremap', 'radarmasksm')
@@ -311,12 +311,12 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if sharedConfig.menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t('notify.loaded_square_map'), 'success')
+            exports.qbx_core:Notify(locale('notify.loaded_square_map'), 'success')
         end
     elseif sharedConfig.menu.isToggleMapShapeChecked == 'circle' then
-        lib.requestStreamedTextureDict('circlemap', false)
+        lib.requestStreamedTextureDict('circlemap')
         if sharedConfig.menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t('notify.load_circle_map'), 'inform')
+            exports.qbx_core:Notify(locale('notify.load_circle_map'), 'inform')
         end
         SetMinimapClipType(1)
         AddReplaceTexture('platform:/textures/graphics', 'radarmasksm', 'circlemap', 'radarmasksm')
@@ -345,7 +345,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
         end
         Wait(1200)
         if sharedConfig.menu.isMapNotifChecked then
-            exports.qbx_core:Notify(Lang:t('notify.loaded_circle_map'), 'success')
+            exports.qbx_core:Notify(locale('notify.loaded_circle_map'), 'success')
         end
     end
 end)
@@ -434,14 +434,14 @@ RegisterNUICallback('cinematicMode', function(_, cb)
         cinematicShow(false)
         sharedConfig.menu.isCineamticModeChecked = false
         if sharedConfig.menu.isCinematicNotifChecked then
-            exports.qbx_core:Notify(Lang:t('notify.cinematic_off'), 'error')
+            exports.qbx_core:Notify(locale('notify.cinematic_off'), 'error')
         end
         DisplayRadar(true)
     else
         cinematicShow(true)
         sharedConfig.menu.isCineamticModeChecked = true
         if sharedConfig.menu.isCinematicNotifChecked then
-            exports.qbx_core:Notify(Lang:t('notify.cinematic_on'), 'success')
+            exports.qbx_core:Notify(locale('notify.cinematic_on'), 'success')
         end
     end
     saveSettings()
@@ -745,7 +745,7 @@ CreateThread(function()
                 if getFuelLevel(cache.vehicle) <= 20 then -- At 20% Fuel Left
                     if sharedConfig.menu.isLowFuelChecked then
                         -- Add pager sound for when fuel is low
-                        exports.qbx_core:Notify(Lang:t('notify.low_fuel'), 'error')
+                        exports.qbx_core:Notify(locale('notify.low_fuel'), 'error')
                         Wait(60000) -- repeats every 1 min until empty
                     end
                 end

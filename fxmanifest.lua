@@ -5,11 +5,10 @@ description 'HUD for Qbox'
 repository 'https://github.com/Qbox-project/qbx_hud'
 version '1.0.0'
 
+ox_lib 'locale'
+
 shared_scripts {
     '@ox_lib/init.lua',
-    '@qbx_core/shared/locale.lua',
-    'locales/en.lua',
-    'locales/*.lua',
 }
 
 client_scripts {
@@ -27,6 +26,7 @@ files {
     'html/styles.css',
     'html/responsive.css',
     'html/app.js',
+    'locales/*.json',
     'config/client.lua',
     'config/shared.lua',
 }
