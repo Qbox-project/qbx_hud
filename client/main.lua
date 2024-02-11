@@ -72,21 +72,6 @@ local function saveSettings()
     SetResourceKvp('hudSettings', json.encode(sharedConfig.menu))
 end
 
-local function hasHarness(items)
-    if not cache.vehicle then return end
-
-    local _harness = false
-    if items then
-        for _, v in pairs(items) do
-            if v.name == 'harness' then
-                _harness = true
-            end
-        end
-    end
-
-    harness = _harness
-end
-
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
@@ -465,10 +450,6 @@ RegisterNetEvent('hud:client:ToggleShowSeatbelt', function()
     showSeatbelt = not showSeatbelt
 end)
 
-RegisterNetEvent('seatbelt:client:ToggleSeatbelt', function() -- Triggered in smallresources
-    seatbeltOn = not seatbeltOn
-end)
-
 RegisterNetEvent('seatbelt:client:ToggleCruise', function() -- Triggered in smallresources
     cruiseOn = not cruiseOn
 end)
@@ -649,7 +630,7 @@ CreateThread(function()
                 -1,
                 cruiseOn,
                 nitroActive,
-                harness,
+                LocalPlayer.state?.harness,
                 hp,
                 math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
                 -1,
@@ -692,7 +673,7 @@ CreateThread(function()
                     nos,
                     cruiseOn,
                     nitroActive,
-                    harness,
+                    LocalPlayer.state?.harness,
                     hp,
                     math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
                     (GetVehicleEngineHealth(cache.vehicle) / 10),
@@ -702,7 +683,7 @@ CreateThread(function()
                 updateVehicleHud({
                     show,
                     IsPauseMenuActive(),
-                    seatbeltOn,
+                    LocalPlayer.state?.seatbelt,
                     math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
                     getFuelLevel(cache.vehicle),
                     math.ceil(GetEntityCoords(cache.ped).z * 0.5),
@@ -786,19 +767,7 @@ RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
     })
 end)
 
--- Harness Check
-
-CreateThread(function()
-    while true do
-        Wait(1000)
-        if cache.vehicle then
-            hasHarness(QBX.PlayerData.items)
-        end
-    end
-end)
-
 -- Stress Gain
-
 CreateThread(function() -- Speeding
     while true do
         if LocalPlayer.state.isLoggedIn then
@@ -811,7 +780,7 @@ CreateThread(function() -- Speeding
                     if vehClass == 8 then
                         stressSpeed = config.stress.minForSpeeding
                     else
-                        stressSpeed = seatbeltOn and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
+                        stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
                     end
                     if speed >= stressSpeed then
                         TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
@@ -1047,7 +1016,7 @@ RegisterNetEvent('qbx_hud:client:showHud', function()
         updateVehicleHud({
             true,
             IsPauseMenuActive(),
-            seatbeltOn,
+            LocalPlayer.state?.seatbelt,
             math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
             getFuelLevel(cache.vehicle),
             math.ceil(GetEntityCoords(cache.ped).z * 0.5),
