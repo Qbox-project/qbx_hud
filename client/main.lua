@@ -1,7 +1,6 @@
 local config = require 'config.client'
 local sharedConfig = require 'config.shared'
 local speedMultiplier = config.useMPH and 2.23694 or 3.6
-local seatbeltOn = false
 local cruiseOn = false
 local showAltitude = false
 local showSeatbelt = false
@@ -12,7 +11,6 @@ local thirst = 100
 local cashAmount = 0
 local bankAmount = 0
 local nitroActive = 0
-local harness = false
 local hp = 100
 local armed = false
 local parachute = -1
@@ -703,9 +701,7 @@ CreateThread(function()
                         seatbelt = false,
                         cruise = false,
                     })
-                    seatbeltOn = false
                     cruiseOn = false
-                    harness = false
                 end
                 DisplayRadar(sharedConfig.menu.isOutMapChecked)
             end
