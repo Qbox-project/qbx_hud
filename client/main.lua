@@ -15,10 +15,10 @@ local directions = {
     W = 90,
     NW = 45,
 }
-local currentHeading, currentStreet, currentStreet2
 
 CreateThread(function()
-    local sleep, minimapShown = 500, false
+    local currentHeading, currentStreet, currentStreet2
+    local sleep, minimapShown
     while true do
         Wait(sleep)
         if not IsMinimapRendering() then
@@ -33,41 +33,39 @@ CreateThread(function()
                 }
             })
         else
-            local coords = GetEntityCoords(cache.ped);
-            local zone = GetNameOfZone(coords.x, coords.y, coords.z);
+            local coords = GetEntityCoords(cache.ped)
             local var1, var2 = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
-            local hash1, hash2 = GetStreetNameFromHashKey(var1), GetStreetNameFromHashKey(var2);
-            local street2 = ("%s%s"):format(hash2 ~= '' and hash2 .. ', ' or '', GetLabelText(zone));
-            local heading = GetEntityHeading(cache.ped);
+            local street, hash2 = GetStreetNameFromHashKey(var1), GetStreetNameFromHashKey(var2)
+            local street2 = ("%s%s"):format(hash2 ~= '' and hash2 .. ', ' or '', GetLabelText(GetNameOfZone(coords.x, coords.y, coords.z)))
+            local heading = GetEntityHeading(cache.ped) % 360
             local convertedHeading = 'N'
 
-            if heading < 0 or heading > 22.5 then
-                for k, v in pairs(directions) do
-                    if heading >= v - 22.5 and heading <= v + 22.5 then
-                        convertedHeading = k
-                        break
-                    end
+            for k, v in pairs(directions) do
+                if heading >= v - 22.5 and heading <= v + 22.5 then
+                    convertedHeading = k
+                    break
                 end
             end
 
-            if not minimapShown or currentHeading ~= convertedHeading or currentStreet ~= hash1 or currentStreet2 ~= street2 then
-                currentHeading, currentStreet, currentStreet2 = convertedHeading, hash1, street2
+            if currentHeading ~= convertedHeading or currentStreet ~= street or currentStreet2 ~= street2 then
                 SendNUIMessage({
                     update = true,
                     data = {
                         {
                             type = 'compass',
-                            show = true,
-                            heading = convertedHeading,
-                            street = hash1,
-                            zone = street2
+                            show = not minimapShown or nil,
+                            heading = currentHeading ~= convertedHeading and convertedHeading or nil,
+                            street = currentStreet ~= street and street or nil,
+                            street2 = currentStreet2 ~= street2 and street2 or nil,
                         }
                     }
                 })
+                currentHeading, currentStreet, currentStreet2 = convertedHeading, street, street2
+                minimapShown = true
             end
-            sleep, minimapShown = 500, true
+            sleep = 500
+            collectgarbage()
         end
-        collectgarbage()
     end
 end)
 
@@ -87,52 +85,46 @@ local function vehiclehudloop()
     end
 
     CreateThread(function()
-        local sleep
         while isInVehicle do
-            sleep = 1000
-            if IsMinimapRendering() then
-                local HasTrailer, Trailer = GetVehicleTrailerVehicle(cache.vehicle)
-                if IsControlJustPressed(1, 174) then     -- <- is pressed
-                    indl = not indl
-                    SetVehicleIndicatorLights(cache.vehicle, 1, indl)
-                    if HasTrailer then
-                        SetVehicleIndicatorLights(Trailer, 1, indl)
-                    end
+            local HasTrailer, Trailer = GetVehicleTrailerVehicle(cache.vehicle)
+            if IsControlJustPressed(1, 174) then     -- <- is pressed
+                indl = not indl
+                SetVehicleIndicatorLights(cache.vehicle, 1, indl)
+                if HasTrailer then
+                    SetVehicleIndicatorLights(Trailer, 1, indl)
                 end
-                if IsControlJustPressed(1, 175) then     -- -> is pressed
-                    indr = not indr
-                    SetVehicleIndicatorLights(cache.vehicle, 0, indr)
-                    if HasTrailer then
-                        SetVehicleIndicatorLights(Trailer, 0, indr)
-                    end
-                end
-                if IsControlJustPressed(1, 173) then     -- down is pressed
-                    indl = not indl
-                    indr = not indr
-                    SetVehicleIndicatorLights(cache.vehicle, 1, indl)
-                    SetVehicleIndicatorLights(cache.vehicle, 0, indr)
-                    if HasTrailer then
-                        SetVehicleIndicatorLights(Trailer, 1, indl)
-                        SetVehicleIndicatorLights(Trailer, 0, indr)
-                    end
-                end
-
-                if currentindicatorL ~= indl or currentindicatorR ~= indr then
-                    currentindicatorL, currentindicatorR = indl, indr
-                    SendNUIMessage({
-                        update = true,
-                        data = {
-                            {
-                                type = 'dashboardlights',
-                                indicatorL = indl,
-                                indicatorR = indr,
-                            }
-                        }
-                    })
-                end
-                sleep = 0
             end
-            Wait(sleep)
+            if IsControlJustPressed(1, 175) then     -- -> is pressed
+                indr = not indr
+                SetVehicleIndicatorLights(cache.vehicle, 0, indr)
+                if HasTrailer then
+                    SetVehicleIndicatorLights(Trailer, 0, indr)
+                end
+            end
+            if IsControlJustPressed(1, 173) then     -- down is pressed
+                indl = not indl
+                indr = not indr
+                SetVehicleIndicatorLights(cache.vehicle, 1, indl)
+                SetVehicleIndicatorLights(cache.vehicle, 0, indr)
+                if HasTrailer then
+                    SetVehicleIndicatorLights(Trailer, 1, indl)
+                    SetVehicleIndicatorLights(Trailer, 0, indr)
+                end
+            end
+            if IsMinimapRendering() and (currentindicatorL ~= indl or currentindicatorR ~= indr) then
+                currentindicatorL, currentindicatorR = indl, indr
+                SendNUIMessage({
+                    update = true,
+                    data = {
+                        {
+                            type = 'dashboardlights',
+                            indicatorL = indl,
+                            indicatorR = indr,
+                        }
+                    }
+                })
+            end
+            Wait(0)
         end
     end)
 
@@ -178,7 +170,11 @@ local function vehiclehudloop()
                         alert = alert - 1
                     else
                         alert = 1500
-                        PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", true)
+                        qbx.playAudio({
+                            audioName = "CONFIRM_BEEP",
+                            audioRef = 'HUD_MINI_GAME_SOUNDSET',
+                            source = cache.vehicle
+                        })
                         exports.qbx_core:Notify(Lang:t("notify.low_fuel"), "error")
                     end
                 end
@@ -250,9 +246,9 @@ local function initHud()
         update = true,
         data = {
             { type = 'showHud', value = playerState.isLoggedIn },
-            { type = 'progress', name = 'hunger', value = playerState.hunger or 0, option = { backgroundColor = playerState.hunger < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'thirst', value = playerState.thirst or 0, option = { backgroundColor = playerState.thirst < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'stress', value = playerState.stress or 0, option = { backgroundColor = playerState.stress > 75 and '#881111ff' or false } },
+            { type = 'progress', name = 'hunger', value = playerState.hunger or 0, option = { backgroundColor = playerState.hunger and playerState.hunger < 30 and '#881111ff' or false } },
+            { type = 'progress', name = 'thirst', value = playerState.thirst or 0, option = { backgroundColor = playerState.thirst and playerState.thirst < 30 and '#881111ff' or false } },
+            { type = 'progress', name = 'stress', value = playerState.stress or 0, option = { backgroundColor = playerState.stress and playerState.stress > 75 and '#881111ff' or false } },
             { type = 'progress', name = 'voice', value = playerState.proximity.distance * 10 },
             { type = 'balance', set = true, isCash = true, value = QBX.PlayerData?.money?.cash},
             { type = 'balance', set = true, isCash = false, value = QBX.PlayerData?.money?.bank },
@@ -302,7 +298,7 @@ local function setTalking(talking)
                 type = 'progress',
                 name = 'voice',
                 option = {
-                    backgroundColor = (playerState.talkingradio and '#5A93FF') or (talking and '#FF935A') or false
+                    backgroundColor = (playerState.radioActive and '#5A93FF') or (talking and '#FF935A') or false
                 }
             }
         }
@@ -310,7 +306,7 @@ local function setTalking(talking)
 end
 
 require '@pma-voice.shared'
-local proximityLevels = Cfg.voiceModes
+local proximityLevels = Cfg.voiceModes or {}
 local highestLevel
 for i = 1, #proximityLevels do
     if not highestLevel or proximityLevels[i][1] > highestLevel then
@@ -504,12 +500,12 @@ local function toggleCinematicMode()
     togglehud()
 end
 
-RegisterNetEvent('qbx_hud:client:toggleCinematicMode', function ()
+RegisterNetEvent('qbx_hud:client:toggleCinematicMode', function()
     toggleCinematicMode()
     exports.qbx_core:Notify(Lang:t(("notify.cinematic_%s"):format(toggleCinematic and 'on' or 'off')))
 end)
 
-RegisterNetEvent('qbx_hud:client:hideHud', function ()
+RegisterNetEvent('qbx_hud:client:hideHud', function()
     SendNUIMessage({
         update = true,
         data = {
@@ -521,7 +517,7 @@ RegisterNetEvent('qbx_hud:client:hideHud', function ()
     })
 end)
 
-RegisterNetEvent('qbx_hud:client:showHud', function ()
+RegisterNetEvent('qbx_hud:client:showHud', function()
     if not toggleCinematic and toggleHud then
         SendNUIMessage({
             update = true,
@@ -535,7 +531,7 @@ RegisterNetEvent('qbx_hud:client:showHud', function ()
     end
 end)
 
-RegisterNetEvent('qbx_hud:client:togglehud', function ()
+RegisterNetEvent('qbx_hud:client:togglehud', function()
     if not displayBars then
         togglehud()
         exports.qbx_core:Notify(Lang:t(("notify.hud_%s"):format(toggleHud and 'on' or 'off')))

@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Oxygen';
+    src: url("Oxygen-Regular.ttf");
+}
+
+@font-face {
+    font-family: 'Oxygen-Bold';
+    src: url(Oxygen-Bold.ttf);
+}
+
 @keyframes fadeLoop {
     0% {
       opacity: 0;
@@ -49,14 +59,26 @@
     overflow: hidden;
 }
 
-.negative-money::before {
-    content: "- ";
+.negative-money {
+    font-weight: 900;
     color: #ff0000;
 }
 
-#cash-change::before, #bank-change::before {
-    content: "+ ";
+.negative-money::before {
+    content: "- ";
+}
+
+.positive-money {
+    font-weight: 900;
     color: #01a01c;
+}
+
+.positive-money::before {
+    content: "+ ";
+}
+
+#cash-change, #bank-change {
+    display: none;
 }
 
 #cash > *, #bank > * {
@@ -253,6 +275,7 @@ i {
 }
 
 .compass-hud {
+    font-family: 'Oxygen', sans-serif;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -271,6 +294,7 @@ i {
     color: white;
     font-size: 1.5em;
     margin-right: 10px;
+    font-family: 'Oxygen-Bold', sans-serif;
 }
 
 .compass-hud .compass-location {

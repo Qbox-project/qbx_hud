@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const dataItem = Data[i];
                 switch (dataItem.type) {
                     case 'compass':
-                        setCompass(dataItem.show, dataItem.heading, dataItem.street, dataItem.zone);
+                        setCompass(dataItem.show, dataItem.heading, dataItem.street, dataItem.street2);
                         break;
                     case 'vehiclehud':
                         document.getElementsByClassName('vehicle-hud')[0].style.display = dataItem.show ? 'flex' : 'none';
@@ -123,13 +123,10 @@ function setSpeedProgress(percentage) {
 }
 
 function setCompass(show, heading, street, zone) {
-    if (show !== undefined) {
-        document.getElementsByClassName("compass-hud")[0].style.display = show && 'flex' || 'none';
-    }
-    if (heading === undefined || street === undefined || zone === undefined) return;
-    document.getElementById('azimuth').innerHTML = heading;
-    document.getElementById('street').innerHTML = street;
-    document.getElementById('zone').innerHTML = zone;
+    if (show) document.getElementsByClassName("compass-hud")[0].style.display = show && 'flex' || 'none';
+    if (heading) document.getElementById('azimuth').innerHTML = heading;
+    if (street) document.getElementById('street').innerHTML = street;
+    if (zone) document.getElementById('zone').innerHTML = zone;
 }
 
 function setDashboardLight(data) {
@@ -167,14 +164,18 @@ function showMoney(isCash) {
 function moneyChange(amount, isCash, isNegative) {
     if (amount === undefined) return;
     showMoney(isCash)
+    document.getElementById(isCash && 'cash-change' || 'bank-change').style.display = 'block';
     if (isNegative) {
+        document.getElementById(isCash && 'cash-change' || 'bank-change').classList.remove('positive-money');
         document.getElementById(isCash && 'cash-change' || 'bank-change').classList.add('negative-money');
     } else {
         document.getElementById(isCash && 'cash-change' || 'bank-change').classList.remove('negative-money');
+        document.getElementById(isCash && 'cash-change' || 'bank-change').classList.add('positive-money');
     }
 
-    document.getElementById(isCash && 'cash-change' || 'bank-change').innerHTML = amount;
+    document.getElementById(isCash && 'cash-change' || 'bank-change').innerHTML = amount.toLocaleString('us-US', { style: 'currency', maximumFractionDigits: 0, compactDisplay: "short", currency: 'USD' });
     setTimeout(() => {
         document.getElementById(isCash && 'cash-change' || 'bank-change').innerHTML = '';
+        document.getElementById(isCash && 'cash-change' || 'bank-change').style.display = 'none';
     }, 2500);
 }
