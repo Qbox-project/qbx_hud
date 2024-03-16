@@ -7,6 +7,8 @@ version '1.0.0'
 
 ox_lib 'locale'
 
+ox_lib 'locale'
+
 shared_scripts {
     '@ox_lib/init.lua',
     '@qbx_core/modules/lib.lua'
