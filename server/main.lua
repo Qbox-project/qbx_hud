@@ -22,7 +22,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
 
     Player(source).state:set('stress', newStress, true)
     player.Functions.SetMetaData('stress', newStress)
-    exports.qbx_core:Notify(source, Lang:t("notify.stress_gain"), 'error', 1500)
+    exports.qbx_core:Notify(source, locale("notify.stress_gain"), 'error', 1500)
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
@@ -37,18 +37,18 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
 
     Player(source).state:set('stress', newStress, true)
     player.Functions.SetMetaData('stress', newStress)
-    exports.qbx_core:Notify(source, Lang:t("notify.stress_removed"))
+    exports.qbx_core:Notify(source, locale("notify.stress_removed"))
 end)
 
 lib.addCommand('bank', {
-    help = Lang:t('commands.bank.help'),
+    help = locale('commands.bank.help'),
     restricted = false,
 }, function (source)
     TriggerClientEvent('qbx_hud:client:showMoney', source, false)
 end)
 
 lib.addCommand('cash', {
-    help = Lang:t('commands.cash.help'),
+    help = locale('commands.cash.help'),
     restricted = false,
 }, function (source)
     TriggerClientEvent('qbx_hud:client:showMoney', source, true)

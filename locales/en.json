@@ -1,0 +1,19 @@
+{
+    "notify": {
+        "low_fuel": "Fuel Level Low!",
+        "stress_gain": "Feeling More Stressed!",
+        "stress_removed": "Feeling More Relaxed!",
+        "cinematic_on": "Cinematic Mode Enabled!",
+        "cinematic_off": "Cinematic Mode Disabled!",
+        "hud_on": "HUD Enabled!",
+        "hud_off": "HUD Disabled!"
+    },
+    "commands": {
+        "bank": {
+            "help": "Show Bank Balance"
+        },
+        "cash": {
+            "help": "Show Cash Balance"
+        }
+    }
+}

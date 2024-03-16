@@ -175,7 +175,7 @@ local function vehiclehudloop()
                             audioRef = 'HUD_MINI_GAME_SOUNDSET',
                             source = cache.vehicle
                         })
-                        exports.qbx_core:Notify(Lang:t("notify.low_fuel"), "error")
+                        exports.qbx_core:Notify(locale("notify.low_fuel"), "error")
                     end
                 end
                 sleep = 100
@@ -502,7 +502,7 @@ end
 
 RegisterNetEvent('qbx_hud:client:toggleCinematicMode', function()
     toggleCinematicMode()
-    exports.qbx_core:Notify(Lang:t(("notify.cinematic_%s"):format(toggleCinematic and 'on' or 'off')))
+    exports.qbx_core:Notify(locale(("notify.cinematic_%s"):format(toggleCinematic and 'on' or 'off')))
 end)
 
 RegisterNetEvent('qbx_hud:client:hideHud', function()
@@ -534,6 +534,6 @@ end)
 RegisterNetEvent('qbx_hud:client:togglehud', function()
     if not displayBars then
         togglehud()
-        exports.qbx_core:Notify(Lang:t(("notify.hud_%s"):format(toggleHud and 'on' or 'off')))
+        exports.qbx_core:Notify(locale(("notify.hud_%s"):format(toggleHud and 'on' or 'off')))
     end
 end)
