@@ -1,21 +1,20 @@
 local Translations = {
     notify = {
-        ["hud_settings_loaded"] = "Impostazioni HUD Caricate!",
-        ["hud_restart"] = "L\'HUD si sta restartando!",
-        ["hud_start"] = "L\'HUD si sta avviando!",
-        ["hud_command_info"] = "Questo comando resetta le impostazioni dell\'HUD!",
-        ["load_square_map"] = "Caricando Mappa Quadrata...",
-        ["loaded_square_map"] = "Mappa Quadrata Caricata!",
-        ["load_circle_map"] = "Caricando Mappa Rotonda...",
-        ["loaded_circle_map"] = "Mappa Rotonda Caricata!",
-        ["cinematic_on"] = "Modalità Cinematica On!",
-        ["cinematic_off"] = "Modalità Cinematica Off!",
-        ["engine_on"] = "Motore Avviato!",
-        ["engine_off"] = "Motore Spento!",
-        ["low_fuel"] = "Livello Carburante Basso!",
-        ["access_denied"] = "Non Sei Autorizzato!",
-        ["stress_gain"] = "Ti Stai Stressando!",
-        ["stress_removed"] = "Ti Stai Rilassando!"
+        low_fuel = 'Livello del carburante basso!',
+        stress_gain = 'Ti senti più stressato!',
+        stress_removed = 'Ti senti più rilassato!',
+        cinematic_on = 'Modalità cinematografica abilitata!',
+        cinematic_off = 'Modalità cinematografica disabilitata!',
+        hud_on = 'HUD abilitato!',
+        hud_off = 'HUD disabilitato!',
+    },
+    commands = {
+        bank = {
+            help = 'Mostra il saldo bancario'
+        },
+        cash = {
+            help = 'Mostra il saldo in contanti'
+        }
     }
 }
 
