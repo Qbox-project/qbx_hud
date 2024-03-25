@@ -15,7 +15,7 @@
 ##
 **Q:** How do I enable dev mode?
 
-**A:** Simple! All you have to do is type /admin and navigate through the menu to the last section called "Developer Options" and inside there you should see "Dev Mode", this will keep you invincible and add a cool developer icon in your circles/radials 
+**A:** Simple! All you have to do is type /admin and navigate through the menu to the last section called "Developer Options" and inside there you should see "Dev Mode", this will keep you invincible and add a cool developer icon in your circles/radials
 ##
 
 ##
