@@ -246,9 +246,9 @@ local function initHud()
         update = true,
         data = {
             { type = 'showHud', value = playerState.isLoggedIn },
-            { type = 'progress', name = 'hunger', value = playerState.hunger or 0, option = { backgroundColor = playerState.hunger and playerState.hunger < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'thirst', value = playerState.thirst or 0, option = { backgroundColor = playerState.thirst and playerState.thirst < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'stress', value = playerState.stress or 0, option = { backgroundColor = playerState.stress and playerState.stress > 75 and '#881111ff' or false } },
+            { type = 'progress', name = 'hunger', value = playerState.hunger or 0, option = { stroke = playerState.hunger and playerState.hunger < 30 and '#881111ff' or false } },
+            { type = 'progress', name = 'thirst', value = playerState.thirst or 0, option = { stroke = playerState.thirst and playerState.thirst < 30 and '#881111ff' or false } },
+            { type = 'progress', name = 'stress', value = playerState.stress or 0, option = { stroke = playerState.stress and playerState.stress > 75 and '#881111ff' or false } },
             { type = 'progress', name = 'voice', value = playerState.proximity.distance * 10 },
             { type = 'balance', set = true, isCash = true, value = QBX.PlayerData?.money?.cash},
             { type = 'balance', set = true, isCash = false, value = QBX.PlayerData?.money?.bank },
@@ -298,7 +298,7 @@ local function setTalking(talking)
                 type = 'progress',
                 name = 'voice',
                 option = {
-                    backgroundColor = (playerState.radioActive and '#5A93FF') or (talking and '#FF935A') or false
+                    stroke = (playerState.radioActive and '#5A93FF') or (talking and '#FF935A') or false
                 }
             }
         }
@@ -348,7 +348,7 @@ AddStateBagChangeHandler('hunger', ('player:%s'):format(cache.serverId), functio
                 name = 'hunger',
                 value = value,
                 option = {
-                    backgroundColor = value < 30 and '#881111ff' or false,
+                    stroke = value < 30 and '#881111ff' or false,
                 }
             }
         }
@@ -364,7 +364,7 @@ AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), functio
                 name = 'thirst',
                 value = value,
                 option = {
-                    backgroundColor = value < 30 and '#881111ff' or false,
+                    stroke = value < 30 and '#881111ff' or false,
                 }
             }
         }
@@ -381,7 +381,7 @@ AddStateBagChangeHandler('stress', ('player:%s'):format(cache.serverId), functio
                 name = 'stress',
                 value = value,
                 option = {
-                    backgroundColor = value > 75 and '#881111ff' or false,
+                    stroke = value > 75 and '#881111ff' or false,
                 }
             }
         }
