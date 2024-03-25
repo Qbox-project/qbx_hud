@@ -29,40 +29,33 @@
         </div>
     </div>
     <div class="player-hud">
-        <div class="bars">
-            <div class="type">
-                <div class="icon">
-                    <i class="fad fa-hamburger"
-                        style="--fa-primary-color: rgb(111, 28, 0); --fa-secondary-color: #f79123;"></i>
-                </div>
-                <div class="progress">
-                    <div id="progress-hunger"></div>
-                </div>
-            </div>
-            <div class="type">
-                <div class="icon">
-                    <i class="fas fa-tint"></i>
-                </div>
-                <div class="progress">
-                    <div id="progress-thirst"></div>
-                </div>
-            </div>
-            <div class="type">
-                <div class="icon">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <div class="progress">
-                    <div id="progress-stress"></div>
-                </div>
-            </div>
-            <div class="type">
-                <div class="icon">
-                    <i class="fas fa-microphone"></i>
-                </div>
-                <div class="progress">
-                    <div id="progress-voice"></div>
-                </div>
-            </div>
+        <div class="progressradial">
+            <svg  style="transform: rotate(-90deg)">
+                <circle r="26" cx="28" cy="28" fill="none" stroke-width="4"></circle>
+                <circle id="progress-hunger" r="26" cx="28" cy="28" fill="none"  stroke-width="4" stroke-dasharray="138.16px" stroke-dashoffset="103.62px" stroke-linecap="round"></circle>
+            </svg>
+            <i class="progress-icons fad fa-hamburger" style="--fa-primary-color: rgb(111, 28, 0); --fa-secondary-color: #f79123;"></i>
+        </div>
+        <div class="progressradial">
+            <svg  style="transform: rotate(-90deg)">
+                <circle r="26" cx="28" cy="28" fill="none" stroke="white" stroke-width="4"></circle>
+                <circle id="progress-thirst" r="26" cx="28" cy="28" fill="none" stroke="red" stroke-width="4" stroke-dasharray="138.16px" stroke-dashoffset="103.62px" stroke-linecap="round"></circle>
+            </svg>
+            <i class="progress-icons fas fa-tint"></i>
+        </div>
+        <div class="progressradial">
+            <svg  style="transform: rotate(-90deg)">
+                <circle r="26" cx="28" cy="28" fill="none" stroke="white" stroke-width="4"></circle>
+                <circle id="progress-stress" r="26" cx="28" cy="28" fill="none" stroke="red" stroke-width="4" stroke-dasharray="138.16px" stroke-dashoffset="103.62px" stroke-linecap="round"></circle>
+            </svg>
+            <i class="progress-icons fas fa-brain"></i>
+        </div>
+        <div class="progressradial">
+            <svg  style="transform: rotate(-90deg)">
+                <circle r="26" cx="28" cy="28" fill="none" stroke="white" stroke-width="4"></circle>
+                <circle id="progress-voice" r="26" cx="28" cy="28" fill="none" stroke="red" stroke-width="4" stroke-dasharray="138.16px" stroke-dashoffset="103.62px" stroke-linecap="round"></circle>
+            </svg>
+            <i class="progress-icons fas fa-microphone"></i>
         </div>
     </div>
     <div class="vehicle-hud">
@@ -105,8 +98,8 @@
                     <circle class="gauge-background" cx="20" cy="20" r="18" stroke="#FFFFFF"
                         stroke-dasharray="113.097 113.097" stroke-dashoffset="33.93" stroke-opacity=".2"
                         stroke-width="3" fill="none" transform="rotate(51 20 20)" />
-                    <circle id="progress-nitro" cx="20" cy="20" r="18" stroke="#4488FF"
-                        stroke-opacity="1" stroke-width="3" fill="none" transform="rotate(51 20 20)" />
+                    <circle id="progress-nitro" cx="20" cy="20" r="18" stroke="#4488FF" stroke-opacity="1"
+                        stroke-width="3" fill="none" transform="rotate(51 20 20)" />
                     <defs>
                         <clipPath id="clip0">
                             <rect width="12" height="13" />

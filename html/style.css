@@ -20,22 +20,65 @@
     }
 }
 
+
+:root {
+    --player-hud-height: 20vh;
+    --player-hud-width: 3vw;
+    --player-hud-padding: 0.25em;
+    --progressradial-margin: 0.1em;
+    --progressradial-height: calc(var(--player-hud-height) / 4 - (2 * var(--progressradial-margin)));
+    --progressradial-width: calc(3vw - (2 * var(--player-hud-padding)));
+    --progressradial-circle-radius: calc((3vw - (2 * var(--player-hud-padding))) / 2 - 2px);
+}
+
 .player-hud {
     position: absolute;
     left: 16.5vw;
-    bottom: 1.5vh;
-    min-width: 100px;
-    width: 12.5vw;
+    bottom: 0.5vh;
+    min-width: 50px;
+    width: var(--player-hud-width);
     min-height: 100px;
-    height: 10.5vh;
-    padding: 5px 5px 5px 5px;
+    height: var(--player-hud-height);
+    padding: var(--player-hud-padding);
     box-sizing: border-box;
-    background: rgba(24, 27, 32, 0.3);
     border-radius: 10px;
     overflow: hidden;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-evenly;
+    align-items: center;
+}
+
+.progressradial {
+    text-align: center;
+    margin-block: calc(var(--progressradial-margin) / 2);
+    height: var(--progressradial-height);
+    width: calc(3vw - (2 * var(--player-hud-padding)));
+}
+
+.progressradial svg {
+    margin-block: calc(var(--progressradial-margin) / 2);
+    height: var(--progressradial-height);
+    width: var(--progressradial-width);
+}
+
+.progressradial svg circle {
+    cx: 50%;
+    cy: 50%;
+    stroke-width: 0.225em;
+    r: 1.35em;
+    stroke: rgb(187, 200, 222);
+    stroke-opacity: 0.3;
+}
+
+#progress-voice {
+    stroke: #bbc8de;
+    stroke-opacity: 1;
+}
+
+.progress-icons {
+    font-size: 1.1em;
+    transform: translateY(-2em);
 }
 
 #money-container {
@@ -142,7 +185,8 @@
 }
 
 #progress-hunger {
-    background-color: #dd6e14;
+    stroke-opacity: 1;
+    stroke: #dd6e14;
 }
 
 .fa-tint {
@@ -150,7 +194,8 @@
 }
 
 #progress-thirst {
-    background-color: #1a7cad;
+    stroke-opacity: 1;
+    stroke: #1a7cad;
 }
 
 .fa-brain {
@@ -158,7 +203,8 @@
 }
 
 #progress-stress {
-    background-color: rgba(196, 0, 0);
+    stroke-opacity: 1;
+    stroke: rgba(196, 0, 0);
 }
 
 #progress-voice {

@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         setDashboardLight(dataItem);
                         break;
                     case 'progress':
-                        setProgressBar(dataItem.value, `progress-${dataItem.name}`, dataItem.option);
+                        setProgress(dataItem.value, `progress-${dataItem.name}`, dataItem.option);
                         break;
                     case 'seatbelt':
                         setSeatbelt(dataItem.value, dataItem.harness);
@@ -54,16 +54,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function setProgressBar(percent, className, option) {
-    let progressBar = document.getElementById(className);
-    if (progressBar === undefined) return;
+function setProgress(percent, className, option) {
+    let circle = document.getElementById(className);
+    if (circle === undefined) return;
     if (percent !== undefined) {
-        percent = percent > 100 && 100 || percent < 0 && 0 || percent;
-        progressBar.style.width = percent + '%';
+        Math.min(100, Math.max(0, percent));
+        let circumference = circle.r.baseVal.value * 2 * Math.PI;
+        //Why 0.81? i don't know, but it works
+        let offset = circumference - ((percent / 100) * 0.81) * circumference;
+
+        circle.style.strokeDasharray = circumference;
+        circle.style.strokeDashoffset = offset;
     }
     if (option !== undefined) {
         for (var key in option) {
-            progressBar.style[key] = option[key] || null;
+            circle.style[key] = option[key] || null;
         }
     }
 }
