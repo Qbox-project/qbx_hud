@@ -75,9 +75,9 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     Wait(2000)
     local hudSettings = GetResourceKvpString('hudSettings')
     if hudSettings then loadSettings(json.decode(hudSettings)) end
-    playerState.stress = QBX.PlayerData.metadata.stress
-    playerState.hunger = QBX.PlayerData.metadata.hunger
-    playerState.thirst = QBX.PlayerData.metadata.thirst
+    stress = QBX.PlayerData.metadata.stress
+    hunger = QBX.PlayerData.metadata.hunger
+    thirst = QBX.PlayerData.metadata.thirst
     hp = QBX.PlayerData.metadata.health
 end)
 
