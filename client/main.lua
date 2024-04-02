@@ -474,15 +474,15 @@ RegisterNetEvent('hud:client:UpdateNitrous', function(_, nitroLevel, bool)
 end)
 
 qbx.entityStateHandler('nitroFlames', function(veh, netId, value)
-    local plate = trim(GetVehicleNumberPlateText(veh))
-    local cachePlate = trim(GetVehicleNumberPlateText(cache.vehicle))
+    local plate = qbx.string.trim(GetVehicleNumberPlateText(veh))
+    local cachePlate = qbx.string.trim(GetVehicleNumberPlateText(cache.vehicle))
     if plate ~= cachePlate then return end
     nitroActive = value
 end)
 
 qbx.entityStateHandler('nitro', function(veh, netId, value)
-    local plate = trim(GetVehicleNumberPlateText(veh))
-    local cachePlate = trim(GetVehicleNumberPlateText(cache.vehicle))
+    local plate = qbx.string.trim(GetVehicleNumberPlateText(veh))
+    local cachePlate = qbx.string.trim(GetVehicleNumberPlateText(cache.vehicle))
     if plate ~= cachePlate then return end
     nos = value
 end)
