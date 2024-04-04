@@ -5,9 +5,10 @@ local cruiseOn = false
 local showAltitude = false
 local showSeatbelt = false
 local nos = 0
-local stress = 0
-local hunger = 100
-local thirst = 100
+local playerState = LocalPlayer.state
+local stress = playerState.stress or 0
+local hunger = playerState.hunger or 100
+local thirst = playerState.thirst or 100
 local cashAmount = 0
 local bankAmount = 0
 local nitroActive = 0
@@ -435,13 +436,27 @@ RegisterNetEvent('hud:client:ToggleAirHud', function()
     showAltitude = not showAltitude
 end)
 
+---@deprecated Use statebags instead
 RegisterNetEvent('hud:client:UpdateNeeds', function(newHunger, newThirst) -- Triggered in qb-core
     hunger = newHunger
     thirst = newThirst
 end)
 
-RegisterNetEvent('hud:client:UpdateStress', function(newStress) -- Add this event with adding stress elsewhere
+AddStateBagChangeHandler('hunger', ('player:%s'):format(cache.serverId), function(_, _, value)
+    hunger = value
+end)
+
+AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), function(_, _, value)
+    thirst = value
+end)
+
+---@deprecated Use statebags instead
+RegisterNetEvent('hud:client:UpdateStress', function(newStress)
     stress = newStress
+end)
+
+AddStateBagChangeHandler('stress', ('player:%s'):format(cache.serverId), function(_, _, value)
+    stress = value
 end)
 
 RegisterNetEvent('hud:client:ToggleShowSeatbelt', function()
@@ -452,9 +467,24 @@ RegisterNetEvent('seatbelt:client:ToggleCruise', function() -- Triggered in smal
     cruiseOn = not cruiseOn
 end)
 
+---@deprecated Use statebags instead
 RegisterNetEvent('hud:client:UpdateNitrous', function(_, nitroLevel, bool)
     nos = nitroLevel
     nitroActive = bool
+end)
+
+qbx.entityStateHandler('nitroFlames', function(veh, netId, value)
+    local plate = qbx.string.trim(GetVehicleNumberPlateText(veh))
+    local cachePlate = qbx.string.trim(GetVehicleNumberPlateText(cache.vehicle))
+    if plate ~= cachePlate then return end
+    nitroActive = value
+end)
+
+qbx.entityStateHandler('nitro', function(veh, netId, value)
+    local plate = qbx.string.trim(GetVehicleNumberPlateText(veh))
+    local cachePlate = qbx.string.trim(GetVehicleNumberPlateText(cache.vehicle))
+    if plate ~= cachePlate then return end
+    nos = value
 end)
 
 RegisterNetEvent('hud:client:UpdateHarness', function(harnessHp)
