@@ -992,9 +992,9 @@ CreateThread(function()
         local show = true
         local camRot = GetGameplayCamRot(0)
         if sharedConfig.menu.isCompassFollowChecked then
-            heading = math.round(360.0 - ((camRot.z + 360.0) % 360.0))
+            heading = qbx.math.round(360.0 - ((camRot.z + 360.0) % 360.0))
         else
-            heading = math.round(360.0 - GetEntityHeading(cache.ped))
+            heading = qbx.math.round(360.0 - GetEntityHeading(cache.ped))
         end
 		if heading == 360 then heading = 0 end
         if heading ~= lastHeading then
