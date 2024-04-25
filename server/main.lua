@@ -21,13 +21,3 @@ lib.addCommand('cash', {
 }, function (source)
     TriggerClientEvent('qbx_hud:client:showMoney', source, true)
 end)
-
-lib.addCommand('testfuel', {
-    help = nil,
-    params = {
-        {name = 'amount', help = 'Amount of fuel to set', type = 'number'}
-    },
-    restricted = false,
-}, function (source, args)
-    Entity(GetVehiclePedIsIn(GetPlayerPed(source))).state.fuel = tonumber(args.amount)
-end)
