@@ -46,10 +46,6 @@ RegisterNetEvent('qbx_hud:client:showMoney', function(isCash)
     })
 end)
 
-CreateThread(function()
-    SetTimeout(250, initHud)
-end)
-
 AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(cache.serverId), function(_, _, value)
     if value then
         initHud()
@@ -73,6 +69,8 @@ AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(cache.serverId), fun
 end)
 
 CreateThread(function()
+    SetTimeout(250, initHud)
+
     -- Disable the minimap on login
     if not PlayerState.isLoggedIn then
         DisplayRadar(false)
