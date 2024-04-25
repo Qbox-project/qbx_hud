@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         setCompass(dataItem.show, dataItem.heading, dataItem.street, dataItem.street2);
                         break;
                     case 'vehiclehud':
-                        document.getElementsByClassName('vehicle-hud')[0].style.display = dataItem.show ? 'flex' : 'none';
+                        document.getElementsByClassName('vehicle-hud')[0].style.opacity = dataItem.show ? 1 : 0;
                         break;
                     case 'speed':
                         setSpeed(dataItem.speed);
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         setSeatbelt(dataItem.value, dataItem.harness);
                         break;
                     case 'showHud':
-                        document.getElementsByTagName('body')[0].style.display = dataItem.value ? 'block' : 'none';
+                        document.getElementsByTagName('body')[0].style.opacity = dataItem.value ? 1 : 0;
                         break;
                     case 'balance':
                         if (dataItem.set) {
@@ -102,7 +102,7 @@ function setGauge(percentage, name, show) {
     let gauge = document.getElementById(name);
     if (gauge === undefined) return;
     if (show !== undefined) {
-        document.getElementById(name).style.display = show && 'flex' || 'none';
+        document.getElementById(name).style.opacity = show ? 1 : 0;
     }
     if (percentage > 100) percentage = 100;
     let circle = document.getElementById('progress-' + name);
@@ -112,6 +112,10 @@ function setGauge(percentage, name, show) {
 
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
     circle.style.strokeDashoffset = offset;
+
+    if (name === 'fuel') {
+        document.getElementById('progress-fuel').style.stroke = percentage > 30 ? '#ffffff' : percentage > 15 ? '#f39c12' : '#a40000';
+    }
 }
 
 /* thanks bing AI */
@@ -128,7 +132,7 @@ function setSpeedProgress(percentage) {
 }
 
 function setCompass(show, heading, street, zone) {
-    if (show) document.getElementsByClassName("compass-hud")[0].style.display = show && 'flex' || 'none';
+    if (show) document.getElementsByClassName("compass-hud")[0].style.opacity = show ? 1 : 0;
     if (heading) document.getElementById('azimuth').innerHTML = heading;
     if (street) document.getElementById('street').innerHTML = street;
     if (zone) document.getElementById('zone').innerHTML = zone;
@@ -149,13 +153,16 @@ function setDashboardLight(data) {
             document.getElementById('indicatorR').classList.remove('indicator-active');
         }
     }
-    if (data.highbeam !== undefined) {
-        document.getElementById('highbeam').style.fill = data.highbeam && '#2ecc71' || '';
-        document.getElementById('highbeam').style.opacity = data.highbeam && '1.0' || '0.2';
-    }
     if (data.lowbeam !== undefined) {
         document.getElementById('lowbeam').style.fill = data.lowbeam && '#0984e3' || '';
         document.getElementById('lowbeam').style.opacity = data.lowbeam && '1.0' || '0.2';
+        if (data.lowbeam && !data.highbeam) {
+            data.highbeam = true;
+        }
+    }
+    if (data.highbeam !== undefined) {
+        document.getElementById('highbeam').style.fill = data.highbeam && '#2ecc71' || '';
+        document.getElementById('highbeam').style.opacity = data.highbeam && '1.0' || '0.2';
     }
 }
 

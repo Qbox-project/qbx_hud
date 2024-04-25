@@ -20,7 +20,6 @@
     }
 }
 
-
 :root {
     --player-hud-height: 20vh;
     --player-hud-width: 3vw;
@@ -236,6 +235,8 @@ i {
     border-radius: 10px;
     overflow: hidden;
     align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s linear;
 }
 
 .vehicle-hud .gauges {
@@ -245,10 +246,6 @@ i {
     font-family: Roboto, sans-serif;
     font-weight: normal;
     text-transform: uppercase;
-}
-
-#nitro {
-    margin-left: -15px;
 }
 
 #progress-speed {
@@ -288,6 +285,7 @@ i {
 }
 
 #nitro {
+    margin-left: -15px;
     translate: 12px -17px;
 }
 
@@ -328,6 +326,8 @@ i {
     position: absolute;
     bottom: 21vh;
     left: 1.5vw;
+    opacity: 0;
+    transition: opacity 0.5s linear;
 }
 
 .compass-hud i {
