@@ -1,14 +1,14 @@
 local config = require("config.client")
 local stressConfig = config.stress
-local playerState = LocalPlayer.state
+Stress = PlayerState.stress or 0
 
 -- Stress Gain
 CreateThread(function() -- Speeding
     while true do
-        if playerState.isLoggedIn then
-            if cache.vehicle and not playerState.harness and GetVehicleClass(cache.vehicle) ~= 8 then
+        if PlayerState.isLoggedIn then
+            if cache.vehicle and not PlayerState.harness and GetVehicleClass(cache.vehicle) ~= 8 then
                 local speed = GetEntitySpeed(cache.vehicle) * config.speedMultiplier
-                local stressSpeed = seatbeltOn and stressConfig.speedingMini or stressConfig.speedingUnbuckledMini
+                local stressSpeed = PlayerState.seatbelt and stressConfig.speedingMini or stressConfig.speedingUnbuckledMini
                 if speed >= stressSpeed then
                     TriggerServerEvent('hud:server:GainStress', math.random(stressConfig.speedingStress.min, stressConfig.speedingStress.max))
                 end
@@ -57,7 +57,7 @@ end
 CreateThread(function()
     while true do
         local effectInterval = 2500
-        if playerState.isLoggedIn then
+        if PlayerState.isLoggedIn then
             effectInterval = GetEffectInterval(Stress)
             if Stress >= 100 then
                 local BlurIntensity = GetBlurIntensity(Stress)
