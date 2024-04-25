@@ -190,6 +190,10 @@ lib.onCache('vehicle', function(value)
             update = true,
             data = {
                 {
+                    type = 'vehiclehud',
+                    show = false
+                },
+                {
                     type = 'seatbelt',
                     value = false,
                 }

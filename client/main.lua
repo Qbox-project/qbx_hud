@@ -15,7 +15,7 @@ local function initHud()
             { type = 'progress', name = 'hunger', value = PlayerState.hunger or 0, option = { stroke = PlayerState.hunger and PlayerState.hunger < 30 and '#881111ff' or false } },
             { type = 'progress', name = 'thirst', value = PlayerState.thirst or 0, option = { stroke = PlayerState.thirst and PlayerState.thirst < 30 and '#881111ff' or false } },
             { type = 'progress', name = 'stress', value = PlayerState.stress or 0, option = { stroke = PlayerState.stress and PlayerState.stress > 75 and '#881111ff' or false } },
-            { type = 'progress', name = 'voice', value = PlayerState.proximity.distance * 10 },
+            { type = 'progress', name = 'voice', value = PlayerState?.proximity?.distance and PlayerState?.proximity?.distance * 10 },
             { type = 'balance', set = true, isCash = true, value = QBX.PlayerData?.money?.cash},
             { type = 'balance', set = true, isCash = false, value = QBX.PlayerData?.money?.bank },
         }
