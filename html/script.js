@@ -34,20 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     case 'showHud':
                         document.getElementsByTagName('body')[0].style.opacity = dataItem.value ? 1 : 0;
                         break;
-                    case 'balance':
-                        if (dataItem.set) {
-                            if (typeof dataItem.amount === 'number') {
-                                moneyChange(dataItem.amount, dataItem.isCash, dataItem.isNegative);
-                            }
-                            setTimeout(() => {
-                                setBalance(dataItem.value, dataItem.isCash);
-                            }, dataItem.amount && 2500 || 0);
-                            break;
-                        };
-                        showMoney(dataItem.isCash);
-                        break;
-                    default:
-                        break;
                 }
             }
         }
@@ -70,17 +56,6 @@ function setProgress(percent, className, option) {
         for (var key in option) {
             circle.style[key] = option[key] || null;
         }
-    }
-}
-
-function setBalance(balance, isCash) {
-    if (balance === undefined || isCash === undefined) return;
-    if (balance < 0) balance = 0;
-
-    if (isCash) {
-        document.getElementById('cash-balance').innerHTML = balance.toLocaleString('us-US', { style: 'currency', maximumFractionDigits: 0, compactDisplay: "short", currency: 'USD' });
-    } else {
-        document.getElementById('bank-balance').innerHTML = balance.toLocaleString('us-US', { style: 'currency', maximumFractionDigits: 0, compactDisplay: "short", currency: 'USD' });
     }
 }
 
@@ -164,30 +139,4 @@ function setDashboardLight(data) {
         document.getElementById('highbeam').style.fill = data.highbeam && '#2ecc71' || '';
         document.getElementById('highbeam').style.opacity = data.highbeam && '1.0' || '0.2';
     }
-}
-
-function showMoney(isCash) {
-    document.getElementById(isCash && 'cash' || 'bank').style.display = 'flex';
-    setTimeout(() => {
-        document.getElementById(isCash && 'cash' || 'bank').style.display = 'none';
-    }, 2500);
-}
-
-function moneyChange(amount, isCash, isNegative) {
-    if (amount === undefined) return;
-    showMoney(isCash)
-    document.getElementById(isCash && 'cash-change' || 'bank-change').style.display = 'block';
-    if (isNegative) {
-        document.getElementById(isCash && 'cash-change' || 'bank-change').classList.remove('positive-money');
-        document.getElementById(isCash && 'cash-change' || 'bank-change').classList.add('negative-money');
-    } else {
-        document.getElementById(isCash && 'cash-change' || 'bank-change').classList.remove('negative-money');
-        document.getElementById(isCash && 'cash-change' || 'bank-change').classList.add('positive-money');
-    }
-
-    document.getElementById(isCash && 'cash-change' || 'bank-change').innerHTML = amount.toLocaleString('us-US', { style: 'currency', maximumFractionDigits: 0, compactDisplay: "short", currency: 'USD' });
-    setTimeout(() => {
-        document.getElementById(isCash && 'cash-change' || 'bank-change').innerHTML = '';
-        document.getElementById(isCash && 'cash-change' || 'bank-change').style.display = 'none';
-    }, 2500);
 }

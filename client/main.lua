@@ -4,6 +4,7 @@ local displayBars = false
 local toggleHud = true
 local toggleCinematic = false
 local SendNUIMessage = SendNUIMessage
+
 local function initHud()
     if config.minimapAlwaysOn then
         DisplayRadar(PlayerState.isLoggedIn)
@@ -16,35 +17,9 @@ local function initHud()
             { type = 'progress', name = 'thirst', value = PlayerState.thirst or 0, option = { stroke = PlayerState.thirst and PlayerState.thirst < 30 and '#881111ff' or false } },
             { type = 'progress', name = 'stress', value = PlayerState.stress or 0, option = { stroke = PlayerState.stress and PlayerState.stress > 75 and '#881111ff' or false } },
             { type = 'progress', name = 'voice', value = PlayerState?.proximity?.distance and PlayerState?.proximity?.distance * 10 },
-            { type = 'balance', set = true, isCash = true, value = QBX.PlayerData?.money?.cash},
-            { type = 'balance', set = true, isCash = false, value = QBX.PlayerData?.money?.bank },
         }
     })
 end
-
-RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isNegative)
-    SendNUIMessage({
-        update = true,
-        data = {{
-            type = 'balance',
-            set = true,
-            value = QBX.PlayerData.money[type],
-            amount = amount,
-            isNegative = isNegative,
-            isCash = type == 'cash' and true or false
-        }},
-    })
-end)
-
-RegisterNetEvent('qbx_hud:client:showMoney', function(isCash)
-    SendNUIMessage({
-        update = true,
-        data = {{
-            type = 'balance',
-            isCash = isCash
-        }},
-    })
-end)
 
 AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(cache.serverId), function(_, _, value)
     if value then
