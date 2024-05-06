@@ -109,9 +109,10 @@ local function vehiclehudloop()
                 }
 
 
+                -- not ideal, the 1500 doesn't actually equal 150 seconds because of framerate
                 if config.lowFuelAlert and getVehicleFuelLevel(cache.vehicle) < config.lowFuelAlert then
                     if alert > 0 then
-                        alert = alert - 1
+                        alert -= 1
                     else
                         alert = 1500
                         qbx.playAudio({

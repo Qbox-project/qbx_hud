@@ -68,7 +68,8 @@ CreateThread(function()
                 TriggerScreenblurFadeOut(1000.0)
 
                 if not cache.vehicle and not IsPedRagdoll(cache.ped) and IsPedOnFoot(cache.ped) and not IsPedSwimming(cache.ped) then
-                    SetPedToRagdollWithFall(cache.ped, RagdollTimeout, RagdollTimeout, 1, GetEntityForwardVector(cache.ped), 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+                    local forwardVec3 = GetEntityForwardVector(cache.ped)
+                    SetPedToRagdollWithFall(cache.ped, RagdollTimeout, RagdollTimeout, 1, forwardVec3.x, forwardVec3.y, forwardVec3.z, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
                 end
 
                 Wait(1000)
