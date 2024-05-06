@@ -13,9 +13,9 @@ local function initHud()
         update = true,
         data = {
             { type = 'showHud', value = PlayerState.isLoggedIn },
-            { type = 'progress', name = 'hunger', value = PlayerState.hunger or 0, option = { stroke = PlayerState.hunger and PlayerState.hunger < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'thirst', value = PlayerState.thirst or 0, option = { stroke = PlayerState.thirst and PlayerState.thirst < 30 and '#881111ff' or false } },
-            { type = 'progress', name = 'stress', value = PlayerState.stress or 0, option = { stroke = PlayerState.stress and PlayerState.stress > 75 and '#881111ff' or false } },
+            { type = 'progress', name = 'hunger', value = PlayerState.hunger or 0 },
+            { type = 'progress', name = 'thirst', value = PlayerState.thirst or 0 },
+            { type = 'progress', name = 'stress', value = PlayerState.stress or 0 },
             { type = 'progress', name = 'voice', value = PlayerState?.proximity?.distance and PlayerState?.proximity?.distance * 10 },
         }
     })

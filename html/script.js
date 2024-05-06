@@ -26,7 +26,18 @@ document.addEventListener("DOMContentLoaded", function () {
                         setDashboardLight(dataItem);
                         break;
                     case 'progress':
-                        setProgress(dataItem.value, `progress-${dataItem.name}`, dataItem.option);
+                        let options = {};
+                        switch (dataItem.name) {
+                            case 'hunger':
+                                options.stroke = value < 30;
+                            case 'thirst':
+                                options.stroke = value < 30;
+                            case 'stress':
+                                options.stroke = value > 75;
+                            case 'voice':
+                                options.stroke = dataItem.state == 1 ? '#FF935A' : dataItem.state == 2 ? '#5A93FF' : null;
+                        }
+                        setProgress(dataItem.value, `progress-${dataItem.name}`, options);
                         break;
                     case 'seatbelt':
                         setSeatbelt(dataItem.value, dataItem.harness);
@@ -40,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-function setProgress(percent, className, option) {
+function setProgress(percent, className, options) {
     let circle = document.getElementById(className);
     if (circle === undefined) return;
     if (percent !== undefined) {
@@ -52,9 +63,9 @@ function setProgress(percent, className, option) {
         circle.style.strokeDasharray = circumference;
         circle.style.strokeDashoffset = offset;
     }
-    if (option !== undefined) {
-        for (var key in option) {
-            circle.style[key] = option[key] || null;
+    if (options !== undefined) {
+        for (var key in options) {
+            circle.style[key] = options[key] || null;
         }
     }
 }

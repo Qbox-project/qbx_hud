@@ -10,9 +10,7 @@ local function setTalking(talking)
             {
                 type = 'progress',
                 name = 'voice',
-                option = {
-                    stroke = (PlayerState.radioActive and '#5A93FF') or (talking and '#FF935A') or false
-                }
+                state = PlayerState.radioActive and 2 or talking and 1 or 0
             }
         }
     })

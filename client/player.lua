@@ -6,10 +6,7 @@ AddStateBagChangeHandler('hunger', ('player:%s'):format(cache.serverId), functio
             {
                 type = 'progress',
                 name = 'hunger',
-                value = value,
-                option = {
-                    stroke = value < 30 and '#881111ff' or false,
-                }
+                value = value
             }
         }
     })
@@ -23,10 +20,7 @@ AddStateBagChangeHandler('thirst', ('player:%s'):format(cache.serverId), functio
             {
                 type = 'progress',
                 name = 'thirst',
-                value = value,
-                option = {
-                    stroke = value < 30 and '#881111ff' or false,
-                }
+                value = value
             }
         }
     })
@@ -42,10 +36,7 @@ AddStateBagChangeHandler('stress', ('player:%s'):format(cache.serverId), functio
             {
                 type = 'progress',
                 name = 'stress',
-                value = value,
-                option = {
-                    stroke = value > 75 and '#881111ff' or false,
-                }
+                value = value
             }
         }
     })
