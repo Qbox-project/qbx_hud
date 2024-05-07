@@ -29,11 +29,11 @@ document.addEventListener("DOMContentLoaded", function () {
                         let options = {};
                         switch (dataItem.name) {
                             case 'hunger':
-                                options.stroke = value < 30;
+                                options.stroke = dataItem.value < 30;
                             case 'thirst':
-                                options.stroke = value < 30;
+                                options.stroke = dataItem.value < 30;
                             case 'stress':
-                                options.stroke = value > 75;
+                                options.stroke = dataItem.value > 75;
                             case 'voice':
                                 options.stroke = dataItem.state == 1 ? '#FF935A' : dataItem.state == 2 ? '#5A93FF' : null;
                         }
