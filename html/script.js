@@ -77,10 +77,10 @@ function setSeatbelt(toggle, harness) {
 
 function setSpeed(speed) {
     if (typeof speed !== 'number') return;
+    speed = Math.round(speed);
     document.getElementById('speed').innerHTML = speed;
 
     if (speed > maxSpeedCounter) speed = maxSpeedCounter; // Can definitely happen with that random value returned by the native
-    speed = Math.round(speed);
     setSpeedProgress(speed/maxSpeedCounter*100);
 }
 
