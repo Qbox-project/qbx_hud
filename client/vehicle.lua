@@ -10,6 +10,7 @@ local isMinimapRendering = IsMinimapRendering
 local isControlJustPressed = IsControlJustPressed
 local setVehicleIndicatorLights = SetVehicleIndicatorLights
 local sendNUIMessage = SendNUIMessage
+local SPEED_MULTIPLIER = config.useMPH and 2.236936 or 3.6
 
 local function vehiclehudloop()
     local currentindicators = getVehicleIndicatorLights(cache.vehicle)
@@ -23,15 +24,13 @@ local function vehiclehudloop()
             sleep = 1000
                 if getIsVehicleEngineRunning(cache.vehicle) and isMinimapRendering() then
                 local HasTrailer, Trailer = getVehicleTrailerVehicle(cache.vehicle)
-                if isControlJustPressed(1, 174) then     -- <- is pressed
-                    indl = warning or not indl
-                    indr = indr and false
-                    warning = false
+                if not warning and isControlJustPressed(1, 174) then     -- <- is pressed
+                    indl = not indl
+                    indr = false
                 end
-                if isControlJustPressed(1, 175) then     -- -> is pressed
-                    indr = warning or not indr
-                    indl = indl and false
-                    warning = false
+                if not warning and isControlJustPressed(1, 175) then     -- -> is pressed
+                    indr = not indr
+                    indl = false
                 end
                 if isControlJustPressed(1, 173) then     -- down is pressed
                     warning = not warning
@@ -156,7 +155,7 @@ local function initVehicleHud()
             },
             {
                 type = 'speedmax',
-                speed = GetVehicleEstimatedMaxSpeed(cache.vehicle) * 5.6 -- meh idk
+                speed = (GetVehicleEstimatedMaxSpeed(cache.vehicle) * SPEED_MULTIPLIER) * 1.75
             }
         }
         vehiclehudloop()

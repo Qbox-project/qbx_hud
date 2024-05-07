@@ -1,5 +1,5 @@
 return {
-    speedMultiplier = 3.6, -- 3.6 for km/h, 2.236936 for mph
+    useMPH = false,
     whitelistedWeaponStress = {
         [`weapon_unarmed`] = true,
         [`weapon_flashlight`] = true,

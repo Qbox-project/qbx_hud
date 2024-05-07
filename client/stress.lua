@@ -1,13 +1,14 @@
 local config = require("config.client")
 local stressConfig = config.stress
 Stress = PlayerState.stress or 0
+local SPEED_MULTIPLIER = config.useMPH and 2.236936 or 3.6
 
 -- Stress Gain
 CreateThread(function() -- Speeding
     while true do
         if PlayerState.isLoggedIn then
             if cache.vehicle and not PlayerState.harness and GetVehicleClass(cache.vehicle) ~= 8 then
-                local speed = GetEntitySpeed(cache.vehicle) * config.speedMultiplier
+                local speed = GetEntitySpeed(cache.vehicle) * SPEED_MULTIPLIER
                 local stressSpeed = PlayerState.seatbelt and stressConfig.speedingMini or stressConfig.speedingUnbuckledMini
                 if speed >= stressSpeed then
                     TriggerServerEvent('hud:server:GainStress', math.random(stressConfig.speedingStress.min, stressConfig.speedingStress.max))
