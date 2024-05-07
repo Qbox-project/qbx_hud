@@ -80,61 +80,6 @@
     transform: translateY(-2em);
 }
 
-#money-container {
-    display: flex;
-    position: absolute;
-    top: 5vh;
-    right: 1.5vw;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: start;
-    white-space: nowrap;
-    margin: 5px;
-}
-
-#cash, #bank {
-    display: none;
-    align-items: center;
-    height: 95%;
-    font-size: 1.5em;
-    color: #ffffff;
-    overflow: hidden;
-}
-
-.negative-money {
-    font-weight: 900;
-    color: #ff0000;
-}
-
-.negative-money::before {
-    content: "- ";
-}
-
-.positive-money {
-    font-weight: 900;
-    color: #01a01c;
-}
-
-.positive-money::before {
-    content: "+ ";
-}
-
-#cash-change, #bank-change {
-    display: none;
-}
-
-#cash > *, #bank > * {
-    margin-right: 15px;
-}
-
-.fa-landmark {
-    color: #bbc8de;
-}
-
-.fa-money-bill {
-    color: #01a01c;
-}
-
 .player-hud .bars {
     display: flex;
     flex-direction: column;
