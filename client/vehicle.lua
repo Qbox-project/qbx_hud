@@ -93,7 +93,7 @@ local function vehiclehudloop()
                     },
                     {
                         type = 'speed',
-                        speed = getEntitySpeed(cache.vehicle) * config.speedMultiplier
+                        speed = getEntitySpeed(cache.vehicle) * SPEED_MULTIPLIER
                     },
                     {
                         type = 'gauge',
