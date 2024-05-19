@@ -794,29 +794,31 @@ RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
 end)
 
 -- Stress Gain
-CreateThread(function() -- Speeding
-    while true do
-        if LocalPlayer.state.isLoggedIn then
-            if cache.vehicle then
-                local vehClass = GetVehicleClass(cache.vehicle)
-                local speed = GetEntitySpeed(cache.vehicle) * speedMultiplier
+if not config.stress.disableStress then
+    CreateThread(function() -- Speeding
+        while true do
+            if LocalPlayer.state.isLoggedIn then
+                if cache.vehicle then
+                    local vehClass = GetVehicleClass(cache.vehicle)
+                    local speed = GetEntitySpeed(cache.vehicle) * speedMultiplier
 
-                if vehClass ~= 13 and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 21 then
-                    local stressSpeed
-                    if vehClass == 8 then
-                        stressSpeed = config.stress.minForSpeeding
-                    else
-                        stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
-                    end
-                    if speed >= stressSpeed then
-                        TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
+                    if vehClass ~= 13 and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 21 then
+                        local stressSpeed
+                        if vehClass == 8 then
+                            stressSpeed = config.stress.minForSpeeding
+                        else
+                            stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
+                        end
+                        if speed >= stressSpeed then
+                            TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
+                        end
                     end
                 end
             end
+            Wait(10000)
         end
-        Wait(10000)
-    end
-end)
+    end)
+end
 
 local function isWhitelistedWeaponStress(weapon)
     if weapon then
