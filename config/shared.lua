@@ -1,4 +1,8 @@
 return {
+    stress = {
+        enableStress = true, -- If false, it will disable stress for everyone
+    },
+
     menu = { -- Don't touch
         isOutMapChecked = false, -- isOutMapChecked
         isOutCompassChecked = false, -- isOutMapChecked

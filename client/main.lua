@@ -794,7 +794,7 @@ RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
 end)
 
 -- Stress Gain
-if not config.stress.disableStress then
+if config.stress.enableStress then
     CreateThread(function() -- Speeding
         while true do
             if LocalPlayer.state.isLoggedIn then

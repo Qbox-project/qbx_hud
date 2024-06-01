@@ -1,7 +1,7 @@
 return {
     menuKey = 'I', -- Key to open the HUD menu
     useMPH = true, -- If true, speed math will be done as MPH, if false KPH will be used (YOU HAVE TO CHANGE CONTENT IN STYLES.CSS TO DISPLAY THE CORRECT TEXT)
-    
+
     stress = {
         chance = 0.1, -- Percentage stress chance when shooting (0-1)
         minForShaking = 50, -- Minimum stress level for screen shaking
@@ -68,5 +68,4 @@ return {
         `weapon_smokegrenade`,
         `weapon_flare`,
     },
-
 }
