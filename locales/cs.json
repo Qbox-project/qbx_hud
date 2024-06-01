@@ -17,4 +17,17 @@
         "stress_gain": "Cítíš se být vystresovaná!",
         "stress_removed": "Cítíš se volněj!"
     }
+    "info": {
+        "open_menu": "Otevřít nabídku"
+    },
+    "commands": {
+        "cash": "cash",
+        "bank": "bank",
+        "dev": "dev",
+        "help": {
+            "cash": "Check Cash Balance",
+            "bank": "Check Bank Balance",
+            "dev": "Zapnout/vypnout režim pro vývojáře"
+        }
+    }
 }
