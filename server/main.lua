@@ -39,7 +39,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
     end
     player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    exports.qbx_core:Notify(src, Lang:t('notify.stress_gain'), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#C53030')
+    exports.qbx_core:Notify(src, locale('notify.stress_gain'), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#C53030')
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
@@ -61,13 +61,13 @@ RegisterNetEvent('hud:server:RelieveStress', function(amount)
     end
     player.Functions.SetMetaData('stress', newStress)
     TriggerClientEvent('hud:client:UpdateStress', src, newStress)
-    exports.qbx_core:Notify(src, Lang:t('notify.stress_removed'), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
+    exports.qbx_core:Notify(src, locale('notify.stress_removed'), 'inform', 2500, nil, nil, {'#141517', '#ffffff'}, 'brain', '#0F52BA')
 end)
 
 -- Commands
 
-lib.addCommand(Lang:t('commands.cash'), {
-    help = Lang:t('commands.help.cash'),
+lib.addCommand(locale('commands.cash'), {
+    help = locale('commands.help.cash'),
     restricted = 'group.admin'
 }, function(source)
     local player = exports.qbx_core:GetPlayer(source)
@@ -75,8 +75,8 @@ lib.addCommand(Lang:t('commands.cash'), {
     TriggerClientEvent('hud:client:ShowAccounts', source, 'cash', cashAmount)
 end)
 
-lib.addCommand(Lang:t('commands.bank'), {
-    help = Lang:t('commands.help.bank'),
+lib.addCommand(locale('commands.bank'), {
+    help = locale('commands.help.bank'),
 }, function(source)
     local player = exports.qbx_core:GetPlayer(source)
     local bankAmount = player.PlayerData.money.bank
@@ -84,7 +84,7 @@ lib.addCommand(Lang:t('commands.bank'), {
 end)
 
 lib.addCommand('dev', {
-    help = Lang:t('commands.help.dev'),
+    help = locale('commands.help.dev'),
     restricted = 'group.admin'
 }, function(source)
     TriggerClientEvent('qb-admin:client:ToggleDevmode', source)
