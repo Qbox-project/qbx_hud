@@ -89,13 +89,13 @@ AddEventHandler('onResourceStart', function(resourceName)
 end)
 
 -- Callbacks & Events
-RegisterCommand('menu', function()
-    Wait(50)
+local function settingsMenu()
     if showMenu then return end
     SetNuiFocus(true, true)
     SendNUIMessage({action = 'open'})
     showMenu = true
-end, false)
+end
+local hudMenuKeybind = lib.addKeybind({name = 'hud_menu', description = locale('info.open_menu'), defaultKey = config.menuKey, defaultMapper = 'keyboard', onPressed = settingsMenu})
 
 RegisterNUICallback('closeMenu', function(_, cb)
     Wait(50)
@@ -103,8 +103,6 @@ RegisterNUICallback('closeMenu', function(_, cb)
     SetNuiFocus(false, false)
     cb('ok')
 end)
-
-RegisterKeyMapping('menu', locale('info.open_menu'), 'keyboard', config.menuKey)
 
 -- Reset hud
 local function restartHud()
