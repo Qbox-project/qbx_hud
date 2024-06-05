@@ -95,7 +95,13 @@ local function settingsMenu()
     SendNUIMessage({action = 'open'})
     showMenu = true
 end
-local hudMenuKeybind = lib.addKeybind({name = 'hud_menu', description = locale('info.open_menu'), defaultKey = config.menuKey, defaultMapper = 'keyboard', onPressed = settingsMenu})
+lib.addKeybind({
+        name = 'hud_menu',
+        description = locale('info.open_menu'),
+        defaultKey = config.menuKey,
+        defaultMapper = 'keyboard',
+        onPressed = settingsMenu,
+    })
 
 RegisterNUICallback('closeMenu', function(_, cb)
     Wait(50)
