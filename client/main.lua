@@ -745,7 +745,7 @@ CreateThread(function()
 end)
 
 local function isElectric(vehicle)
-    for _, v in pairs(config.fuelBlacklist) do
+    for _, v in pairs(config.electricVehicles) do
         if GetEntityModel(vehicle) == GetHashKey(v) then
             return true
         end
@@ -1103,7 +1103,7 @@ lib.onCache('vehicle', function(value)
 end)
 
 lib.onCache('weapon', function(value)
-    if not value then return end
+    if not value then armed = false return end
     armed = isWhitelistedWeaponArmed(value) and false or true
 end)
 
