@@ -1,6 +1,7 @@
 return {
     menuKey = 'I', -- Key to open the HUD menu
     useMPH = true, -- If true, speed math will be done as MPH, if false KPH will be used (YOU HAVE TO CHANGE CONTENT IN STYLES.CSS TO DISPLAY THE CORRECT TEXT)
+    compassTickDelay = 1500, -- Delay in milliseconds between compass updates. Lower value = faster updates and more cpu, higher value = slower updates and less cpu.
 
     stress = {
         chance = 0.1, -- Percentage stress chance when shooting (0-1)
@@ -11,6 +12,16 @@ return {
             `weapon_petrolcan`,
             `weapon_hazardcan`,
             `weapon_fireextinguisher`,
+        },
+        whitelistedVehicleClasses = {
+            13, -- Cycles
+            14, -- Boats
+            15, -- Helicopters
+            16, -- Planes
+            21, -- Trains
+        },
+        whitelistedVehicles = {
+            `police4`,
         },
         blurIntensity = { -- Blur intensity for different stress levels
             [1] = {min = 50, max = 60, intensity = 1500},
@@ -68,4 +79,25 @@ return {
         `weapon_smokegrenade`,
         `weapon_flare`,
     },
+    electricVehicles = {
+        `surge`,
+        `iwagen`,
+        `voltic`,
+        `voltic2`,
+        `raiden`,
+        `cyclone`,
+        `tezeract`,
+        `neon`,
+        `omnisegt`,
+        `iwagen`,
+        `caddy`,
+        `caddy2`,
+        `caddy3`,
+        `airtug`,
+        `rcbandito`,
+        `imorgon`,
+        `dilettante`,
+        `khamelion`,
+        `wheelchair`,
+    }
 }

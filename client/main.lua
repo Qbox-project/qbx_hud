@@ -1,5 +1,12 @@
 local config = require 'config.client'
 local sharedConfig = require 'config.shared'
+local isLoggedIn = false
+
+local GetEntitySpeed = GetEntitySpeed
+local GetEntityCoords = GetEntityCoords
+local GetStreetNameAtCoord = GetStreetNameAtCoord
+local GetStreetNameFromHashKey = GetStreetNameFromHashKey
+
 local speedMultiplier = config.useMPH and 2.23694 or 3.6
 local cruiseOn = false
 local showAltitude = false
@@ -132,6 +139,7 @@ RegisterNUICallback('restartHud', function(_, cb)
     cb('ok')
 end)
 
+---@diagnostic disable-next-line: missing-parameter
 RegisterCommand('resethud', function(_, cb)
     Wait(50)
     restartHud()
@@ -607,17 +615,9 @@ CreateThread(function()
         else
             Wait(50)
         end
-        if LocalPlayer.state.isLoggedIn then
+        if isLoggedIn then
             local show = true
-            local weapon = GetSelectedPedWeapon(cache.ped)
             -- Player hud
-            if not isWhitelistedWeaponArmed(weapon) then
-                if weapon ~= `WEAPON_UNARMED` then
-                    armed = true
-                else
-                    armed = false
-                end
-            end
             playerDead = IsEntityDead(cache.ped) or QBX.PlayerData.metadata.inlaststand or QBX.PlayerData.metadata.isdead
             parachute = GetPedParachuteState(cache.ped)
             -- Stamina
@@ -672,11 +672,8 @@ CreateThread(function()
             })
             end
             -- Vehicle hud
-            if IsPedInAnyHeli(cache.ped) or IsPedInAnyPlane(cache.ped) then
-                showAltitude = true
-                showSeatbelt = false
-            end
             if cache.vehicle and not IsThisModelABicycle(cache.vehicle) then
+                local speed = math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier)
                 if not wasInVehicle then
                     DisplayRadar(true)
                 end
@@ -708,7 +705,7 @@ CreateThread(function()
                     nitroActive,
                     LocalPlayer.state?.harness,
                     hp,
-                    math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+                    speed,
                     (GetVehicleEngineHealth(cache.vehicle) / 10),
                     sharedConfig.menu.isCineamticModeChecked,
                     dev,
@@ -717,7 +714,7 @@ CreateThread(function()
                     show,
                     IsPauseMenuActive(),
                     LocalPlayer.state?.seatbelt,
-                    math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+                    speed,
                     getFuelLevel(cache.vehicle),
                     math.ceil(GetEntityCoords(cache.ped).z * 0.5),
                     showAltitude,
@@ -725,8 +722,6 @@ CreateThread(function()
                     showSquareB,
                     showCircleB,
                 })
-                showAltitude = false
-                showSeatbelt = true
             else
                 if wasInVehicle then
                     wasInVehicle = false
@@ -749,23 +744,27 @@ CreateThread(function()
     end
 end)
 
--- Low fuel
-CreateThread(function()
-    while true do
-        if LocalPlayer.state.isLoggedIn then
-            if cache.vehicle and not IsThisModelABicycle(GetEntityModel(cache.vehicle)) then
-                if getFuelLevel(cache.vehicle) <= 20 then -- At 20% Fuel Left
-                    if sharedConfig.menu.isLowFuelChecked then
-                        -- Add pager sound for when fuel is low
-                        exports.qbx_core:Notify(locale('notify.low_fuel'), 'error')
-                        Wait(60000) -- repeats every 1 min until empty
-                    end
-                end
-            end
+local function isElectric(vehicle)
+    for _, v in pairs(config.fuelBlacklist) do
+        if GetEntityModel(vehicle) == GetHashKey(v) then
+            return true
         end
-        Wait(10000)
     end
-end)
+    return false
+end
+
+-- Low fuel
+local function lowFuelNotification()
+    CreateThread(function()
+        while cache.vehicle do
+            if getFuelLevel(cache.vehicle) <= 20 and sharedConfig.menu.isLowFuelChecked then -- At 20% Fuel Left
+                TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
+                exports.qbx_core:Notify(locale('notify.low_fuel'), 'error')
+            end
+            Wait(60000)
+        end
+    end)
+end
 
 -- Money HUD
 
@@ -798,29 +797,38 @@ RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
     })
 end)
 
--- Stress Gain
-if config.stress.enableStress then
-    CreateThread(function() -- Speeding
-        while true do
-            if LocalPlayer.state.isLoggedIn then
-                if cache.vehicle then
-                    local vehClass = GetVehicleClass(cache.vehicle)
-                    local speed = GetEntitySpeed(cache.vehicle) * speedMultiplier
+local function stressFreeVehicle(vehClass)
+    for _, v in pairs(config.whitelistedVehicleClasses) do
+        if vehClass == v then
+            return true
+        end
+    end
+    local vehModel = GetEntityModel(cache.vehicle)
+    for _, v in pairs(config.whitelistedVehicles) do
+        if vehModel == v then
+            return true
+        end
+    end
+    return false
+end
 
-                    if vehClass ~= 13 and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 21 then
-                        local stressSpeed
-                        if vehClass == 8 then
-                            stressSpeed = config.stress.minForSpeeding
-                        else
-                            stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
-                        end
-                        if speed >= stressSpeed then
-                            TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
-                        end
-                    end
-                end
+-- Stress Gain
+local function gainStressLoop()
+    if not sharedConfig.stress.enableStress then return end
+    CreateThread(function() -- Speeding
+        local vehClass = GetVehicleClass(cache.vehicle)
+        if stressFreeVehicle(vehClass) then return end
+        while cache.vehicle do
+            local speed = GetEntitySpeed(cache.vehicle) * speedMultiplier
+            local stressSpeed
+            if vehClass == 8 then
+                stressSpeed = config.stress.minForSpeeding
+            else
+                stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
             end
-            Wait(10000)
+            if speed >= stressSpeed then
+                TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
+            end
         end
     end)
 end
@@ -976,7 +984,7 @@ local lastCrossroadCheck = {}
 
 local function getCrossroads(player)
     local updateTick = GetGameTimer()
-    if updateTick - lastCrossroadUpdate > 1500 then
+    if updateTick - lastCrossroadUpdate > config.compassTickDelay then
         local pos = GetEntityCoords(player)
         local street1, street2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
         lastCrossroadUpdate = updateTick
@@ -1069,4 +1077,37 @@ RegisterNetEvent('qbx_hud:client:hideHud', function()
             show = false,
         })
     end
+end)
+
+local function vehTypeCheck()
+    if IsPedInAnyHeli(cache.ped) or IsPedInAnyPlane(cache.ped) then
+        showAltitude = true
+        showSeatbelt = false
+    else
+        showAltitude = false
+        showSeatbelt = true
+    end
+    if IsThisModelABicycle(GetEntityModel(cache.vehicle)) or isElectric(cache.vehicle) then
+        return true
+    else
+        return false
+    end
+end
+
+lib.onCache('vehicle', function(value)
+    local noFuel = vehTypeCheck()
+    if not value then return end
+    gainStressLoop()
+    if noFuel then return end
+    lowFuelNotification()
+end)
+
+lib.onCache('weapon', function(value)
+    if not value then return end
+    armed = isWhitelistedWeaponArmed(value) and false or true
+end)
+
+AddStateBagChangeHandler('isLoggedIn', ('player:%s'):format(cache.serverId), function(_, _, loginState)
+    if isLoggedIn == loginState then return end
+    isLoggedIn = loginState
 end)
