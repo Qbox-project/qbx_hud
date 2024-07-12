@@ -744,28 +744,6 @@ CreateThread(function()
     end
 end)
 
-local function isElectric(vehicle)
-    for _, v in pairs(config.electricVehicles) do
-        if GetEntityModel(vehicle) == v then
-            return true
-        end
-    end
-    return false
-end
-
--- Low fuel
-local function lowFuelNotification()
-    CreateThread(function()
-        while cache.vehicle do
-            if getFuelLevel(cache.vehicle) <= 20 and sharedConfig.menu.isLowFuelChecked then -- At 20% Fuel Left
-                -- add pager sound
-                exports.qbx_core:Notify(locale('notify.low_fuel'), 'error')
-            end
-            Wait(60000)
-        end
-    end)
-end
-
 -- Money HUD
 
 RegisterNetEvent('hud:client:ShowAccounts', function(type, amount)
@@ -829,6 +807,7 @@ local function gainStressLoop()
             if speed >= stressSpeed then
                 TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
             end
+            Wait(10000)
         end
     end)
 end
@@ -1079,6 +1058,15 @@ RegisterNetEvent('qbx_hud:client:hideHud', function()
     end
 end)
 
+local function isElectric(vehicle)
+    for _, v in pairs(config.electricVehicles) do
+        if vehicle == v then
+            return true
+        end
+    end
+    return false
+end
+
 local function vehTypeCheck()
     if IsPedInAnyHeli(cache.ped) or IsPedInAnyPlane(cache.ped) then
         showAltitude = true
@@ -1087,11 +1075,25 @@ local function vehTypeCheck()
         showAltitude = false
         showSeatbelt = true
     end
-    if IsThisModelABicycle(GetEntityModel(cache.vehicle)) or isElectric(cache.vehicle) then
+    local entityModel = GetEntityModel(cache.vehicle)
+    if IsThisModelABicycle(entityModel) or isElectric(entityModel) then
         return true
     else
         return false
     end
+end
+
+-- Low fuel
+local function lowFuelNotification()
+    CreateThread(function()
+        while cache.vehicle do
+            if getFuelLevel(cache.vehicle) <= 20 and sharedConfig.menu.isLowFuelChecked then -- At 20% Fuel Left
+                -- add pager sound
+                exports.qbx_core:Notify(locale('notify.low_fuel'), 'error')
+            end
+            Wait(60000)
+        end
+    end)
 end
 
 lib.onCache('vehicle', function(value)
