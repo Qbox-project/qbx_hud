@@ -746,7 +746,7 @@ end)
 
 local function isElectric(vehicle)
     for _, v in pairs(config.electricVehicles) do
-        if GetEntityModel(vehicle) == GetHashKey(v) then
+        if GetEntityModel(vehicle) == v then
             return true
         end
     end
