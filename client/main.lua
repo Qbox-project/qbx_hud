@@ -758,7 +758,7 @@ local function lowFuelNotification()
     CreateThread(function()
         while cache.vehicle do
             if getFuelLevel(cache.vehicle) <= 20 and sharedConfig.menu.isLowFuelChecked then -- At 20% Fuel Left
-                TriggerServerEvent('InteractSound_SV:PlayOnSource', 'pager', 0.10)
+                -- add pager sound
                 exports.qbx_core:Notify(locale('notify.low_fuel'), 'error')
             end
             Wait(60000)
