@@ -798,13 +798,13 @@ RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus)
 end)
 
 local function stressFreeVehicle(vehClass)
-    for _, v in pairs(config.whitelistedVehicleClasses) do
+    for _, v in pairs(config.stress.whitelistedVehicleClasses) do
         if vehClass == v then
             return true
         end
     end
     local vehModel = GetEntityModel(cache.vehicle)
-    for _, v in pairs(config.whitelistedVehicles) do
+    for _, v in pairs(config.stress.whitelistedVehicles) do
         if vehModel == v then
             return true
         end
