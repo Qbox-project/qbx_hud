@@ -26,34 +26,34 @@
 
 # Previews
 ### menu config (this is just a preview more options included than what is shown here)
-![menu](.github/images/menu_settings.png)
+![menu](.github/images/menu_settings.jpg)
 ### all radials
-![all radials](.github/images/all_radials.png)
+![all radials](.github/images/all_radials.jpg)
 ### dead health
-![dead](.github/images/dead_health.png)
+![dead](.github/images/dead_health.jpg)
 ### engine health
-![engine](.github/images/engine_health.png)
+![engine](.github/images/engine_health.jpg)
 ### altitude
-![altitude](.github/images/altitude.png)
+![altitude](.github/images/altitude.jpg)
 ### parachute
-![parachute](.github/images/parachute.png)
+![parachute](.github/images/parachute.jpg)
 ### armed
-![armed](.github/images/armed.png)
+![armed](.github/images/armed.jpg)
 ### cinematic
-![cinematic](.github/images/cinematic.png)
+![cinematic](.github/images/cinematic.jpg)
 ### cruise
-![cruise](.github/images/cruise.png)
+![cruise](.github/images/cruise.jpg)
 ### harness
-![harness](.github/images/harness.png)
+![harness](.github/images/harness.jpg)
 ### cash
-![cash](.github/images/cash.png)
+![cash](.github/images/cash.jpg)
 ### bank
-![bank](.github/images/bank.png)
+![bank](.github/images/bank.jpg)
 ### nitro
-![nitro](.github/images/nitro.png)
+![nitro](.github/images/nitro.jpg)
 ### stamina
-![stamina](.github/images/stamina.png)
+![stamina](.github/images/stamina.jpg)
 ### oxygen
-![oxygen](.github/images/oxygen.png)
+![oxygen](.github/images/oxygen.jpg)
 ### radio (outdated color)
-![radio](.github/images/radio.png)
+![radio](.github/images/radio.jpg)
