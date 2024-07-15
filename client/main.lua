@@ -845,7 +845,7 @@ AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
 
     if not currentWeapon then return end
 
-    startWeaponStressThread(currentWeapon.name)
+    startWeaponStressThread(currentWeapon.hash)
 end)
 
 -- Stress Screen Effects
