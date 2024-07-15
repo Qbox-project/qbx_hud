@@ -21,7 +21,7 @@ end)
 -- Network Events
 
 RegisterNetEvent('hud:server:GainStress', function(amount)
-    if not config.stress.enableStress then return end
+    if not sharedConfig.stress.enableStress then return end
 
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
@@ -45,7 +45,7 @@ RegisterNetEvent('hud:server:GainStress', function(amount)
 end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
-    if not config.stress.enableStress then return end
+    if not sharedConfig.stress.enableStress then return end
 
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
