@@ -3,7 +3,7 @@ game 'gta5'
 
 description 'HUD for Qbox'
 repository 'https://github.com/Qbox-project/qbx_hud'
-version '1.0.0'
+version '0.1.0'
 
 ox_lib 'locale'
 
