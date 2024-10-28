@@ -1,3 +1,5 @@
+lib.versionCheck('Qbox-project/qbx_hud')
+
 local config = require 'config.server'
 local sharedConfig = require 'config.shared'
 local resetStress = false
