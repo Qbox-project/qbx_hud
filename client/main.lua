@@ -917,14 +917,6 @@ CreateThread(function()
     end
 end)
 
--- Minimap update
-CreateThread(function()
-    while true do
-        SetBigmapActive(false, false)
-        Wait(500)
-    end
-end)
-
 local function blackBars()
     DrawRect(0.0, 0.0, 2.0, w, 0, 0, 0, 255)
     DrawRect(0.0, 1.0, 2.0, w, 0, 0, 0, 255)
