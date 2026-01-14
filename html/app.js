@@ -1,9 +1,9 @@
 const { ref, onBeforeUnmount } = Vue
 
 const app = Vue.createApp({
-  data: function() {
-		return {
-			isOutMapChecked: this.initIsOutMapChecked(),
+  data: function () {
+    return {
+      isOutMapChecked: this.initIsOutMapChecked(),
       isOutCompassChecked: this.initIsOutCompassChecked(),
       isCompassFollowChecked: this.initIsCompassFollowChecked(),
       isMapNotifChecked: this.initIsMapNotifChecked(),
@@ -27,26 +27,26 @@ const app = Vue.createApp({
       isPointerShowChecked: this.initIsPointerShowChecked(),
       isDegreesShowChecked: this.initIsDegreesShowChecked(),
       isCineamticModeChecked: this.initIsCineamticModeChecked(),
-		};
-	},
-  setup () {
+    };
+  },
+  setup() {
     const progress = ref([
       { loading: false, percentage: 0 },
       { loading: false, percentage: 0 },
       { loading: false, percentage: 0 }
     ])
-    
-    const intervals = [ null, null, null ]
 
-    function startComputing (id) {
-      progress.value[ id ].loading = true
-      progress.value[ id ].percentage = 0
+    const intervals = [null, null, null]
 
-      intervals[ id ] = setInterval(() => {
-        progress.value[ id ].percentage += Math.floor(Math.random() * 8 + 10)
-        if (progress.value[ id ].percentage >= 100) {
-          clearInterval(intervals[ id ])
-          progress.value[ id ].loading = false
+    function startComputing(id) {
+      progress.value[id].loading = true
+      progress.value[id].percentage = 0
+
+      intervals[id] = setInterval(() => {
+        progress.value[id].percentage += Math.floor(Math.random() * 8 + 10)
+        if (progress.value[id].percentage >= 100) {
+          clearInterval(intervals[id])
+          progress.value[id].loading = false
         }
       }, 700)
     }
@@ -55,7 +55,7 @@ const app = Vue.createApp({
       intervals.forEach(val => {
         clearInterval(val)
       })
-    }) 
+    })
     return {
       framework: {
         plugins: [
@@ -71,383 +71,383 @@ const app = Vue.createApp({
     }
   },
   watch: {
-    isOutMapChecked: function() {
-			localStorage.setItem("isOutMapChecked", this.isOutMapChecked);
-		},
-    isOutCompassChecked: function() {
-			localStorage.setItem("isOutCompassChecked", this.isOutCompassChecked);
-		},
-    isCompassFollowChecked: function() {
-			localStorage.setItem("isCompassFollowChecked", this.isCompassFollowChecked);
-		},
-    isMapNotifChecked: function() {
-			localStorage.setItem("isMapNotifChecked", this.isMapNotifChecked);
-		},
-    isLowFuelChecked: function() {
-			localStorage.setItem("isLowFuelChecked", this.isLowFuelChecked);
-		},
-    isCinematicNotifChecked: function() {
-			localStorage.setItem("isCinematicNotifChecked", this.isCinematicNotifChecked);
-		},
-    isDynamicHealthChecked: function() {
-			localStorage.setItem("isDynamicHealthChecked", this.isDynamicHealthChecked);
-		},
-    isDynamicArmorChecked: function() {
-			localStorage.setItem("isDynamicArmorChecked", this.isDynamicArmorChecked);
-		},
-    isDynamicHungerChecked: function() {
-			localStorage.setItem("isDynamicHungerChecked", this.isDynamicHungerChecked);
-		},
-    isDynamicThirstChecked: function() {
-			localStorage.setItem("isDynamicThirstChecked", this.isDynamicThirstChecked);
-		},
-    isDynamicStressChecked: function() {
-			localStorage.setItem("isDynamicStressChecked", this.isDynamicStressChecked);
-		},
-    isDynamicOxygenChecked: function() {
-			localStorage.setItem("isDynamicOxygenChecked", this.isDynamicOxygenChecked);
-		},
-    isChangeFPSChecked: function() {
-			localStorage.setItem("isChangeFPSChecked", this.isChangeFPSChecked);
-		},
-    isToggleMapShapeChecked: function() {
-			localStorage.setItem("isToggleMapShapeChecked", this.isToggleMapShapeChecked);
-		},
-    isHideMapChecked: function() {
-			localStorage.setItem("isHideMapChecked", this.isHideMapChecked);
-		},
-    isToggleMapBordersChecked: function() {
-			localStorage.setItem("isToggleMapBordersChecked", this.isToggleMapBordersChecked);
-		},
-    isDynamicEngineChecked: function() {
-			localStorage.setItem("isDynamicEngineChecked", this.isDynamicEngineChecked);
-		},
-    isDynamicNitroChecked: function() {
-			localStorage.setItem("isDynamicNitroChecked", this.isDynamicNitroChecked);
-		},
-    isChangeCompassFPSChecked: function() {
-			localStorage.setItem("isChangeCompassFPSChecked", this.isChangeCompassFPSChecked);
-		},
-    isShowCompassChecked: function() {
-			localStorage.setItem("isShowCompassChecked", this.isShowCompassChecked);
-		},
-    isShowStreetsChecked: function() {
-			localStorage.setItem("isShowStreetsChecked", this.isShowStreetsChecked);
-		},
-    isPointerShowChecked: function() {
-			localStorage.setItem("isPointerShowChecked", this.isPointerShowChecked);
-		},
-    isDegreesShowChecked: function() {
-			localStorage.setItem("isDegreesShowChecked", this.isDegreesShowChecked);
-		},
-    isCineamticModeChecked: function() {
-			localStorage.setItem("isCineamticModeChecked", this.isCineamticModeChecked);
-		},
-	},
+    isOutMapChecked: function () {
+      localStorage.setItem("isOutMapChecked", this.isOutMapChecked);
+    },
+    isOutCompassChecked: function () {
+      localStorage.setItem("isOutCompassChecked", this.isOutCompassChecked);
+    },
+    isCompassFollowChecked: function () {
+      localStorage.setItem("isCompassFollowChecked", this.isCompassFollowChecked);
+    },
+    isMapNotifChecked: function () {
+      localStorage.setItem("isMapNotifChecked", this.isMapNotifChecked);
+    },
+    isLowFuelChecked: function () {
+      localStorage.setItem("isLowFuelChecked", this.isLowFuelChecked);
+    },
+    isCinematicNotifChecked: function () {
+      localStorage.setItem("isCinematicNotifChecked", this.isCinematicNotifChecked);
+    },
+    isDynamicHealthChecked: function () {
+      localStorage.setItem("isDynamicHealthChecked", this.isDynamicHealthChecked);
+    },
+    isDynamicArmorChecked: function () {
+      localStorage.setItem("isDynamicArmorChecked", this.isDynamicArmorChecked);
+    },
+    isDynamicHungerChecked: function () {
+      localStorage.setItem("isDynamicHungerChecked", this.isDynamicHungerChecked);
+    },
+    isDynamicThirstChecked: function () {
+      localStorage.setItem("isDynamicThirstChecked", this.isDynamicThirstChecked);
+    },
+    isDynamicStressChecked: function () {
+      localStorage.setItem("isDynamicStressChecked", this.isDynamicStressChecked);
+    },
+    isDynamicOxygenChecked: function () {
+      localStorage.setItem("isDynamicOxygenChecked", this.isDynamicOxygenChecked);
+    },
+    isChangeFPSChecked: function () {
+      localStorage.setItem("isChangeFPSChecked", this.isChangeFPSChecked);
+    },
+    isToggleMapShapeChecked: function () {
+      localStorage.setItem("isToggleMapShapeChecked", this.isToggleMapShapeChecked);
+    },
+    isHideMapChecked: function () {
+      localStorage.setItem("isHideMapChecked", this.isHideMapChecked);
+    },
+    isToggleMapBordersChecked: function () {
+      localStorage.setItem("isToggleMapBordersChecked", this.isToggleMapBordersChecked);
+    },
+    isDynamicEngineChecked: function () {
+      localStorage.setItem("isDynamicEngineChecked", this.isDynamicEngineChecked);
+    },
+    isDynamicNitroChecked: function () {
+      localStorage.setItem("isDynamicNitroChecked", this.isDynamicNitroChecked);
+    },
+    isChangeCompassFPSChecked: function () {
+      localStorage.setItem("isChangeCompassFPSChecked", this.isChangeCompassFPSChecked);
+    },
+    isShowCompassChecked: function () {
+      localStorage.setItem("isShowCompassChecked", this.isShowCompassChecked);
+    },
+    isShowStreetsChecked: function () {
+      localStorage.setItem("isShowStreetsChecked", this.isShowStreetsChecked);
+    },
+    isPointerShowChecked: function () {
+      localStorage.setItem("isPointerShowChecked", this.isPointerShowChecked);
+    },
+    isDegreesShowChecked: function () {
+      localStorage.setItem("isDegreesShowChecked", this.isDegreesShowChecked);
+    },
+    isCineamticModeChecked: function () {
+      localStorage.setItem("isCineamticModeChecked", this.isCineamticModeChecked);
+    },
+  },
   methods: {
-    initIsOutMapChecked: function() {
-			const stored = localStorage.getItem("isOutMapChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsOutCompassChecked: function() {
-			const stored = localStorage.getItem("isOutCompassChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsCompassFollowChecked: function() {
-			const stored = localStorage.getItem("isCompassFollowChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsMapNotifChecked: function() {
-			const stored = localStorage.getItem("isMapNotifChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsLowFuelChecked: function() {
-			const stored = localStorage.getItem("isLowFuelChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsCinematicNotifChecked: function() {
-			const stored = localStorage.getItem("isCinematicNotifChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicHealthChecked: function() {
-			const stored = localStorage.getItem("isDynamicHealthChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicArmorChecked: function() {
-			const stored = localStorage.getItem("isDynamicArmorChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicHungerChecked: function() {
-			const stored = localStorage.getItem("isDynamicHungerChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicThirstChecked: function() {
-			const stored = localStorage.getItem("isDynamicThirstChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicStressChecked: function() {
-			const stored = localStorage.getItem("isDynamicStressChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicOxygenChecked: function() {
-			const stored = localStorage.getItem("isDynamicOxygenChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsChangeFPSChecked: function() {
-			const stored = localStorage.getItem("isChangeFPSChecked");
-			if (stored === null) {
-				return 'Optimized';
-			} else {
-				return stored;
-			}
-		}, 
-    initIsToggleMapShapeChecked: function() {
-			const stored = localStorage.getItem("isToggleMapShapeChecked");
-			if (stored === null) {
-				return 'Circle';
-			} else {
-				return stored;
-			}
-		},
-    initIsHideMapChecked: function() {
-			const stored = localStorage.getItem("isHideMapChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsToggleMapBordersChecked: function() {
-			const stored = localStorage.getItem("isToggleMapBordersChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicEngineChecked: function() {
-			const stored = localStorage.getItem("isDynamicEngineChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDynamicNitroChecked: function() {
-			const stored = localStorage.getItem("isDynamicNitroChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsChangeCompassFPSChecked: function() {
-			const stored = localStorage.getItem("isChangeCompassFPSChecked");
-			if (stored === null) {
-				return 'Optimized';
-			} else {
-				return stored;
-			}
-		}, 
-    initIsShowCompassChecked: function() {
-			const stored = localStorage.getItem("isShowCompassChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsShowStreetsChecked: function() {
-			const stored = localStorage.getItem("isShowStreetsChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsPointerShowChecked: function() {
-			const stored = localStorage.getItem("isPointerShowChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsDegreesShowChecked: function() {
-			const stored = localStorage.getItem("isDegreesShowChecked");
-			if (stored === null) {
-				return true;
-			} else {
-				return stored == 'true';
-			}
-		},
-    initIsCineamticModeChecked: function() {
-			const stored = localStorage.getItem("isCineamticModeChecked");
-			if (stored === null) {
-				return false;
-			} else {
-				return stored == 'true';
-			}
-		},
-    resetStorage: function(event) {
+    initIsOutMapChecked: function () {
+      const stored = localStorage.getItem("isOutMapChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsOutCompassChecked: function () {
+      const stored = localStorage.getItem("isOutCompassChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsCompassFollowChecked: function () {
+      const stored = localStorage.getItem("isCompassFollowChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsMapNotifChecked: function () {
+      const stored = localStorage.getItem("isMapNotifChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsLowFuelChecked: function () {
+      const stored = localStorage.getItem("isLowFuelChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsCinematicNotifChecked: function () {
+      const stored = localStorage.getItem("isCinematicNotifChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicHealthChecked: function () {
+      const stored = localStorage.getItem("isDynamicHealthChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicArmorChecked: function () {
+      const stored = localStorage.getItem("isDynamicArmorChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicHungerChecked: function () {
+      const stored = localStorage.getItem("isDynamicHungerChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicThirstChecked: function () {
+      const stored = localStorage.getItem("isDynamicThirstChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicStressChecked: function () {
+      const stored = localStorage.getItem("isDynamicStressChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicOxygenChecked: function () {
+      const stored = localStorage.getItem("isDynamicOxygenChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsChangeFPSChecked: function () {
+      const stored = localStorage.getItem("isChangeFPSChecked");
+      if (stored === null) {
+        return 'Optimized';
+      } else {
+        return stored;
+      }
+    },
+    initIsToggleMapShapeChecked: function () {
+      const stored = localStorage.getItem("isToggleMapShapeChecked");
+      if (stored === null) {
+        return 'Circle';
+      } else {
+        return stored;
+      }
+    },
+    initIsHideMapChecked: function () {
+      const stored = localStorage.getItem("isHideMapChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsToggleMapBordersChecked: function () {
+      const stored = localStorage.getItem("isToggleMapBordersChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicEngineChecked: function () {
+      const stored = localStorage.getItem("isDynamicEngineChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDynamicNitroChecked: function () {
+      const stored = localStorage.getItem("isDynamicNitroChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsChangeCompassFPSChecked: function () {
+      const stored = localStorage.getItem("isChangeCompassFPSChecked");
+      if (stored === null) {
+        return 'Optimized';
+      } else {
+        return stored;
+      }
+    },
+    initIsShowCompassChecked: function () {
+      const stored = localStorage.getItem("isShowCompassChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsShowStreetsChecked: function () {
+      const stored = localStorage.getItem("isShowStreetsChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsPointerShowChecked: function () {
+      const stored = localStorage.getItem("isPointerShowChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsDegreesShowChecked: function () {
+      const stored = localStorage.getItem("isDegreesShowChecked");
+      if (stored === null) {
+        return true;
+      } else {
+        return stored == 'true';
+      }
+    },
+    initIsCineamticModeChecked: function () {
+      const stored = localStorage.getItem("isCineamticModeChecked");
+      if (stored === null) {
+        return false;
+      } else {
+        return stored == 'true';
+      }
+    },
+    resetStorage: function (event) {
       targetId = event.currentTarget.id;
       localStorage.clear();
       resetStorage()
     },
-    restartHud: function(event) {
+    restartHud: function (event) {
       targetId = event.currentTarget.id;
       restartHud()
     },
-    showOutMap: function(event) {
+    showOutMap: function (event) {
       targetId = event.currentTarget.id;
       showOutMap()
     },
-    showOutCompass: function(event) {
+    showOutCompass: function (event) {
       targetId = event.currentTarget.id;
       showOutCompass()
     },
-    showFollowCompass: function(event) {
+    showFollowCompass: function (event) {
       targetId = event.currentTarget.id;
       showFollowCompass()
     },
-    showMapNotif: function(event) {
+    showMapNotif: function (event) {
       targetId = event.currentTarget.id;
       showMapNotif()
     },
-    showFuelAlert: function(event) {
+    showFuelAlert: function (event) {
       targetId = event.currentTarget.id;
       showFuelAlert()
     },
-    showCinematicNotif: function(event) {
+    showCinematicNotif: function (event) {
       targetId = event.currentTarget.id;
       showCinematicNotif()
     },
-    dynamicHealth: function(event) {
+    dynamicHealth: function (event) {
       targetId = event.currentTarget.id;
       dynamicHealth()
     },
-    dynamicArmor: function(event) {
+    dynamicArmor: function (event) {
       targetId = event.currentTarget.id;
       dynamicArmor()
     },
-    dynamicHunger: function(event) {
+    dynamicHunger: function (event) {
       targetId = event.currentTarget.id;
       dynamicHunger()
     },
-    dynamicThirst: function(event) {
+    dynamicThirst: function (event) {
       targetId = event.currentTarget.id;
       dynamicThirst()
     },
-    dynamicStress: function(event) {
+    dynamicStress: function (event) {
       targetId = event.currentTarget.id;
       dynamicStress()
     },
-    dynamicOxygen: function(event) {
+    dynamicOxygen: function (event) {
       targetId = event.currentTarget.id;
       dynamicOxygen()
     },
-    changeFPS: function(event) {
+    changeFPS: function (event) {
       targetId = event.currentTarget.id;
       changeFPS()
     },
-    ToggleMapShape: function(event) {
+    ToggleMapShape: function (event) {
       targetId = event.currentTarget.id;
       ToggleMapShape()
     },
-    HideMap: function(event) {
+    HideMap: function (event) {
       targetId = event.currentTarget.id;
       HideMap()
     },
-    ToggleMapBorders: function(event) {
+    ToggleMapBorders: function (event) {
       targetId = event.currentTarget.id;
       ToggleMapBorders()
     },
-    dynamicEngine: function(event) {
+    dynamicEngine: function (event) {
       targetId = event.currentTarget.id;
       dynamicEngine()
     },
-    dynamicNitro: function(event) {
+    dynamicNitro: function (event) {
       targetId = event.currentTarget.id;
       dynamicNitro()
     },
-    changeCompassFPS: function(event) {
+    changeCompassFPS: function (event) {
       targetId = event.currentTarget.id;
       changeCompassFPS()
     },
-    showCompassBase: function(event) {
+    showCompassBase: function (event) {
       targetId = event.currentTarget.id;
       showCompassBase()
     },
-    showStreetsNames: function(event) {
+    showStreetsNames: function (event) {
       targetId = event.currentTarget.id;
       showStreetsNames()
     },
-    showPointerIndex: function(event) {
+    showPointerIndex: function (event) {
       targetId = event.currentTarget.id;
       showPointerIndex()
     },
-    showDegreesNum: function(event) {
+    showDegreesNum: function (event) {
       targetId = event.currentTarget.id;
       showDegreesNum()
     },
-    cinematicMode: function(event) {
+    cinematicMode: function (event) {
       targetId = event.currentTarget.id;
       cinematicMode()
     },
   },
   mounted() {
     this.listener = window.addEventListener("message", (event) => {
-        if (event.data.event === 'isToggleMapShapeChecked' || event.data.event === 'isChangeFPSChecked') {
-          eval(`this.${event.data.event} = "${event.data.toggle}"`)
-        }
+      if (event.data.event === 'isToggleMapShapeChecked' || event.data.event === 'isChangeFPSChecked') {
+        eval(`this.${event.data.event} = "${event.data.toggle}"`)
+      }
     });
   },
 })
@@ -549,9 +549,9 @@ function cinematicMode() {
 $(document).ready(function () {
   window.addEventListener("message", function (event) {
     switch (event.data.action) {
-    case "open":
-      Open(event.data);
-      break;
+      case "open":
+        Open(event.data);
+        break;
     }
   });
 });
@@ -719,9 +719,11 @@ const playerHud = {
       hungerColor: "",
       healthColor: "",
       thirstColor: "",
+      // CUSTOM INDICATORS (Dynamic API)
+      customIndicators: [],
     };
   },
-  
+
   destroyed() {
     window.removeEventListener("message", this.listener);
   },
@@ -729,10 +731,17 @@ const playerHud = {
     this.listener = window.addEventListener("message", (event) => {
       if (event.data.action === "hudtick") {
         this.hudTick(event.data);
-      } 
-      // else if(event.data.update) {
-      //   eval(event.data.action + "(" + event.data.show + ')')
-      // }
+      }
+      // CUSTOM INDICATORS HANDLING
+      else if (event.data.action === "addCustomIndicator") {
+        this.addCustomIndicator(event.data.indicator);
+      }
+      else if (event.data.action === "updateCustomIndicator") {
+        this.updateCustomIndicator(event.data.id, event.data.value, event.data.color);
+      }
+      else if (event.data.action === "removeCustomIndicator") {
+        this.removeCustomIndicator(event.data.id);
+      }
     });
     Config = {};
   },
@@ -755,7 +764,7 @@ const playerHud = {
       this.speed = data.speed;
       this.armed = data.armed;
       this.parachute = data.parachute;
-      this.hp = data.hp*5;
+      this.hp = data.hp * 5;
       this.engine = data.engine;
       this.cinematic = data.cinematic;
       this.dev = data.dev;
@@ -771,13 +780,14 @@ const playerHud = {
 
       if (data.dynamicHealth == true) {
         if (data.health >= 100) {
-          this.showHealth = false; }
-          else{
-            this.showHealth = true;
-          }
-      } else if (data.dynamicHealth == false){
+          this.showHealth = false;
+        }
+        else {
+          this.showHealth = true;
+        }
+      } else if (data.dynamicHealth == false) {
         this.showHealth = true;
-      } 
+      }
       if (data.playerDead === false) {
         this.healthColor = "#3FA554";
       } else {
@@ -787,13 +797,13 @@ const playerHud = {
 
       if (data.dynamicArmor == true) {
         if (data.armor == 0) {
-          this.showArmor = false; 
-        }  else {
-            this.showArmor = true;
-          }
-      } else if (data.dynamicArmor == false){
+          this.showArmor = false;
+        } else {
+          this.showArmor = true;
+        }
+      } else if (data.dynamicArmor == false) {
         this.showArmor = true;
-      } 
+      }
 
       if (data.armor <= 0) {
         this.armorColor = "#FF0000";
@@ -803,84 +813,90 @@ const playerHud = {
 
       if (data.dynamicHunger == true) {
         if (data.hunger >= 100) {
-          this.showHunger = false; }
-          else{
-            this.showHunger = true;
-          }
-      } else if (data.dynamicHunger == false){
+          this.showHunger = false;
+        }
+        else {
+          this.showHunger = true;
+        }
+      } else if (data.dynamicHunger == false) {
         this.showHunger = true;
-      } 
+      }
       if (data.hunger >= 100) {
         this.hungerColor = "#dd6e14";
-      } else if(data.hunger <= 30){
+      } else if (data.hunger <= 30) {
         this.hungerColor = "#ff0000";
-      } else{
+      } else {
         this.hungerColor = "#dd6e14";
       }
 
       if (data.dynamicThirst == true) {
         if (data.thirst >= 100) {
-          this.showThirst = false; }
-          else{
-            this.showThirst = true;
-          }
-      } else if (data.dynamicThirst == false){
+          this.showThirst = false;
+        }
+        else {
+          this.showThirst = true;
+        }
+      } else if (data.dynamicThirst == false) {
         this.showThirst = true;
-      } 
+      }
       if (data.thirst >= 100) {
         this.thirstColor = "#1a7cad";
-      } else if(data.thirst <= 30){
+      } else if (data.thirst <= 30) {
         this.thirstColor = "#ff0000";
-      } else{
+      } else {
         this.thirstColor = "#1a7cad";
       }
 
       if (data.dynamicStress == true) {
         if (data.stress == 0) {
-          this.showStress = false; 
-        }  else {
-            this.showStress = true;
-          }
-      } else if (data.dynamicStress == false){
+          this.showStress = false;
+        } else {
+          this.showStress = true;
+        }
+      } else if (data.dynamicStress == false) {
         this.showStress = true;
-      } 
+      }
 
       if (data.dynamicOxygen == true) {
         if (data.oxygen >= 100) {
-          this.showOxygen = false; }
-          else{
-            this.showOxygen = true;
-          }
-      } else if (data.dynamicOxygen == false){
+          this.showOxygen = false;
+        }
+        else {
+          this.showOxygen = true;
+        }
+      } else if (data.dynamicOxygen == false) {
         this.showOxygen = true;
-      } 
+      }
 
       if (data.dynamicEngine == true) {
         if (data.engine >= 95) {
-          this.showEngine = false; 
-        } else if  (data.engine < 0){
-          this.showEngine = false;} else {this.showEngine = true;}
-      } else if (data.dynamicEngine == false){
-        if  (data.engine < 0) {
-          this.showEngine = false;} else {this.showEngine = true;}
-      } 
+          this.showEngine = false;
+        } else if (data.engine < 0) {
+          this.showEngine = false;
+        } else { this.showEngine = true; }
+      } else if (data.dynamicEngine == false) {
+        if (data.engine < 0) {
+          this.showEngine = false;
+        } else { this.showEngine = true; }
+      }
       if (data.engine <= 45) {
         this.engineColor = "#ff0000";
-      } else if (data.engine <= 75 && data.engine >= 46 ) {
+      } else if (data.engine <= 75 && data.engine >= 46) {
         this.engineColor = "#dd6e14";
-      } else if(data.engine<=100) {
+      } else if (data.engine <= 100) {
         this.engineColor = "#3FA554";
-      } 
+      }
 
       if (data.dynamicNitro == true) {
-      if (data.nos === 0 || data.nos === undefined) {
-        this.showNos = false;
-      } else if  (data.nos < 0){
-        this.showNos = false;} else {this.showNos = true;}  
-      } else if  (data.dynamicNitro == false)  {
-        if  (data.nos < 0){
+        if (data.nos === 0 || data.nos === undefined) {
           this.showNos = false;
-      } else {this.showNos = true;}
+        } else if (data.nos < 0) {
+          this.showNos = false;
+        } else { this.showNos = true; }
+      } else if (data.dynamicNitro == false) {
+        if (data.nos < 0) {
+          this.showNos = false;
+        } else { this.showNos = true; }
       }
       if (data.nitroActive) {
         this.nosColor = "#D64763";
@@ -919,13 +935,13 @@ const playerHud = {
         this.showArmed = false;
       }
 
-      if (data.parachute >= 0 ) {
+      if (data.parachute >= 0) {
         this.showParachute = true;
       } else {
         this.showParachute = false;
       }
 
-      if (data.dev === true ) {
+      if (data.dev === true) {
         this.showDev = true;
       } else {
         this.showDev = false;
@@ -935,6 +951,34 @@ const playerHud = {
         this.show = false;
       }
     },
+    // CUSTOM INDICATORS METHODS
+    addCustomIndicator(indicator) {
+      // Check if indicator already exists
+      const existing = this.customIndicators.find(i => i.id === indicator.id);
+      if (existing) {
+        // Update existing
+        existing.value = indicator.value;
+        existing.color = indicator.color;
+        existing.icon = indicator.icon;
+      } else {
+        // Add new
+        this.customIndicators.push(indicator);
+      }
+    },
+    updateCustomIndicator(id, value, color) {
+      const indicator = this.customIndicators.find(i => i.id === id);
+      if (indicator) {
+        indicator.value = value;
+        if (color) indicator.color = color;
+      }
+    },
+    removeCustomIndicator(id) {
+      const index = this.customIndicators.findIndex(i => i.id === id);
+      if (index !== -1) {
+        this.customIndicators.splice(index, 1);
+      }
+    },
+    // END CUSTOM INDICATORS METHODS
   },
 };
 const app2 = Vue.createApp(playerHud);
@@ -961,7 +1005,7 @@ const vehHud = {
       seatbeltColor: "",
     };
   },
-  
+
   destroyed() {
     window.removeEventListener("message", this.listener);
   },
@@ -1048,14 +1092,14 @@ const baseplateHud = {
       if (event.data.action == "update") {
         type = event.data.type
         value = event.data.value
-          if (value  !== undefined) {
-            $('.degrees').html(value);
-            bar = document.getElementsByTagName("svg")[0];
-            bar.setAttribute("viewBox", ''+ (value - 90) + ' 0 180 5');
-            heading = document.getElementsByTagName("svg")[1];
-            heading.setAttribute("viewBox", ''+ (value - 90) + ' 0 180 1.5');
-          }
+        if (value !== undefined) {
+          $('.degrees').html(value);
+          bar = document.getElementsByTagName("svg")[0];
+          bar.setAttribute("viewBox", '' + (value - 90) + ' 0 180 5');
+          heading = document.getElementsByTagName("svg")[1];
+          heading.setAttribute("viewBox", '' + (value - 90) + ' 0 180 1.5');
         }
+      }
       if (event.data.action === "baseplate") {
         this.baseplateHud(event.data);
       }
