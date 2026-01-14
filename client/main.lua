@@ -24,6 +24,83 @@ local showSquareB = false
 local CinematicHeight = 0.2
 local w = 0
 local hasWeapon = false
+local customIndicators = {} -- Storage for custom indicators
+
+--- Add a custom indicator to the HUD
+--- @param data table { id: string, icon: string, color: string, value: number, label?: string, alwaysShow?: boolean }
+--- @return boolean success
+local function addCustomIndicator(data)
+    if not data or not data.id then return false end
+
+    customIndicators[data.id] = {
+        id = data.id,
+        icon = data.icon or 'fas fa-circle',
+        color = data.color or '#ffffff',
+        value = data.value or 0,
+        label = data.label or data.id,
+        alwaysShow = data.alwaysShow or false,
+        show = true
+    }
+
+    -- Send to NUI
+    SendNUIMessage({
+        action = 'addCustomIndicator',
+        indicator = customIndicators[data.id]
+    })
+
+    return true
+end
+
+--- Update an existing custom indicator
+--- @param id string
+--- @param value number
+--- @param color? string
+--- @return boolean success
+local function updateCustomIndicator(id, value, color)
+    if not customIndicators[id] then return false end
+
+    customIndicators[id].value = value
+    if color then customIndicators[id].color = color end
+
+    -- Send to NUI
+    SendNUIMessage({
+        action = 'updateCustomIndicator',
+        id = id,
+        value = value,
+        color = color or customIndicators[id].color
+    })
+
+    return true
+end
+
+--- Remove a custom indicator
+--- @param id string
+--- @return boolean success
+local function removeCustomIndicator(id)
+    if not customIndicators[id] then return false end
+
+    customIndicators[id] = nil
+
+    -- Send to NUI
+    SendNUIMessage({
+        action = 'removeCustomIndicator',
+        id = id
+    })
+
+    return true
+end
+
+--- Get all custom indicators
+--- @return table
+local function getCustomIndicators()
+    return customIndicators
+end
+
+-- Exports for external scripts
+exports('AddCustomIndicator', addCustomIndicator)
+exports('UpdateCustomIndicator', updateCustomIndicator)
+exports('RemoveCustomIndicator', removeCustomIndicator)
+exports('GetCustomIndicators', getCustomIndicators)
 
 DisplayRadar(false)
 
@@ -48,18 +125,18 @@ local function loadSettings(settings)
     for k, v in pairs(settings) do
         if k == 'isToggleMapShapeChecked' then
             sharedConfig.menu.isToggleMapShapeChecked = v
-            SendNUIMessage({test = true, event = k, toggle = v})
+            SendNUIMessage({ test = true, event = k, toggle = v })
         elseif k == 'isCineamticModeChecked' then
             sharedConfig.menu.isCineamticModeChecked = v
             cinematicShow(v)
-            SendNUIMessage({test = true, event = k, toggle = v})
+            SendNUIMessage({ test = true, event = k, toggle = v })
         elseif k == 'isChangeFPSChecked' then
             sharedConfig.menu[k] = v
             local val = v and 'Optimized' or 'Synced'
-            SendNUIMessage({test = true, event = k, toggle = val})
+            SendNUIMessage({ test = true, event = k, toggle = val })
         else
             sharedConfig.menu[k] = v
-            SendNUIMessage({test = true, event = k, toggle = v})
+            SendNUIMessage({ test = true, event = k, toggle = v })
         end
     end
     exports.qbx_core:Notify(locale('notify.hud_settings_loaded'), 'success')
@@ -92,7 +169,7 @@ end)
 local function settingsMenu()
     if showMenu then return end
     SetNuiFocus(true, true)
-    SendNUIMessage({action = 'open'})
+    SendNUIMessage({ action = 'open' })
     showMenu = true
 end
 
@@ -116,12 +193,12 @@ local function restartHud()
     exports.qbx_core:Notify(locale('notify.hud_restart'), 'error')
     if cache.vehicle then
         Wait(2600)
-        SendNUIMessage({action = 'car', show = false})
-        SendNUIMessage({action = 'car', show = true})
+        SendNUIMessage({ action = 'car', show = false })
+        SendNUIMessage({ action = 'car', show = true })
     end
     Wait(2600)
-    SendNUIMessage({action = 'hudtick', show = false})
-    SendNUIMessage({action = 'hudtick', show = true})
+    SendNUIMessage({ action = 'hudtick', show = false })
+    SendNUIMessage({ action = 'hudtick', show = true })
     Wait(2600)
     exports.qbx_core:Notify(locale('notify.hud_start'), 'success')
 end
@@ -165,7 +242,7 @@ RegisterNUICallback('showOutCompass', function(_, cb)
 end)
 
 RegisterNUICallback('showFollowCompass', function(_, cb)
-	Wait(50)
+    Wait(50)
     sharedConfig.menu.isCompassFollowChecked = not sharedConfig.menu.isCompassFollowChecked
     saveSettings()
     cb('ok')
@@ -265,7 +342,7 @@ RegisterNetEvent('hud:client:LoadMap', function()
     local aspectRatio = resolutionX / resolutionY
     local minimapOffset = 0
     if aspectRatio > defaultAspectRatio then
-        minimapOffset = ((defaultAspectRatio-aspectRatio) / 3.6) - 0.008
+        minimapOffset = ((defaultAspectRatio - aspectRatio) / 3.6) - 0.008
     end
     if sharedConfig.menu.isToggleMapShapeChecked == 'square' then
         lib.requestStreamedTextureDict('squaremap')
@@ -341,7 +418,8 @@ end)
 RegisterNUICallback('ToggleMapShape', function(_, cb)
     Wait(50)
     if not sharedConfig.menu.isHideMapChecked then
-        sharedConfig.menu.isToggleMapShapeChecked = sharedConfig.menu.isToggleMapShapeChecked == 'circle' and 'square' or 'circle'
+        sharedConfig.menu.isToggleMapShapeChecked = sharedConfig.menu.isToggleMapShapeChecked == 'circle' and 'square' or
+        'circle'
         Wait(50)
         TriggerEvent('hud:client:LoadMap')
     end
@@ -382,35 +460,35 @@ end)
 
 -- Compass
 RegisterNUICallback('showCompassBase', function(_, cb)
-	Wait(50)
+    Wait(50)
     sharedConfig.menu.isCompassShowChecked = not sharedConfig.menu.isCompassShowChecked
     saveSettings()
     cb('ok')
 end)
 
 RegisterNUICallback('showStreetsNames', function(_, cb)
-	Wait(50)
+    Wait(50)
     sharedConfig.menu.isShowStreetsChecked = not sharedConfig.menu.isShowStreetsChecked
     saveSettings()
     cb('ok')
 end)
 
 RegisterNUICallback('showPointerIndex', function(_, cb)
-	Wait(50)
+    Wait(50)
     sharedConfig.menu.isPointerShowChecked = not sharedConfig.menu.isPointerShowChecked
     saveSettings()
     cb('ok')
 end)
 
 RegisterNUICallback('showDegreesNum', function(_, cb)
-	Wait(50)
+    Wait(50)
     sharedConfig.menu.isDegreesShowChecked = not sharedConfig.menu.isDegreesShowChecked
     saveSettings()
     cb('ok')
 end)
 
 RegisterNUICallback('changeCompassFPS', function(_, cb)
-	Wait(50)
+    Wait(50)
     sharedConfig.menu.isChangeCompassFPSChecked = not sharedConfig.menu.isChangeCompassFPSChecked
     saveSettings()
     cb('ok')
@@ -510,7 +588,7 @@ local function isWhitelistedWeaponArmed(weapon)
     return false
 end
 
-local prevPlayerStats = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
+local prevPlayerStats = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
 
 local function updatePlayerHud(data)
     local shouldUpdate = false
@@ -558,13 +636,16 @@ local function updatePlayerHud(data)
     end
 end
 
-local prevVehicleStats = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
+local prevVehicleStats = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
 
 local function updateVehicleHud(data)
     local shouldUpdate = false
     local invOpen = LocalPlayer.state.invOpen
     for k, v in pairs(data) do
-        if prevVehicleStats[k] ~= v then shouldUpdate = true break end
+        if prevVehicleStats[k] ~= v then
+            shouldUpdate = true
+            break
+        end
     end
     prevVehicleStats = data
     if shouldUpdate and not invOpen then
@@ -617,7 +698,8 @@ CreateThread(function()
                     armed = false
                 end
             end
-            playerDead = IsEntityDead(cache.ped) or QBX.PlayerData.metadata.inlaststand or QBX.PlayerData.metadata.isdead
+            playerDead = IsEntityDead(cache.ped) or QBX.PlayerData.metadata.inlaststand or QBX.PlayerData.metadata
+            .isdead
             parachute = GetPedParachuteState(cache.ped)
             -- Stamina
             if not IsEntityInWater(cache.ped) then
@@ -637,38 +719,38 @@ CreateThread(function()
                 show = false
             end
             if not (cache.vehicle and not IsThisModelABicycle(cache.vehicle)) then
-            updatePlayerHud({
-                show,
-                sharedConfig.menu.isDynamicHealthChecked,
-                sharedConfig.menu.isDynamicArmorChecked,
-                sharedConfig.menu.isDynamicHungerChecked,
-                sharedConfig.menu.isDynamicThirstChecked,
-                sharedConfig.menu.isDynamicStressChecked,
-                sharedConfig.menu.isDynamicOxygenChecked,
-                sharedConfig.menu.isDynamicEngineChecked,
-                sharedConfig.menu.isDynamicNitroChecked,
-                GetEntityHealth(cache.ped) - 100,
-                playerDead,
-                GetPedArmour(cache.ped),
-                thirst,
-                hunger,
-                stress,
-                voice,
-                LocalPlayer.state.radioChannel,
-                talking,
-                armed,
-                oxygen,
-                parachute,
-                -1,
-                cruiseOn,
-                nitroActive,
-                LocalPlayer.state?.harness,
-                hp,
-                math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
-                -1,
-                sharedConfig.menu.isCineamticModeChecked,
-                dev,
-            })
+                updatePlayerHud({
+                    show,
+                    sharedConfig.menu.isDynamicHealthChecked,
+                    sharedConfig.menu.isDynamicArmorChecked,
+                    sharedConfig.menu.isDynamicHungerChecked,
+                    sharedConfig.menu.isDynamicThirstChecked,
+                    sharedConfig.menu.isDynamicStressChecked,
+                    sharedConfig.menu.isDynamicOxygenChecked,
+                    sharedConfig.menu.isDynamicEngineChecked,
+                    sharedConfig.menu.isDynamicNitroChecked,
+                    GetEntityHealth(cache.ped) - 100,
+                    playerDead,
+                    GetPedArmour(cache.ped),
+                    thirst,
+                    hunger,
+                    stress,
+                    voice,
+                    LocalPlayer.state.radioChannel,
+                    talking,
+                    armed,
+                    oxygen,
+                    parachute,
+                    -1,
+                    cruiseOn,
+                    nitroActive,
+                    LocalPlayer.state?.harness,
+                    hp,
+                    math.ceil(GetEntitySpeed(cache.vehicle) * speedMultiplier),
+                    -1,
+                    sharedConfig.menu.isCineamticModeChecked,
+                    dev,
+                })
             end
             -- Vehicle hud
             if IsPedInAnyHeli(cache.ped) or IsPedInAnyPlane(cache.ped) then
@@ -811,7 +893,8 @@ if config.stress.enableStress then
                         if vehClass == 8 then
                             stressSpeed = config.stress.minForSpeeding
                         else
-                            stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or config.stress.minForSpeedingUnbuckled
+                            stressSpeed = LocalPlayer.state?.seatbelt and config.stress.minForSpeeding or
+                            config.stress.minForSpeedingUnbuckled
                         end
                         if speed >= stressSpeed then
                             TriggerServerEvent('hud:server:GainStress', math.random(1, 3))
@@ -893,7 +976,8 @@ CreateThread(function()
 
             if not IsPedRagdoll(cache.ped) and IsPedOnFoot(cache.ped) and not IsPedSwimming(cache.ped) then
                 local forwardVector = GetEntityForwardVector(cache.ped)
-                SetPedToRagdollWithFall(cache.ped, ragdollTimeout, ragdollTimeout, 1, forwardVector.x, forwardVector.y, forwardVector.z, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+                SetPedToRagdollWithFall(cache.ped, ragdollTimeout, ragdollTimeout, 1, forwardVector.x, forwardVector.y,
+                    forwardVector.z, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
             end
 
             Wait(1000)
@@ -940,16 +1024,19 @@ CreateThread(function()
 end)
 
 -- Compass
-local prevBaseplateStats = {nil, nil, nil, nil, nil, nil, nil}
+local prevBaseplateStats = { nil, nil, nil, nil, nil, nil, nil }
 
 local function updateBaseplateHud(data)
     local shouldUpdate = false
     for k, v in pairs(data) do
-        if prevBaseplateStats[k] ~= v then shouldUpdate = true break end
+        if prevBaseplateStats[k] ~= v then
+            shouldUpdate = true
+            break
+        end
     end
     prevBaseplateStats = data
     if shouldUpdate then
-        SendNUIMessage ({
+        SendNUIMessage({
             action = 'baseplate',
             show = data[1],
             street1 = data[2],
@@ -971,7 +1058,7 @@ local function getCrossroads(player)
         local pos = GetEntityCoords(player)
         local street1, street2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z)
         lastCrossroadUpdate = updateTick
-        lastCrossroadCheck = {GetStreetNameFromHashKey(street1), GetStreetNameFromHashKey(street2)}
+        lastCrossroadCheck = { GetStreetNameFromHashKey(street1), GetStreetNameFromHashKey(street2) }
     end
     return lastCrossroadCheck
 end
@@ -979,9 +1066,9 @@ end
 -- Compass Update loop
 
 CreateThread(function()
-	local lastHeading = 1
+    local lastHeading = 1
     local heading
-	while true do
+    while true do
         if sharedConfig.menu.isChangeCompassFPSChecked then
             Wait(50)
         else
@@ -994,11 +1081,11 @@ CreateThread(function()
         else
             heading = qbx.math.round(360.0 - GetEntityHeading(cache.ped))
         end
-		if heading == 360 then heading = 0 end
+        if heading == 360 then heading = 0 end
         if heading ~= lastHeading then
             if cache.vehicle then
                 local crossroads = getCrossroads(cache.ped)
-                SendNUIMessage ({
+                SendNUIMessage({
                     action = 'update',
                     value = heading
                 })
@@ -1013,17 +1100,17 @@ CreateThread(function()
                 })
             else
                 if sharedConfig.menu.isOutCompassChecked then
-                    SendNUIMessage ({
+                    SendNUIMessage({
                         action = 'update',
                         value = heading
                     })
-                    SendNUIMessage ({
+                    SendNUIMessage({
                         action = 'baseplate',
                         show = true,
                         showCompass = true,
                     })
                 else
-                    SendNUIMessage ({
+                    SendNUIMessage({
                         action = 'baseplate',
                         show = false,
                     })
