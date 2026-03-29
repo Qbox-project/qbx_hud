@@ -1,0 +1,33 @@
+{
+    "notify": {
+        "hud_settings_loaded": "HUD設定を読み込みました！",
+        "hud_restart": "HUDを再起動中！",
+        "hud_start": "HUDが起動しました！",
+        "hud_command_info": "このコマンドは現在のHUD設定をリセットします！",
+        "load_square_map": "スクエアマップを読み込んでいます...",
+        "loaded_square_map": "スクエアマップを読み込みました！",
+        "load_circle_map": "サークルマップを読み込んでいます...",
+        "loaded_circle_map": "サークルマップを読み込みました！",
+        "cinematic_on": "シネマティックモードをオンにしました！",
+        "cinematic_off": "シネマティックモードをオフにしました！",
+        "engine_on": "エンジンを起動しました！",
+        "engine_off": "エンジンを停止しました！",
+        "low_fuel": "燃料残量が少なくなっています！",
+        "access_denied": "アクセス権がありません！",
+        "stress_gain": "ストレスが増加しています！",
+        "stress_removed": "リラックスしています！"
+    },
+    "info": {
+        "open_menu": "メニューを開く"
+    },
+    "commands": {
+        "cash": "cash",
+        "bank": "bank",
+        "dev": "dev",
+        "help": {
+            "cash": "現金残高を確認",
+            "bank": "銀行残高を確認",
+            "dev": "開発者モードを有効/無効にする"
+        }
+    }
+}
