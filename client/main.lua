@@ -132,11 +132,10 @@ RegisterNUICallback('restartHud', function(_, cb)
     cb('ok')
 end)
 
-RegisterCommand('resethud', function(_, cb)
+RegisterCommand('resethud', function()
     Wait(50)
     restartHud()
-    cb('ok')
-end)
+end, false)
 
 RegisterNUICallback('resetStorage', function(_, cb)
     Wait(50)
