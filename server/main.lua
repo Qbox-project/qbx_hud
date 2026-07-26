@@ -4,6 +4,12 @@ local config = require 'config.server'
 local sharedConfig = require 'config.shared'
 local resetStress = false
 
+---@param amount any
+---@return boolean
+local function isValidStressAmount(amount)
+    return type(amount) == 'number' and amount == amount and amount > 0 and amount <= 100
+end
+
 -- Handlers
 
 AddEventHandler('ox_inventory:openedInventory', function(source)
@@ -24,6 +30,7 @@ end)
 
 RegisterNetEvent('hud:server:GainStress', function(amount)
     if not sharedConfig.stress.enableStress then return end
+    if not isValidStressAmount(amount) then return end
 
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
@@ -48,6 +55,7 @@ end)
 
 RegisterNetEvent('hud:server:RelieveStress', function(amount)
     if not sharedConfig.stress.enableStress then return end
+    if not isValidStressAmount(amount) then return end
 
     local src = source
     local player = exports.qbx_core:GetPlayer(src)
