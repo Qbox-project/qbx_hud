@@ -16,5 +16,18 @@
         "access_denied": "Je bent niet gemachtigd!",
         "stress_gain": "Je voelt je meer gestrest!",
         "stress_removed": "Je voelt je meer relaxed!"
+    },
+    "info": {
+        "open_menu": "Menu openen"
+    },
+    "commands": {
+        "cash": "cash",
+        "bank": "bank",
+        "dev": "ontwikkelaar",
+        "help": {
+            "cash": "Controleer het kassaldo",
+            "bank": "Banksaldo controleren",
+            "dev": "Ontwikkelaarsmodus in-/uitschakelen"
+        }
     }
 }
