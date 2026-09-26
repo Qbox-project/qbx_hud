@@ -4,6 +4,39 @@
 
 Shows UI elements such as health, hunger, thirst, etc.
 
+## Custom indicators
+
+Client resources can add circular indicators alongside the player HUD:
+
+```lua
+exports.qbx_hud:AddCustomIndicator({
+    id = 'example:effect',
+    icon = 'fas fa-pills',
+    color = '#ff0000',
+    value = 75,
+    label = 'Effect level',
+    alwaysShow = false,
+})
+exports.qbx_hud:UpdateCustomIndicator('example:effect', 50, '#ff9900')
+exports.qbx_hud:RemoveCustomIndicator('example:effect')
+```
+
+`AddCustomIndicator`, `UpdateCustomIndicator`, and `RemoveCustomIndicator` return
+`true` on success and `false` for invalid arguments, missing indicators, or an ID
+owned by another resource. Re-adding an ID from the same resource replaces all its
+settings. Use a unique ID (up to 64 characters); icon, color, and label strings
+are limited to 128 characters. Only `id` is required when adding an indicator.
+Defaults are a white circle, value `0`, the ID as its label, and `alwaysShow = false`.
+Values must be finite numbers and are clamped to `0`–`100`.
+
+An indicator is hidden at `0` unless `alwaysShow` is `true`; the normal player HUD
+visibility still applies. The label is available as a tooltip and accessibility
+label. `GetCustomIndicators()` returns a snapshot keyed by ID; changing that table
+does not update the HUD. Indicators are removed when their owning resource stops
+or the player logs out. Add them again for a new character session or when
+`qbx_hud` restarts. Indicators added before the browser is ready are synchronized
+once the HUD mounts.
+
 ## Features
 
 ### Player HUDs
